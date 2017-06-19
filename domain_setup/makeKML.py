@@ -7,30 +7,27 @@ setup user here: https://urs.earthdata.nasa.gov/profile
  
 Example:   
         as script:
-        $ python getDEM_points_test.py "/home/joel/sim/topomap_test/" "/home/joel/data/DEM/srtm" 0.75 "/home/joel/data/GCOS/points_all.txt" 2 3
+        $ python makeKML.py "/home/joel/sim/topomap_test/" "/home/joel/sim/topomap_test/predictors/ele.tif" "shape" "/home/joel/sim/topomap_test/spatial/extent
 
         or, as import: 
 
-        import getDEM_points as gdem
-        gdem.main("/home/joel/sim/topomap_test/" ,"/home/joel/data/DEM/srtm" ,0.75, "/home/joel/data/GCOS/points_all.txt", 2, 3)
+        import makeKML as kml
+        kml.main("/home/joel/sim/topomap_test/", "/home/joel/sim/topomap_test/predictors/ele.tif", "shape", "/home/joel/sim/topomap_test/spatial/extent")
+
 
 Attributes:
     wd = "/home/joel/sim/topomap_test/"
-    demDir = "/home/joel/data/DEM/srtm"
-    grid = 0.75
-    pointsFile = "/home/joel/data/GCOS/points_all.txt"
-    loncol = 2
-    latcol = 3
+    plotshp = TRUE
 
 Todo:
 
 """
-path2script = "./rsrc/getDEM_points.R"
+path2script = "./rsrc/makeKML.R"
 
 # main
-def main(wd, demDir, grid, pointsFile, loncol, latcol):
+def main(wd, file, outFormat, outPath):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd, demDir, str(grid), pointsFile, str(loncol), str(latcol)])
+    run_rscript_fileout(path2script,[wd, file, outFormat, outPath])
 
 
 # functions
@@ -55,22 +52,11 @@ def run_rscript_fileout(path2script , args):
 if __name__ == '__main__':
     import sys
     wd          = sys.argv[1]
-    demDir      = sys.argv[2]
-    grid        = sys.argv[3]
-    pointsFile  = sys.argv[4]
-    loncol      = sys.argv[5]
-    latcol      = sys.argv[6]
-
-    print 'Arguments parsed:'
-    print sys.argv[1]
-    print sys.argv[2]
-    print sys.argv[3]
-    print sys.argv[4]   
-    print sys.argv[5]
-    print sys.argv[6]
-    
-
-    main(wd, demDir, grid, pointsFile, loncol, latcol)
+    file        = sys.argv[2]
+    outFormat   = sys.argv[3]
+    outPath     = sys.argv[4]
+   
+    main(wd, file, outFormat, outPath)
 
 
 

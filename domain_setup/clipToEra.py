@@ -7,12 +7,13 @@ setup user here: https://urs.earthdata.nasa.gov/profile
  
 Example:   
         as script:
-        $ python getDEM_points_test.py "/home/joel/sim/topomap_test/" "/home/joel/data/DEM/srtm" 0.75 "/home/joel/data/GCOS/points_all.txt" 2 3
+        $ python clipToEra.py "/home/joel/sim/topomap_test/" 0.75
 
         or, as import: 
 
-        import getDEM_points as gdem
-        gdem.main("/home/joel/sim/topomap_test/" ,"/home/joel/data/DEM/srtm" ,0.75, "/home/joel/data/GCOS/points_all.txt", 2, 3)
+        import clipToEra as era
+        era.main("/home/joel/sim/topomap_test/" ,str(0.75))
+
 
 Attributes:
     wd = "/home/joel/sim/topomap_test/"
@@ -25,12 +26,12 @@ Attributes:
 Todo:
 
 """
-path2script = "./rsrc/getDEM_points.R"
+path2script = "./rsrc/clipToEra.R"
 
 # main
-def main(wd, demDir, grid, pointsFile, loncol, latcol):
+def main(wd, grid):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd, demDir, str(grid), pointsFile, str(loncol), str(latcol)])
+    run_rscript_fileout(path2script,[wd,str(grid)])
 
 
 # functions
@@ -55,22 +56,9 @@ def run_rscript_fileout(path2script , args):
 if __name__ == '__main__':
     import sys
     wd          = sys.argv[1]
-    demDir      = sys.argv[2]
-    grid        = sys.argv[3]
-    pointsFile  = sys.argv[4]
-    loncol      = sys.argv[5]
-    latcol      = sys.argv[6]
-
-    print 'Arguments parsed:'
-    print sys.argv[1]
-    print sys.argv[2]
-    print sys.argv[3]
-    print sys.argv[4]   
-    print sys.argv[5]
-    print sys.argv[6]
-    
-
-    main(wd, demDir, grid, pointsFile, loncol, latcol)
+    grid        = sys.argv[2]
+  
+    main(wd, grid)
 
 
 
