@@ -57,8 +57,8 @@ os.mkdir(eraDir)
 
 from getERA import eraRetrievePLEVEL as plevel
 print "Retrieving ECWMF pressure-level data"
-plevel.main( config['main']['startDate'], config['main']['endDate'], latN, latS, lonE, lonW, config['era-interim']['grid'],eraDir)
+plevel.retrieve_interim( config['main']['startDate'], config['main']['endDate'], latN, latS, lonE, lonW, config['era-interim']['grid'],eraDir)
 
-from getERA import eraRetrievePLEVEL as surf
+from getERA import eraRetrieveSURFACE as surf
 print "Retrieving ECWMF surface data"
-surf.main(config['main']['startDate'], config['main']['endDate'], latN, latS, lonE, lonW, config['era-interim']['grid'],eraDir)
+surf.retrieve_interim(config['main']['startDate'], config['main']['endDate'], latN, latS, lonE, lonW, config['era-interim']['grid'],eraDir)
