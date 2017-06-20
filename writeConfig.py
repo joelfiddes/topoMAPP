@@ -48,13 +48,9 @@ config['toposub']['samples'] = 10
 # TopoSCale
 #=================================================================
 config['toposcale'] = {}
+config['toposcale']['swTopo'] = 'FALSE'
 config['toposcale']['svfCompute'] = 'FALSE'
 config['toposcale']['pfactor'] = 0.25
-
-
-
-
-
 
 #=================================================================
 # GEOTOP

@@ -25,13 +25,12 @@ Attributes:
 Todo:
 
 """
-path2script = "./rsrc/makeShape.R"
+path2script = "./rsrc/tscale_plevel.R"
 
 # main
 def main(wd, pointsFile, loncol, latcol):
     """Main entry point for the script."""
     run_rscript_fileout(path2script,[wd, pointsFile, loncol, latcol])
-
 
 # functions
 def run_rscript_stdout(path2script , args):

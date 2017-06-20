@@ -31,12 +31,16 @@ print sys.argv[0]
 # declare wd once here
 # syspath append get relative path
 
-#config
+#====================================================================
+#	Config file
+#====================================================================
 from configobj import ConfigObj
 config = ConfigObj('topomapp.conf')
 wd = config['main']['wd']
 
-# SETUP DOMAIN
+#====================================================================
+#	Setup domain
+#====================================================================
 from domain_setup import getDEM_points as gdem
 gdem.main(wd ,config['main']['demDir'] ,config['era-interim']['grid'], config['main']['pointsFile'], config['main']['lonCol'], config['main']['latCol'])
 
@@ -84,16 +88,26 @@ surf.retrieve_interim(config['main']['startDate'], config['main']['endDate'], la
 
 # Merge NDF timeseries (requires linux package cdo)
 import subprocess
-os.chdir(eraDir)
-cmd     = 'cdo -b F64 -f -O nc2 mergetime' + ' interim_daily_PLEVEL* ' + ' PLEVEL.nc'
+#os.chdir(eraDir)
+cmd     = 'cdo -b F64 -f nc2 mergetime ' + wd + '/eraDat/interim_daily_PLEVEL* ' +  wd + '/eraDat/PLEVEL.nc'
+
+if os.path.exists(wd + 'eraDat/PLEVEL.nc'):
+    os.remove(wd + 'eraDat/PLEVEL.nc')
+    print "removed original PLEVEL.nc"
+
 print("Running:" + str(cmd))
 subprocess.check_output(cmd, shell = 'TRUE')
 
-cmd     = 'cdo -b F64 -f -O nc2 mergetime' + wd +  ' /eraDat/interim_daily_SURF* ' + ' SURF.nc'
+cmd     = 'cdo -b F64 -f nc2 mergetime ' + wd +  '/eraDat/interim_daily_SURF* ' + wd +'/eraDat/SURF.nc'
+
+if os.path.exists(wd + 'eraDat/SURF.nc'):
+    os.remove(wd + 'eraDat/SURF.nc')
+    print "removed original SURF.nc"
+
 print("Running:" + str(cmd))
 subprocess.check_output(cmd, shell = 'TRUE')
 
-os.chdir(config['main']['srcdir'])
+#os.chdir(config['main']['srcdir'])
 
 from getERA import era_prep as prep
 prep.main(wd, config['main']['startDate'], config['main']['endDate'])
@@ -102,12 +116,10 @@ from getERA import prepSims as sim
 sim.main(wd)
 
 #====================================================================
-#	makeListpoint
+#	makeListpoint: creates a listpoints for each ERA-grid, only 
+#	required for point runs
 #====================================================================
-
-# creates a listpoints for each ERA-grid, only required for point runs
-
-# Returns number of cells in ERA-Grid extent"
+# 
 
 from listpoints_make import getRasterDims as dims
 ncells = dims.main(wd, wd + '/spatial/eraExtent.tif')
@@ -125,5 +137,38 @@ if os.path.exists(gridpath):
 else:
 	print "Grid "+ Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid+1
 
+#====================================================================
+#	run toposcale
+#====================================================================
+
+ncells = dims.main(wd, wd + '/spatial/eraExtent.tif')
+from toposcale import getGridEle as gele
+gele.main(wd)
+
+# set up sim directoroes #and write metfiles
+for Ngrid in range(1,ncells):
+	gridpath = wd +'/grid'+ Ngrid
+
+if os.path.exists(gridpath):
+	print 'running toposcale for grid ' + Ngrid
+
+	from toposcale import boxMetadata as box
+	box.main(gridpath, Ngrid)
+
+	from toposcale import tscale_plevel.py as plevel
+	plevel.main(gridpath, Ngrid, 'rhumPl')
+	plevel.main(gridpath, Ngrid, 'tairPl')
+	plevel.main(gridpath, Ngrid, 'uPl')
+	plevel.main(gridpath, Ngrid, 'vPl')
+
+	from toposcale import tscale_sw.py as sw
+	sw.main( gridpath, Ngrid, config['toposcale']['swTopo'], config['main']['tz']) #TRUE requires svf as does more computes 
+
+	from toposcale import tscale_lw.py as lw
+	lw.main( gridpath, Ngrid, config['toposcale']['svfCompute']) #TRUE requires svf as does more computes terrain/sky effects
 	
-done
+	from toposcale import tscale_p.py as p
+	Rscript tscale_p.R gridpath Ngrid pfactor
+
+else:
+	print "Grid "+ Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid+1
