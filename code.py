@@ -44,7 +44,9 @@ topo.main(wd, config['toposcale']['svfCompute'])
 from domain_setup import makeSurface as surf
 surf.main(wd, config['modis']['MODISdir'] )
 
-# GET ERA
+#====================================================================
+#	GET ERA
+#====================================================================
 from getERA import getExtent as ext
 latN = ext.main(wd + '/predictors/ele.tif' , "latN")
 latS = ext.main(wd + '/predictors/ele.tif' , "latS")
@@ -52,7 +54,8 @@ lonW = ext.main(wd + '/predictors/ele.tif' , "lonW")
 lonE = ext.main(wd + '/predictors/ele.tif' , "lonE")
 
 eraDir = wd + '/eraDat'
-os.mkdir(eraDir)
+if not os.path.exists(eraDir):
+	os.mkdir(eraDir)
 
 
 from getERA import eraRetrievePLEVEL as plevel
@@ -62,3 +65,22 @@ plevel.retrieve_interim( config['main']['startDate'], config['main']['endDate'],
 from getERA import eraRetrieveSURFACE as surf
 print "Retrieving ECWMF surface data"
 surf.retrieve_interim(config['main']['startDate'], config['main']['endDate'], latN, latS, lonE, lonW, config['era-interim']['grid'],eraDir)
+
+# Merge NDF timeseries (requires linux package cdo)
+import subprocess
+os.chdir(eraDir)
+cmd     = 'cdo -b F64 -f nc2 mergetime' + ' interim_daily_PLEVEL* ' + ' PLEVEL.nc'
+print("Running:" + str(cmd))
+subprocess.check_output(cmd)
+
+cmd     = 'cdo -b F64 -f nc2 mergetime' + ' interim_daily_SURF* ' + ' SURF.nc'
+print("Running:" + str(cmd))
+subprocess.check_output(cmd)
+
+os.chdir(config['main']['srcdir'])
+
+from getERA import era_prep as prep
+prep.main(wd, config['main']['startDate'], config['main']['endDate'])
+
+from getERA import prepSims as sim
+sim.main(wd, config['main'])
