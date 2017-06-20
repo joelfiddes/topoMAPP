@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
-""" This module preprocesses ERA-Interim data.
+""" This module preprocesses ERA-Interim data, units, accumulated to instantaneous values and timestep interpolation for 6 h to 3 h values.
  
 Example:   
-        as script:
-        $ python era_prep.py "/home/joel/sim/topomap_test/predictors/ele.tif" "latN"
+        as import: 
 
-        or, as import: 
-
-        import getExtent as ext
-        ext.main("/home/joel/sim/topomap_test/predictors/ele.tif" , "latN")
+        from getERA import era_prep as prep
+        prep.main(wd, config['main']['startDate'], config['main']['endDate'])
 
 
 Attributes:

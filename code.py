@@ -1,4 +1,20 @@
 #!/usr/bin/env python
+# import ipdb
+# ipdb.set_trace
+
+#============= LOGGING =========================================
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# logger.info('Start reading database')
+# # read database here
+# records = {'john': 55, 'tom': 66}
+# logger.debug('Records: %s', records)
+# logger.info('Updating records ...')
+# # update records here
+# logger.info('Finish updating records')
+#================================================================
 
 import sys
 import os
@@ -69,13 +85,13 @@ surf.retrieve_interim(config['main']['startDate'], config['main']['endDate'], la
 # Merge NDF timeseries (requires linux package cdo)
 import subprocess
 os.chdir(eraDir)
-cmd     = 'cdo -b F64 -f nc2 mergetime' + ' interim_daily_PLEVEL* ' + ' PLEVEL.nc'
+cmd     = 'cdo -b F64 -f -O nc2 mergetime' + ' interim_daily_PLEVEL* ' + ' PLEVEL.nc'
 print("Running:" + str(cmd))
-subprocess.check_output(cmd)
+subprocess.check_output(cmd, shell = 'TRUE')
 
-cmd     = 'cdo -b F64 -f nc2 mergetime' + ' interim_daily_SURF* ' + ' SURF.nc'
+cmd     = 'cdo -b F64 -f -O nc2 mergetime' + wd +  ' /eraDat/interim_daily_SURF* ' + ' SURF.nc'
 print("Running:" + str(cmd))
-subprocess.check_output(cmd)
+subprocess.check_output(cmd, shell = 'TRUE')
 
 os.chdir(config['main']['srcdir'])
 
@@ -83,4 +99,31 @@ from getERA import era_prep as prep
 prep.main(wd, config['main']['startDate'], config['main']['endDate'])
 
 from getERA import prepSims as sim
-sim.main(wd, config['main'])
+sim.main(wd)
+
+#====================================================================
+#	makeListpoint
+#====================================================================
+
+# creates a listpoints for each ERA-grid, only required for point runs
+
+# Returns number of cells in ERA-Grid extent"
+
+from listpoints_make import getRasterDims as dims
+ncells = dims.main(wd, wd + '/spatial/eraExtent.tif')
+
+print 'Setting up simulation directories for ' + ncells  + ' ERA-Grids' 
+
+# set up sim directoroes #and write metfiles
+for Ngrid in range(1,ncells):
+	print 'creating listpoints for grid ' + Ngrid
+	gridpath=wd +'/grid'+ Ngrid
+
+if os.path.exists(gridpath):
+	from listpoints_make import makeListpoint as list
+	list.main(config['main']['gridpath'], config['main']['pointsFile'],config['main']['pkCol'], config['main']['lonCol'], config['main']['latCol'])
+else:
+	print "Grid "+ Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid+1
+
+	
+done

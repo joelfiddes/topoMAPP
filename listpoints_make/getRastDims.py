@@ -1,30 +1,30 @@
 #!/usr/bin/env python
 
-""" This module preprocesses creates simulation directory for every ERA-grid in domain and cookie-cuts the predictors with each ERA-grid.
+""" This module returns dimensions of a raster object. It ios generally used to quantify number of ERA-grid  cells
  
 Example:   
         as script:
-        $ python prepSims.py "/home/joel/sim/topomap_test"/predictors/ele.tif" "latN""
+        $ python getExtent.py "/home/joel/sim/topomap_test/predictors/ele.tif" "latN"
 
         or, as import: 
 
-        from getERA import prepSims as sim
-        sim.main(wd)
+        import getExtent as ext
+        ext.main("/home/joel/sim/topomap_test/predictors/ele.tif" , "latN")
+
 
 Attributes:
-    wd = "/home/joel/sim/topomap_test/"
-    plotshp = TRUE
 
 Todo:
 
 """
-path2script = "./rsrc/prepareSims.R"
+path2script = "./rsrc/getRasterDims.R"
 
 # main
-def main(wd):
+def main(wd, rastPath):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd])
-    
+    x = run_rscript_stdout(path2script,[wd, rastPath])
+    return(x)
+
 # functions
 def run_rscript_stdout(path2script , args):
     """ Function to define comands to run an Rscript. Returns an object. """
@@ -47,4 +47,6 @@ def run_rscript_fileout(path2script , args):
 if __name__ == '__main__':
     import sys
     wd         = sys.argv[1]
-    main(wd)
+    rastPath = sys.argv[2]
+   
+    main(wd, rastPath)

@@ -25,6 +25,7 @@ config['main']['startDate'] = '2013-01-01'
 config['main']['endDate'] = '2013-01-06'
 config['main']['positions'] = [9.3,46.5,9.7,46.8 ]
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt'
+config['main']['pkCol'] = 1
 config['main']['lonCol'] = 2
 config['main']['latCol'] = 3
 config['main']['tz'] = -1

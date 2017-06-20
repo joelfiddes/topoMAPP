@@ -1,29 +1,25 @@
 #!/usr/bin/env python
 
-""" This module preprocesses creates simulation directory for every ERA-grid in domain and cookie-cuts the predictors with each ERA-grid.
+""" This module creats a 'listpoints' file for all points contained within an ERA-grid.
  
 Example:   
-        as script:
-        $ python prepSims.py "/home/joel/sim/topomap_test"/predictors/ele.tif" "latN""
 
-        or, as import: 
+    as import: 
 
         from getERA import prepSims as sim
         sim.main(wd)
 
 Attributes:
-    wd = "/home/joel/sim/topomap_test/"
-    plotshp = TRUE
 
 Todo:
 
 """
-path2script = "./rsrc/prepareSims.R"
+path2script = "./rsrc/makeListpoints.R"
 
 # main
-def main(wd):
+def main(gridpath, pointsFile, pkCol, lonCol, latCol):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd])
+    run_rscript_fileout(path2script,[gridpath, pointsFile, pkCol, lonCol, latCol])
     
 # functions
 def run_rscript_stdout(path2script , args):
@@ -46,5 +42,9 @@ def run_rscript_fileout(path2script , args):
 # calling main
 if __name__ == '__main__':
     import sys
-    wd         = sys.argv[1]
-    main(wd)
+    gridpath    = sys.argv[1]
+    pointsFile  = sys.argv[2]
+    pkCol       = sys.argv[3]
+    lonCol      = sys.argv[4]
+    latCol      = sys.argv[5]
+    main(gridpath, pointsFile, pkCol, lonCol, latCol)
