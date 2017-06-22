@@ -25,7 +25,7 @@ Attributes:
 Todo:
 
 """
-path2script = "./rsrc/tscale_plevel.R"
+path2script = "./rsrc/makeShape.R"
 
 # main
 def main(wd, pointsFile, loncol, latcol):
