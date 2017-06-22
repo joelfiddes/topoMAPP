@@ -217,20 +217,58 @@ for Ngrid in range(1,int(ncells)):
 
 	if os.path.exists(gridpath):
 
-	 	print "Simulations grid" + str(Ngrid) + "running"
-
-		s.cd(gridpath).run()
-		batchfile="batch.txt"
+	 	print "Simulations grid" + str(Ngrid) + " running"
+		batchfile="batch.sh"
 
 		sim_entries=gridpath +"/S*"
 
-		f = open(batchfile, "w")
+		f = open(batchfile, "w+")
+		f.write("#!/bin/bash"+ '\n')
 		f.write("cd " + config["geotop"]["lsmPath"] + '\n')
-		f.write("parallel" + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + '\n')
+		f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + '\n')
 		f.close()
 
-		subprocess.check_output("chmod u+x" + batchfile)
-		subprocess.check_output("./" + batchfile)
+		import os, sys, stat
+		os.chmod(batchfile, stat.S_IRWXU)
+
+		cmd     = ["./" + batchfile]
+		subprocess.check_output( "./" + batchfile )
 
 	else:
 		print "Grid "+ str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid+1)
+
+#====================================================================
+#	Get MODIS SCA
+#====================================================================
+
+# clear data
+import os, shutil
+folder = config['modis']['sca_wd']
+for the_file in os.listdir(folder):
+    file_path = os.path.join(folder, the_file)
+    try:
+        if os.path.isfile(file_path):
+            os.unlink(file_path)
+        elif os.path.isdir(file_path): shutil.rmtree(file_path)
+    except Exception as e:
+        print(e)
+
+# compute from dem
+from getERA import getExtent as ext
+latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+# call bash script that does grep type stuff to update values in options file
+cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['startDate'] , config['main']['endDate'] , config['modis']['options_file']]
+
+# run MODIStsp tool\
+from DA import getMODIS as gmod
+gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+
+# extract timersies per point
+from DA import scaTS
+scaTS.main(wd ,config['modis']['sca_wd'] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+
+# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
