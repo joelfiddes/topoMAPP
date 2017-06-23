@@ -262,6 +262,7 @@ lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 # call bash script that does grep type stuff to update values in options file
 cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['startDate'] , config['main']['endDate'] , config['modis']['options_file']]
+subprocess.check_output( cmd)
 
 # run MODIStsp tool\
 from DA import getMODIS as gmod
