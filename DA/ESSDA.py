@@ -6,18 +6,19 @@ import pandas as pd
 from datetime import date
 from datetime import datetime
 
+wd= 'Alps_EXAMPLE_THAT_RUNS'
 wd= 'Alps_2_test'
-eng = matlab.engine.start_matlab()
-os.chdir('/home/joel/src/' +wd)
-eng.clean(nargout=0)
+#eng = matlab.engine.start_matlab()
+#os.chdir('/home/joel/src/' +wd)
+#eng.clean(nargout=0)
 
-eng = matlab.engine.start_matlab()
-os.chdir('/home/joel/src/' +wd+ '/obs')
-eng.getfSCA_Joel(nargout=0)\
+#eng = matlab.engine.start_matlab()
+#os.chdir('/home/joel/src/' +wd+ '/obs')
+#eng.getfSCA_Joel(nargout=0)\
 
-eng = matlab.engine.start_matlab()
-os.chdir('/home/joel/src/' +wd+ '/forcing')
-eng.struct_meteo(nargout=0)
+#eng = matlab.engine.start_matlab()
+#os.chdir('/home/joel/src/' +wd+ '/forcing')
+#eng.struct_meteo(nargout=0)
 
 eng = matlab.engine.start_matlab()
 os.chdir('/home/joel/src/' + wd)

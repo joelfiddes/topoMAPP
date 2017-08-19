@@ -17,12 +17,12 @@ config.filename = 'topomapp.conf'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/topomap_test/'
+config['main']['wd'] = '/home/joel/sim/topomap_augtest/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox'
 config['main']['startDate'] = '2011-09-01'
-config['main']['endDate'] = '2016-01-09'
+config['main']['endDate'] = '2011-09-02'
 config['main']['positions'] = [9.3,46.5,9.7,46.8 ]
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt'
 config['main']['pkCol'] = 1

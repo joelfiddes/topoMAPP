@@ -9,8 +9,8 @@ import subprocess
 import logging
 #============= LOGGING =========================================
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+#logging.basicConfig(level=logging.INFO)
+#logger = logging.getLogger(__name__)
 
 # logger.info("Start reading database")
 # # read database here
@@ -19,6 +19,14 @@ logger = logging.getLogger(__name__)
 # logger.info("Updating records ...")
 # # update records here
 # logger.info("Finish updating records")
+
+# v2 
+#import logging
+# import logging.handlers
+# log = logging.getLogger(__name__)
+# log.addHandler(logging.StreamHandler())  # Prints to console.
+# log.addHandler(logging.handlers.RotatingFileHandler('logfile.log'))
+# log.setLevel(logging.INFO)  # Set logging level here.
 #================================================================
 
 
@@ -90,7 +98,7 @@ from getERA import eraRetrieveSURFACE as surf
 print "Retrieving ECWMF surface data"
 surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
 
-# Merge NDF timeseries (requires linux package cdo)
+# Merge NC timeseries (requires linux package cdo)
 import subprocess
 #os.chdir(eraDir)
 cmd     = "cdo -b F64 -f nc2 mergetime " + wd + "/eraDat/interim_daily_PLEVEL* " +  wd + "/eraDat/PLEVEL.nc"
@@ -118,6 +126,22 @@ prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 
 from getERA import prepSims as sim
 sim.main(wd)
+
+#====================================================================
+#	TOPOSUB HERE
+#====================================================================
+ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+print "Running TopoSUB"
+
+for Ngrid in range(1,int(ncells)):
+	gridpath = wd +"/grid"+ str(Ngrid)
+	
+	if os.path.exists(gridpath):
+		print "running TopoSUB for grid " + str(Ngrid)
+		from toposub import toposub as tsub
+		tsub.main(gridpath, config["toposub"]["samples"] str(Ngrid))	
+
+
 
 #====================================================================
 #	makeListpoint: creates a listpoints for each ERA-grid, only 
