@@ -17,3 +17,8 @@ Describe python/ R setup here
 
 # Todo
 - check files exist and skip module if so
+
+# Notes
+
+- lon and lat written to lsp in toposub.R as mean values of grid - this is required by toposcale_sw in FALSE mode
+- makeSurface.R requires massive matrix calc (10+GB) and crashes frequently
