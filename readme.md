@@ -15,3 +15,5 @@ Describe python/ R setup here
 
 # CONFIG  
 
+# Todo
+- check files exist and skip module if so

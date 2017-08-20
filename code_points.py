@@ -7,6 +7,8 @@ import sys
 import os
 import subprocess
 import logging
+import os.path
+
 #============= LOGGING =========================================
 
 #logging.basicConfig(level=logging.INFO)
@@ -53,73 +55,94 @@ wd = config["main"]["wd"]
 #====================================================================
 #	Setup domain
 #====================================================================
-from domain_setup import getDEM_points as gdem
-gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
-from domain_setup import clipToEra as era
-era.main(wd ,config["era-interim"]["grid"])
 
-from domain_setup import makeShape as shp
-shp.main(wd , config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
-          
-from domain_setup import domainPlot as dplot
-dplot.main(wd , "TRUE") # shp = TRUE for points  run
 
-from domain_setup import makeKML as kml
-kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")
-        
-kml.main(wd, wd + "/spatial/eraExtent.tif", "raster", wd + "/spatial/eraExtent")
+fname = wd + "predictors/surface.tif"
+if os.path.isfile(fname) == False:
 
-from domain_setup import computeTopo as topo
-topo.main(wd, config["toposcale"]["svfCompute"])
+	from domain_setup import getDEM_points as gdem
+	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
-from domain_setup import makeSurface as surf
-surf.main(wd, config["modis"]["MODISdir"] )
+	from domain_setup import clipToEra as era
+	era.main(wd ,config["era-interim"]["grid"])
+
+	from domain_setup import makeShape as shp
+	shp.main(wd , config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
+	          
+	from domain_setup import domainPlot as dplot
+	dplot.main(wd , "TRUE") # shp = TRUE for points  run
+
+	from domain_setup import makeKML as kml
+	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")
+	        
+	kml.main(wd, wd + "/spatial/eraExtent.tif", "raster", wd + "/spatial/eraExtent")
+
+	from domain_setup import computeTopo as topo
+	topo.main(wd, config["toposcale"]["svfCompute"])
+
+	from domain_setup import makeSurface as surf
+	surf.main(wd, config["modis"]["MODISdir"] )
+
+else:
+	print "surface.tif precomputed"
 
 #====================================================================
 #	GET ERA
 #====================================================================
-from getERA import getExtent as ext
-latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
-
-eraDir = wd + "/eraDat"
-if not os.path.exists(eraDir):
-	os.mkdir(eraDir)
 
 
-from getERA import eraRetrievePLEVEL as plevel
-print "Retrieving ECWMF pressure-level data"
-plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
+fname1 = wd + "eraDat/SURF.nc"
+fname2 = wd + "eraDat/PLEVEL.nc"
+if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: 
 
-from getERA import eraRetrieveSURFACE as surf
-print "Retrieving ECWMF surface data"
-surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
 
-# Merge NC timeseries (requires linux package cdo)
-import subprocess
-#os.chdir(eraDir)
-cmd     = "cdo -b F64 -f nc2 mergetime " + wd + "/eraDat/interim_daily_PLEVEL* " +  wd + "/eraDat/PLEVEL.nc"
 
-if os.path.exists(wd + "eraDat/PLEVEL.nc"):
-    os.remove(wd + "eraDat/PLEVEL.nc")
-    print "removed original PLEVEL.nc"
 
-print("Running:" + str(cmd))
-subprocess.check_output(cmd, shell = "TRUE")
+	from getERA import getExtent as ext
+	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
-cmd     = "cdo -b F64 -f nc2 mergetime " + wd +  "/eraDat/interim_daily_SURF* " + wd +"/eraDat/SURF.nc"
+	eraDir = wd + "/eraDat"
+	if not os.path.exists(eraDir):
+		os.mkdir(eraDir)
 
-if os.path.exists(wd + "eraDat/SURF.nc"):
-    os.remove(wd + "eraDat/SURF.nc")
-    print "removed original SURF.nc"
 
-print("Running:" + str(cmd))
-subprocess.check_output(cmd, shell = "TRUE")
+	from getERA import eraRetrievePLEVEL as plevel
+	print "Retrieving ECWMF pressure-level data"
+	plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
 
-#os.chdir(config["main"]["srcdir"])
+	from getERA import eraRetrieveSURFACE as surf
+	print "Retrieving ECWMF surface data"
+	surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
+
+	# Merge NC timeseries (requires linux package cdo)
+	import subprocess
+	#os.chdir(eraDir)
+	cmd     = "cdo -b F64 -f nc2 mergetime " + wd + "/eraDat/interim_daily_PLEVEL* " +  wd + "/eraDat/PLEVEL.nc"
+
+	if os.path.exists(wd + "eraDat/PLEVEL.nc"):
+	    os.remove(wd + "eraDat/PLEVEL.nc")
+	    print "removed original PLEVEL.nc"
+
+	print("Running:" + str(cmd))
+	subprocess.check_output(cmd, shell = "TRUE")
+
+	cmd     = "cdo -b F64 -f nc2 mergetime " + wd +  "/eraDat/interim_daily_SURF* " + wd +"/eraDat/SURF.nc"
+
+	if os.path.exists(wd + "eraDat/SURF.nc"):
+	    os.remove(wd + "eraDat/SURF.nc")
+	    print "removed original SURF.nc"
+
+	print("Running:" + str(cmd))
+	subprocess.check_output(cmd, shell = "TRUE")
+
+else:
+	print "SURF.nc and PLEVEL.nc precomputed"
+
+	#os.chdir(config["main"]["srcdir"])
 
 from getERA import era_prep as prep
 prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])

@@ -1,328 +1,3 @@
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Warning messages:
-1: In `[<-`(`*tmp*`, i, value = raster(rasters1[i])) :
-  implicit list embedding of S4 objects is deprecated
-2: In `[<-`(`*tmp*`, i, value = raster(rasters1[i])) :
-  implicit list embedding of S4 objects is deprecated
-3: In `[<-`(`*tmp*`, i, value = raster(rasters1[i])) :
-  implicit list embedding of S4 objects is deprecated
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Warning message:
-In dir.create(paste0(wd, "/spatial")) :
-  '/home/joel/sim/topomap_augtest//spatial' already exists
-Loading required namespace: ncdf4
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-rgdal: version: 1.2-7, (SVN revision 660)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
- Path to GDAL shared files: /usr/share/gdal/1.11
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-4 
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: plotKML
-plotKML version 0.5-6 (2016-05-02)
-URL: http://plotkml.r-forge.r-project.org/
-KML file opened for writing...
-Writing to KML...
-Closing  /home/joel/sim/topomap_augtest//spatial/extent.kml
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: plotKML
-plotKML version 0.5-6 (2016-05-02)
-URL: http://plotkml.r-forge.r-project.org/
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: horizon
-Loading required package: MODIS
-Loading required package: mapdata
-Loading required package: maps
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-
-Loading required package: rgdal
-rgdal: version: 1.2-7, (SVN revision 660)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
- Path to GDAL shared files: /usr/share/gdal/1.11
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-4 
-Loading required namespace: rgeos
-Warning message:
-In .hist1(x, maxpixels = maxpixels, main = main, plot = plot, ...) :
-  0% of the raster cells were used. 100000 values used.
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-['/home/joel/src/TOPOMAP/toposubv2/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
-code_points.py
-Running:['Rscript', './rsrc/getDEM_points.R', '/home/joel/sim/topomap_augtest/', '/home/joel/data/DEM/srtm', '0.75', '/home/joel/data/GCOS/pointsTEST.txt', '2', '3']
-Running:['Rscript', './rsrc/clipToEra.R', '/home/joel/sim/topomap_augtest/', '0.75']
-Running:['Rscript', './rsrc/makeShape.R', '/home/joel/sim/topomap_augtest/', '/home/joel/data/GCOS/pointsTEST.txt', '2', '3']
-Running:['Rscript', './rsrc/domainPlot.R', '/home/joel/sim/topomap_augtest/', 'TRUE']
-Running:['Rscript', './rsrc/makeKML.R', '/home/joel/sim/topomap_augtest/', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'shape', '/home/joel/sim/topomap_augtest//spatial/extent']
-Running:['Rscript', './rsrc/makeKML.R', '/home/joel/sim/topomap_augtest/', '/home/joel/sim/topomap_augtest//spatial/eraExtent.tif', 'raster', '/home/joel/sim/topomap_augtest//spatial/eraExtent']
-Running:['Rscript', './rsrc/computeTopo.R', '/home/joel/sim/topomap_augtest/', 'FALSE']
-Running:['Rscript', './rsrc/makeSurface.R', '/home/joel/sim/topomap_augtest/', '/home/joel/data/MODIS_ARC/PROCESSED']
-Obtaining latN from /home/joel/sim/topomap_augtest//predictors/ele.tif
-Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'latN']
-Obtaining latS from /home/joel/sim/topomap_augtest//predictors/ele.tif
-Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'latS']
-Obtaining lonW from /home/joel/sim/topomap_augtest//predictors/ele.tif
-Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'lonW']
-Obtaining lonE from /home/joel/sim/topomap_augtest//predictors/ele.tif
-Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'lonE']
---- 6.103515625e-05 seconds ---
-Retrieving ECWMF pressure-level data
-['2011', '09', '01']
-Retrieving ERA-Interim data
-Bbox = 47.24986/9.750139/46.50014/10.49986
-Grid = 0.75
-Start date = 2011-9
-End date = 2011-9
-2017-08-19 16:31:31 ECMWF API python library 1.4.0
-2017-08-19 16:31:31 ECMWF API at https://api.ecmwf.int/v1
-2017-08-19 16:31:31 Welcome Joel Fiddes
-2017-08-19 16:31:32 In case of problems, please check https://software.ecmwf.int/wiki/display/WEBAPI/Troubleshooting or contact calldesk@ecmwf.int
-2017-08-19 16:31:32 
-2017-08-19 16:31:32 Request is queued
-Calling '['nice', 'mars', '/tmp/tmp-_marsDyX9It.req']'
-mars - WARN -
-mars - WARN - From 9 February 2016 10AM (UTC) MARS uses versions of
-mars - WARN - libemos newer than 4.3.0. For more details, see
-mars - WARN - https://software.ecmwf.int/wiki/display/EMOS/Bug+fix+implemented+in+EMOSLIB+4.3.x
-mars - WARN -
-PPDIR is /var/tmp/ppdir/x86_64
-mars - INFO   - 20170819.143133 - Welcome to MARS with ecCodes + ODB
-mars - INFO   - 20170819.143133 - MARS Client build stamp: 20170719164934
-mars - INFO   - 20170819.143133 - MARS Client version: 6.18.0
-mars - INFO   - 20170819.143133 - EMOSLIB version: 450
-mars - INFO   - 20170819.143133 - Using ecCodes version 2.4.0
-mars - INFO   - 20170819.143133 - Using odb_api version: 0.15.4.1 (file format version: 0.5)
-mars - INFO   - 20170819.143133 - Maximum retrieval size is 20.00 G
-retrieve,levelist=500/650/775/850/925/1000,stream=oper,levtype=pl,area=47.24986/9.750139/46.50014/10.49986,param=129.128/130.128/157.128/131.128/132.128,step=0,grid=0.75/0.75,expver=0001,time=00/06/12/18,date=20110901/to/20110930,resol=av,type=an,class=ei,padding=0,expect=anymars - WARN   - 20170819.143133 - For full resolution grid, it is recommended to use RESOL=AV to prevent any truncation before transformation
-mars - INFO   - 20170819.143133 - Automatic split by date is on
-
-mars - INFO   - 20170819.143133 - Processing request 1
-mars - WARN   - 20170819.143133 - Area not compatible with grid
-mars - WARN   - 20170819.143133 - Area changed from 47.24986/9.750139/46.50014/10.49986 to 47.25/9.75/46.5/10.5
-
-RETRIEVE,
-    CLASS      = EI,
-    TYPE       = AN,
-    STREAM     = OPER,
-    EXPVER     = 0001,
-    REPRES     = SH,
-    LEVTYPE    = PL,
-    LEVELIST   = 500/650/775/850/925/1000,
-    PARAM      = 129.128/130.128/157.128/131.128/132.128,
-    TIME       = 0000/0600/1200/1800,
-    STEP       = 0,
-    DOMAIN     = G,
-    RESOL      = AV,
-    AREA       = 47.25/9.75/46.5/10.5,
-    GRID       = 0.75/0.75,
-    PADDING    = 0,
-    EXPECT     = ANY,
-    DATE       = 20110901/20110902/20110903/20110904/20110905/20110906/20110907/20110908/20110909/20110910/20110911/20110912/20110913/20110914/20110915/20110916/20110917/20110918/20110919/20110920/20110921/20110922/20110923/20110924/20110925/20110926/20110927/20110928/20110929/20110930
-
-mars - INFO   - 20170819.143133 - Web API request id: 59984bc48806ad8a2016a842
-mars - INFO   - 20170819.143133 - Requesting any number of fields (request describes 3600)
-mars - INFO   - 20170819.143133 - Calling mars on 'marser', callback on 57917
-mars - INFO   - 20170819.143133 - Server task is 58 [marser]
-mars - INFO   - 20170819.143133 - Request cost: 3,600 fields, 455.322 Mbytes online, nodes: mvr02 [marser]
-mars - INFO   - 20170819.143133 - Wind conversion requested by server
-mars - INFO   - 20170819.143133 - Transfering 477439200 bytes
-2017-08-19 16:31:34 Request is active
-mars - INFO   - 20170819.143138 - Deriving U and V from vorticity and divergence
-mars - INFO   - 20170819.143202 - 3600 fields retrieved from 'marser'
-mars - INFO   - 20170819.143202 - 3600 fields have been interpolated
-mars - INFO   - 20170819.143202 - Request time:  wall: 29 sec  cpu: 21 sec
-mars - INFO   - 20170819.143202 -   Read from network: 455.32 Mbyte(s) in 8 sec  [54.47 Mbyte/sec]
-mars - INFO   - 20170819.143202 -   Visiting marser: wall: 29 sec
-mars - INFO   - 20170819.143202 -   Post-processing: wall: 11 sec cpu: 11 sec
-mars - INFO   - 20170819.143202 -   Writing to target file: 407.81 Kbyte(s) in < 1 sec [38.19 Mbyte/sec]
-mars - INFO   - 20170819.143202 - Memory used: 35.55 Mbyte(s)
-mars - INFO   - 20170819.143202 - No errors reported
-Process '['nice', 'mars', '/tmp/tmp-_marsDyX9It.req']' finished
-Calling '['nice', 'grib_to_netcdf', '/data/data04/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-PxHLlo.grib', '-o', '/data/data03/scratch/_grib2netcdf-atls04-98f536083ae965b31b0d04811be6f4c6-WK4x3c.nc', '-utime']'
-grib_to_netcdf: Version 2.4.0
-grib_to_netcdf: Processing input file '/data/data04/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-PxHLlo.grib'.
-grib_to_netcdf: Found 3600 GRIB fields in 1 file.
-grib_to_netcdf: Ignoring key(s): method, type, stream, refdate, hdate
-grib_to_netcdf: Creating netCDF file '/data/data03/scratch/_grib2netcdf-atls04-98f536083ae965b31b0d04811be6f4c6-WK4x3c.nc'
-grib_to_netcdf: NetCDF library version: 4.3.0 of Apr 10 2017 16:04:21 $
-grib_to_netcdf: Creating large (64 bit) file format.
-grib_to_netcdf: Defining variable 'z'.
-grib_to_netcdf: Defining variable 't'.
-grib_to_netcdf: Defining variable 'r'.
-grib_to_netcdf: Defining variable 'u'.
-grib_to_netcdf: Defining variable 'v'.
-grib_to_netcdf: Done.
-Process '['nice', 'grib_to_netcdf', '/data/data04/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-PxHLlo.grib', '-o', '/data/data03/scratch/_grib2netcdf-atls04-98f536083ae965b31b0d04811be6f4c6-WK4x3c.nc', '-utime']' finished
-2017-08-19 16:32:14 Request is complete
-2017-08-19 16:32:14 Transfering 30.8984 Kbytes into /home/joel/sim/topomap_augtest//eraDat/interim_daily_PLEVEL_201109.nc
-2017-08-19 16:32:14 From https://stream.ecmwf.int/data/atls04/data/data03/scratch/_grib2netcdf-atls04-98f536083ae965b31b0d04811be6f4c6-WK4x3c.nc
-2017-08-19 16:32:14 Transfer rate 52.0866 Kbytes/s
---- 7.08103179932e-05 seconds ---
-Retrieving ECWMF surface data
-Retrieving ERA-Interim data
-Bbox = 47.24986/9.750139/46.50014/10.49986
-Grid = 0.75
-Start date = 2011-8
-End date = 2011-9
-2017-08-19 16:32:15 ECMWF API python library 1.4.0
-2017-08-19 16:32:15 ECMWF API at https://api.ecmwf.int/v1
-2017-08-19 16:32:16 Welcome Joel Fiddes
-2017-08-19 16:32:16 In case of problems, please check https://software.ecmwf.int/wiki/display/WEBAPI/Troubleshooting or contact calldesk@ecmwf.int
-2017-08-19 16:32:16 
-2017-08-19 16:32:17 Request is queued
-Calling '['nice', 'mars', '/tmp/tmp-_mars7T9FHD.req']'
-mars - WARN -
-mars - WARN - From 9 February 2016 10AM (UTC) MARS uses versions of
-mars - WARN - libemos newer than 4.3.0. For more details, see
-mars - WARN - https://software.ecmwf.int/wiki/display/EMOS/Bug+fix+implemented+in+EMOSLIB+4.3.x
-mars - WARN -
-PPDIR is /var/tmp/ppdir/x86_64
-mars - INFO   - 20170819.143218 - Welcome to MARS with ecCodes + ODB
-mars - INFO   - 20170819.143218 - MARS Client build stamp: 20170719164934
-mars - INFO   - 20170819.143218 - MARS Client version: 6.18.0
-mars - INFO   - 20170819.143218 - EMOSLIB version: 450
-mars - INFO   - 20170819.143218 - Using ecCodes version 2.4.0
-mars - INFO   - 20170819.143218 - Using odb_api version: 0.15.4.1 (file format version: 0.5)
-mars - INFO   - 20170819.143218 - Maximum retrieval size is 20.00 G
-retrieve,stream=oper,area=47.24986/9.750139/46.50014/10.49986,levtype=sfc,param=129.128/168.128/175.128/169.128/228.128/167.128/212.128,step=3/6/9/12,grid=0.75/0.75,expver=0001,time=00/12,date=20110801/to/20110831,resol=av,type=fc,class=ei,padding=0,expect=anymars - WARN   - 20170819.143218 - For full resolution grid, it is recommended to use RESOL=AV to prevent any truncation before transformation
-mars - INFO   - 20170819.143218 - Automatic split by date is on
-
-mars - INFO   - 20170819.143218 - Processing request 1
-mars - WARN   - 20170819.143218 - Area not compatible with grid
-mars - WARN   - 20170819.143218 - Area changed from 47.24986/9.750139/46.50014/10.49986 to 47.25/9.75/46.5/10.5
-
-RETRIEVE,
-    CLASS      = EI,
-    TYPE       = FC,
-    STREAM     = OPER,
-    EXPVER     = 0001,
-    REPRES     = SH,
-    LEVTYPE    = SFC,
-    PARAM      = 129.128/168.128/175.128/169.128/228.128/167.128/212.128,
-    TIME       = 0000/1200,
-    STEP       = 3/6/9/12,
-    DOMAIN     = G,
-    RESOL      = AV,
-    AREA       = 47.25/9.75/46.5/10.5,
-    GRID       = 0.75/0.75,
-    PADDING    = 0,
-    EXPECT     = ANY,
-    DATE       = 20110801/20110802/20110803/20110804/20110805/20110806/20110807/20110808/20110809/20110810/20110811/20110812/20110813/20110814/20110815/20110816/20110817/20110818/20110819/20110820/20110821/20110822/20110823/20110824/20110825/20110826/20110827/20110828/20110829/20110830/20110831
-
-mars - INFO   - 20170819.143218 - Web API request id: 59984bf18806ad8a3b16a817
-mars - INFO   - 20170819.143218 - Requesting any number of fields (request describes 1736)
-mars - INFO   - 20170819.143218 - Calling mars on 'marser', callback on 52774
-mars - INFO   - 20170819.143218 - Server task is 765 [marser]
-mars - INFO   - 20170819.143218 - Request cost: 1,736 fields, 295.183 Mbytes online, nodes: mvr02 mvr06 [marser]
-mars - INFO   - 20170819.143218 - Transfering 309521856 bytes
-2017-08-19 16:32:19 Request is active
-mars - INFO   - 20170819.143239 - 1736 fields retrieved from 'marser'
-mars - INFO   - 20170819.143239 - 1736 fields have been interpolated
-mars - INFO   - 20170819.143239 - Request time:  wall: 21 sec  cpu: 9 sec
-mars - INFO   - 20170819.143239 -   Read from network: 295.18 Mbyte(s) in 11 sec  [26.70 Mbyte/sec]
-mars - INFO   - 20170819.143239 -   Visiting marser: wall: 21 sec
-mars - INFO   - 20170819.143239 -   Post-processing: wall: 6 sec cpu: 6 sec
-mars - INFO   - 20170819.143239 -   Writing to target file: 196.66 Kbyte(s) in < 1 sec [31.40 Mbyte/sec]
-mars - INFO   - 20170819.143239 - Memory used: 31.24 Mbyte(s)
-mars - INFO   - 20170819.143239 - No errors reported
-Process '['nice', 'mars', '/tmp/tmp-_mars7T9FHD.req']' finished
-Calling '['nice', 'grib_to_netcdf', '/data/data02/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-XkSgjr.grib', '-o', '/data/data01/scratch/_grib2netcdf-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-FSJG6o.nc', '-utime']'
-grib_to_netcdf: Version 2.4.0
-grib_to_netcdf: Processing input file '/data/data02/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-XkSgjr.grib'.
-grib_to_netcdf: Found 1736 GRIB fields in 1 file.
-grib_to_netcdf: Ignoring key(s): method, type, stream, refdate, hdate
-grib_to_netcdf: Creating netCDF file '/data/data01/scratch/_grib2netcdf-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-FSJG6o.nc'
-grib_to_netcdf: NetCDF library version: 4.3.0 of Apr 10 2017 16:04:37 $
-grib_to_netcdf: Creating large (64 bit) file format.
-grib_to_netcdf: Defining variable 'z'.
-grib_to_netcdf: Defining variable 'd2m'.
-grib_to_netcdf: Defining variable 'strd'.
-grib_to_netcdf: Defining variable 'ssrd'.
-grib_to_netcdf: Defining variable 'tp'.
-grib_to_netcdf: Defining variable 't2m'.
-grib_to_netcdf: Defining variable 'tisr'.
-grib_to_netcdf: Done.
-Process '['nice', 'grib_to_netcdf', '/data/data02/scratch/_mars-atls04-a562cefde8a29a7288fa0b8b7f9413f7-XkSgjr.grib', '-o', '/data/data01/scratch/_grib2netcdf-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-FSJG6o.nc', '-utime']' finished
-2017-08-19 16:32:47 Request is complete
-2017-08-19 16:32:47 Transfering 17.0859 Kbytes into /home/joel/sim/topomap_augtest//eraDat/interim_daily_SURF_201108.nc
-2017-08-19 16:32:47 From https://stream.ecmwf.int/data/atls06/data/data01/scratch/_grib2netcdf-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-FSJG6o.nc
-2017-08-19 16:32:47 Transfer rate 29.2528 Kbytes/s
-2017-08-19 16:32:48 ECMWF API python library 1.4.0
-2017-08-19 16:32:48 ECMWF API at https://api.ecmwf.int/v1
-2017-08-19 16:32:48 Welcome Joel Fiddes
-2017-08-19 16:32:48 In case of problems, please check https://software.ecmwf.int/wiki/display/WEBAPI/Troubleshooting or contact calldesk@ecmwf.int
-2017-08-19 16:32:48 
-2017-08-19 16:32:49 Request is queued
-Calling '['nice', 'mars', '/tmp/tmp-_marsg_bytM.req']'
-mars - WARN -
-mars - WARN - From 9 February 2016 10AM (UTC) MARS uses versions of
-mars - WARN - libemos newer than 4.3.0. For more details, see
-mars - WARN - https://software.ecmwf.int/wiki/display/EMOS/Bug+fix+implemented+in+EMOSLIB+4.3.x
-mars - WARN -
-PPDIR is /var/tmp/ppdir/x86_64
-mars - INFO   - 20170819.143250 - Welcome to MARS with ecCodes + ODB
-mars - INFO   - 20170819.143250 - MARS Client build stamp: 20170719164934
-mars - INFO   - 20170819.143250 - MARS Client version: 6.18.0
-mars - INFO   - 20170819.143250 - EMOSLIB version: 450
-mars - INFO   - 20170819.143250 - Using ecCodes version 2.4.0
-mars - INFO   - 20170819.143250 - Using odb_api version: 0.15.4.1 (file format version: 0.5)
-mars - INFO   - 20170819.143250 - Maximum retrieval size is 20.00 G
-retrieve,stream=oper,area=47.24986/9.750139/46.50014/10.49986,levtype=sfc,param=129.128/168.128/175.128/169.128/228.128/167.128/212.128,step=3/6/9/12,grid=0.75/0.75,expver=0001,time=00/12,date=20110901/to/20110930,resol=av,type=fc,class=ei,padding=0,expect=anymars - WARN   - 20170819.143250 - For full resolution grid, it is recommended to use RESOL=AV to prevent any truncation before transformation
-mars - INFO   - 20170819.143250 - Automatic split by date is on
-
-mars - INFO   - 20170819.143250 - Processing request 1
-mars - WARN   - 20170819.143250 - Area not compatible with grid
-mars - WARN   - 20170819.143250 - Area changed from 47.24986/9.750139/46.50014/10.49986 to 47.25/9.75/46.5/10.5
-
-RETRIEVE,
-    CLASS      = EI,
-    TYPE       = FC,
-    STREAM     = OPER,
-    EXPVER     = 0001,
-    REPRES     = SH,
-    LEVTYPE    = SFC,
-    PARAM      = 129.128/168.128/175.128/169.128/228.128/167.128/212.128,
-    TIME       = 0000/1200,
-    STEP       = 3/6/9/12,
-    DOMAIN     = G,
-    RESOL      = AV,
-    AREA       = 47.25/9.75/46.5/10.5,
-    GRID       = 0.75/0.75,
-    PADDING    = 0,
-    EXPECT     = ANY,
-    DATE       = 20110901/20110902/20110903/20110904/20110905/20110906/20110907/20110908/20110909/20110910/20110911/20110912/20110913/20110914/20110915/20110916/20110917/20cdo mergetime: Processed 14400 values from 5 variables over 120 timesteps ( 0.01s )
-cdo mergetime: Processed 13664 values from 14 variables over 488 timesteps ( 0.01s )
 Loading required package: ncdf4
 Loading required package: raster
 Loading required package: methods
@@ -377,58 +52,7 @@ Warning messages:
 2: In RGEOSBinPredFunc(spgeom1, spgeom2, byid, func) :
   spgeom1 and spgeom2 have different proj4 strings
 sh: 0: getcwd() failed: No such file or directory
-110918/20110919/20110920/20110921/20110922/20110923/20110924/20110925/20110926/20110927/20110928/20110929/20110930
-
-mars - INFO   - 20170819.143250 - Web API request id: 59984c1137b5ffe24f1e8615
-mars - INFO   - 20170819.143250 - Requesting any number of fields (request describes 1680)
-mars - INFO   - 20170819.143250 - Calling mars on 'marser', callback on 38832
-mars - INFO   - 20170819.143250 - Server task is 167 [marser]
-mars - INFO   - 20170819.143250 - Request cost: 1,680 fields, 285.661 Mbytes online, nodes: mvr02 [marser]
-mars - INFO   - 20170819.143250 - Transfering 299537280 bytes
-2017-08-19 16:32:52 Request is active
-mars - INFO   - 20170819.143308 - 1680 fields retrieved from 'marser'
-mars - INFO   - 20170819.143308 - 1680 fields have been interpolated
-mars - INFO   - 20170819.143308 - Request time:  wall: 19 sec  cpu: 7 sec
-mars - INFO   - 20170819.143308 -   Read from network: 285.66 Mbyte(s) in 11 sec  [25.33 Mbyte/sec]
-mars - INFO   - 20170819.143308 -   Visiting marser: wall: 19 sec
-mars - INFO   - 20170819.143308 -   Post-processing: wall: 5 sec cpu: 5 sec
-mars - INFO   - 20170819.143308 -   Writing to target file: 190.31 Kbyte(s) in < 1 sec [59.64 Mbyte/sec]
-mars - INFO   - 20170819.143308 - Memory used: 31.21 Mbyte(s)
-mars - INFO   - 20170819.143308 - No errors reported
-Process '['nice', 'mars', '/tmp/tmp-_marsg_bytM.req']' finished
-Calling '['nice', 'grib_to_netcdf', '/data/data03/scratch/_mars-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-2MXndx.grib', '-o', '/data/data04/scratch/_grib2netcdf-atls04-a562cefde8a29a7288fa0b8b7f9413f7-BP2ecN.nc', '-utime']'
-grib_to_netcdf: Version 2.4.0
-grib_to_netcdf: Processing input file '/data/data03/scratch/_mars-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-2MXndx.grib'.
-grib_to_netcdf: Found 1680 GRIB fields in 1 file.
-grib_to_netcdf: Ignoring key(s): method, type, stream, refdate, hdate
-grib_to_netcdf: Creating netCDF file '/data/data04/scratch/_grib2netcdf-atls04-a562cefde8a29a7288fa0b8b7f9413f7-BP2ecN.nc'
-grib_to_netcdf: NetCDF library version: 4.3.0 of Apr 10 2017 16:04:21 $
-grib_to_netcdf: Creating large (64 bit) file format.
-grib_to_netcdf: Defining variable 'z'.
-grib_to_netcdf: Defining variable 'd2m'.
-grib_to_netcdf: Defining variable 'strd'.
-grib_to_netcdf: Defining variable 'ssrd'.
-grib_to_netcdf: Defining variable 'tp'.
-grib_to_netcdf: Defining variable 't2m'.
-grib_to_netcdf: Defining variable 'tisr'.
-grib_to_netcdf: Done.
-Process '['nice', 'grib_to_netcdf', '/data/data03/scratch/_mars-atls06-95e2cf679cd58ee9b4db4dd119a05a8d-2MXndx.grib', '-o', '/data/data04/scratch/_grib2netcdf-atls04-a562cefde8a29a7288fa0b8b7f9413f7-BP2ecN.nc', '-utime']' finished
-2017-08-19 16:33:16 Request is complete
-2017-08-19 16:33:16 Transfering 16.6172 Kbytes into /home/joel/sim/topomap_augtest//eraDat/interim_daily_SURF_201109.nc
-2017-08-19 16:33:16 From https://stream.ecmwf.int/data/atls04/data/data04/scratch/_grib2netcdf-atls04-a562cefde8a29a7288fa0b8b7f9413f7-BP2ecN.nc
-2017-08-19 16:33:17 Transfer rate 31.3711 Kbytes/s
-Running:cdo -b F64 -f nc2 mergetime /home/joel/sim/topomap_augtest//eraDat/interim_daily_PLEVEL* /home/joel/sim/topomap_augtest//eraDat/PLEVEL.nc
-Running:cdo -b F64 -f nc2 mergetime /home/joel/sim/topomap_augtest//eraDat/interim_daily_SURF* /home/joel/sim/topomap_augtest//eraDat/SURF.nc
-Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/topomap_augtest/', '2011-09-01', '2011-09-02']
-Running:['Rscript', './rsrc/prepareSims.R', '/home/joel/sim/topomap_augtest/']
-Running:['Rscript', './rsrc/getRasterDims.R', '/home/joel/sim/topomap_augtest/', '/home/joel/sim/topomap_augtest//spatial/eraExtent.tif']
-Setting up simulation directories for 4 ERA-Grids
-creating listpoints for grid 1
-Running:['Rscript', './rsrc/makeListpoints.R', '/home/joel/sim/topomap_augtest//grid1', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
-creating listpoints for grid 2
-Running:['Rscript', './rsrc/makeListpoints.R', '/home/joel/sim/topomap_augtest//grid2', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
-creating listpoints for grid 3
-Running:['Rscript', './rsrc/makeListpoints.R',Loading required package: raster
+Loading required package: raster
 Loading required package: methods
 Loading required package: sp
 rgeos version: 0.3-23, (SVN revision 546)
@@ -648,6 +272,12 @@ The following objects are masked from ‘package:base’:
 
     format.pval, round.POSIXt, trunc.POSIXt, units
 
+Warning messages:
+1: In dir.create(simindex, recursive = TRUE) : 'S00001' already exists
+2: In dir.create(paste0(simindex, "/out"), recursive = TRUE) :
+  'S00001/out' already exists
+3: In dir.create(paste0(simindex, "/rec"), recursive = TRUE) :
+  'S00001/rec' already exists
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -680,55 +310,20 @@ The following object is masked from ‘package:base’:
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: MODIStsp
-[Sat Aug 19 16:34:32 2017]Welcome to MODIStsp!
-
-We will now search for a valid GDAL installation - please wait
-(this will happen only once)
-Scanning for GDAL installations...
-Checking Sys.which...
-GDAL version 2.2.1
-GDAL version in use:1.11.3
-[Sat Aug 19 16:34:34 2017] Retrieving list of files from NASA server
-[Sat Aug 19 16:34:43 2017] Retrieving Files for Year 2011
-[Sat Aug 19 16:34:47 2017] Downloading Terra Files for date 2011_09_01 : 1 of 1
-[Sat Aug 19 16:34:58 2017] 1 files for date of 2011.09.01 were successfully downloaded!
-[Sat Aug 19 16:34:58 2017] Processing and Reprojecting Terra SC files for date: 2011_09_01
-[Sat Aug 19 16:35:02 2017] Downloading Terra Files for date 2011_09_02 : 1 of 1
-[Sat Aug 19 16:35:12 2017] 1 files for date of 2011.09.02 were successfully downloaded!
-[Sat Aug 19 16:35:12 2017] Processing and Reprojecting Terra SC files for date: 2011_09_02
-Error in curl::curl_fetch_memory(url, handle = handle) : 
-  Timeout was reached
-Trying to reach http server - attempt 1
-Error in curl::curl_fetch_memory(url, handle = handle) : 
-  Timeout was reached
-Trying to reach http server - attempt 2
-[Sat Aug 19 16:35:41 2017] Retrieving Files for Year 2011
-[Sat Aug 19 16:35:43 2017] Downloading Aqua Files for date 2011_09_01 : 1 of 1
-[Sat Aug 19 16:35:54 2017] 1 files for date of 2011.09.01 were successfully downloaded!
-[Sat Aug 19 16:35:54 2017] Processing and Reprojecting Aqua SC files for date: 2011_09_01
-[Sat Aug 19 16:35:58 2017] Downloading Aqua Files for date 2011_09_02 : 1 of 1
-[Sat Aug 19 16:36:13 2017] 1 files for date of 2011.09.02 were successfully downloaded!
-[Sat Aug 19 16:36:13 2017] Processing and Reprojecting Aqua SC files for date: 2011_09_02
-[Sat Aug 19 16:36:14 2017] Creating Virtual Files and rts time series for layer SC
-[Sat Aug 19 16:36:14 2017] Creating Virtual Files and rts time series for layer SC
-[Sat Aug 19 16:36:14 2017] Creating Virtual Files and rts time series for layer SC
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
- '/home/joel/sim/topomap_augtest//grid3', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
+['/home/joel/src/TOPOMAP/toposubv2/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
+code_points.py
+surface.tif precomputed
+SURF.nc and PLEVEL.nc precomputed
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/topomap_augtest/', '2011-09-01', '2011-09-02']
+Running:['Rscript', './rsrc/prepareSims.R', '/home/joel/sim/topomap_augtest/']
+Running:['Rscript', './rsrc/getRasterDims.R', '/home/joel/sim/topomap_augtest/', '/home/joel/sim/topomap_augtest//spatial/eraExtent.tif']
+Setting up simulation directories for 4 ERA-Grids
+creating listpoints for grid 1
+Running:['Rscript', './rsrc/makeListpoints.R', '/home/joel/sim/topomap_augtest//grid1', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
+creating listpoints for grid 2
+Running:['Rscript', './rsrc/makeListpoints.R', '/home/joel/sim/topomap_augtest//grid2', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
+creating listpoints for grid 3
+Running:['Rscript', './rsrc/makeListpoints.R', '/home/joel/sim/topomap_augtest//grid3', '/home/joel/data/GCOS/pointsTEST.txt', '1', '2', '3']
 Running:['Rscript', './rsrc/getRasterDims.R', '/home/joel/sim/topomap_augtest/', '/home/joel/sim/topomap_augtest//spatial/eraExtent.tif']
 Running TopoSCALE
 Running:['Rscript', './rsrc/getGridEle.R', '/home/joel/sim/topomap_augtest/']
@@ -760,7 +355,49 @@ Grid 1 has been removed because it contained no points. Now processing grid2
 Grid 2 has been removed because it contained no points. Now processing grid3
 Simulations grid3 running
 Obtaining latN from /home/joel/sim/topomap_augtest//predictors/ele.tif
-Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'latN']
+Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tLoading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: MODIStsp
+[Sun Aug 20 00:05:11 2017]Welcome to MODIStsp!
+
+We will now search for a valid GDAL installation - please wait
+(this will happen only once)
+Scanning for GDAL installations...
+Checking Sys.which...
+GDAL version 2.2.1
+GDAL version in use:1.11.3
+[Sun Aug 20 00:05:12 2017] Retrieving list of files from NASA server
+[Sun Aug 20 00:05:22 2017] Retrieving Files for Year 2011
+[Sun Aug 20 00:05:24 2017] Downloading Terra Files for date 2011_09_01 : 1 of 1
+[Sun Aug 20 00:05:35 2017] 1 files for date of 2011.09.01 were successfully downloaded!
+[Sun Aug 20 00:05:35 2017] Processing and Reprojecting Terra SC files for date: 2011_09_01
+[Sun Aug 20 00:05:39 2017] Downloading Terra Files for date 2011_09_02 : 1 of 1
+[Sun Aug 20 00:05:48 2017] 1 files for date of 2011.09.02 were successfully downloaded!
+[Sun Aug 20 00:05:49 2017] Processing and Reprojecting Terra SC files for date: 2011_09_02
+[Sun Aug 20 00:05:53 2017] Retrieving Files for Year 2011
+[Sun Aug 20 00:05:55 2017] Downloading Aqua Files for date 2011_09_01 : 1 of 1
+[Sun Aug 20 00:06:07 2017] 1 files for date of 2011.09.01 were successfully downloaded!
+[Sun Aug 20 00:06:07 2017] Processing and Reprojecting Aqua SC files for date: 2011_09_01
+[Sun Aug 20 00:06:11 2017] Downloading Aqua Files for date 2011_09_02 : 1 of 1
+[Sun Aug 20 00:06:21 2017] 1 files for date of 2011.09.02 were successfully downloaded!
+[Sun Aug 20 00:06:21 2017] Processing and Reprojecting Aqua SC files for date: 2011_09_02
+[Sun Aug 20 00:06:22 2017] Creating Virtual Files and rts time series for layer SC
+[Sun Aug 20 00:06:22 2017] Creating Virtual Files and rts time series for layer SC
+[Sun Aug 20 00:06:22 2017] Creating Virtual Files and rts time series for layer SC
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+if', 'latN']
 Obtaining latS from /home/joel/sim/topomap_augtest//predictors/ele.tif
 Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/topomap_augtest//predictors/ele.tif', 'latS']
 Obtaining lonW from /home/joel/sim/topomap_augtest//predictors/ele.tif
