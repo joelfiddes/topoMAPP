@@ -59,7 +59,7 @@ wd = config["main"]["wd"]
 
 
 
-fname = wd + "predictors/surface.tif"
+fname = wd + "predictors/asp.tif"
 if os.path.isfile(fname) == False:
 
 	from domain_setup import getDEM_points as gdem
@@ -82,8 +82,8 @@ if os.path.isfile(fname) == False:
 	from domain_setup import computeTopo as topo
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
-	from domain_setup import makeSurface as surf
-	surf.main(wd, config["modis"]["MODISdir"] )
+	#from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+	#surf.main(wd, config["modis"]["MODISdir"] )
 
 else:
 	print "surface.tif precomputed"
@@ -163,6 +163,10 @@ for Ngrid in range(1,int(ncells)):
 	gridpath = wd +"/grid"+ str(Ngrid)
 	
 	if os.path.exists(gridpath):
+		print "preparing surface layer " + str(Ngrid)
+		from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+		surf.main(gridpath, config["modis"]["MODISdir"] )
+
 		print "running TopoSUB for grid " + str(Ngrid)
 		from toposub import toposub as tsub
 		tsub.main(gridpath, config["toposub"]["samples"], str(Ngrid))	
@@ -183,6 +187,10 @@ for Ngrid in range(1,int(ncells)):
 # # set up sim directoroes #and write metfiles
 # for Ngrid in range(1,int(ncells)):
 # 	gridpath=wd +"/grid"+ str(Ngrid)
+
+#	print "preparing surface layer " + str(Ngrid)
+#	from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+#	surf.main(gridpath, config["modis"]["MODISdir"] )
 # 	print "creating listpoints for grid " + str(Ngrid)
 # 	from listpoints_make import makeListpoints as list
 # 	list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])

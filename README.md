@@ -1,9 +1,9 @@
-# Too run
+# To run
 1. set config by:
 - edit writeConfig.py
 - python writeConfig.py
 
-2. creat wd manually
+2. create wd manually
 3. ./run.sh
 
 # Dependencies
