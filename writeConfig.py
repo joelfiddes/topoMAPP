@@ -22,12 +22,12 @@ config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2011-09-01'
-config['main']['endDate'] = '2011-09-02'
+config['main']['endDate'] = '2011-12-05'
 
-config['main']['lonw'] = 9.3
-config['main']['lats'] = 46.5
-config['main']['lone'] = 9.7
-config['main']['latn'] = 46.8
+config['main']['lonw'] = 9.7
+config['main']['lats'] = 46.7
+config['main']['lone'] = 9.9
+config['main']['latn'] = 46.9
 
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
 config['main']['pkCol'] = 1
@@ -66,9 +66,9 @@ config['geotop']['geotopInputsPath'] = '/home/joel/src/geotop/inputsfile/geotop.
 config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
 config['geotop']['file1'] = 'surface.txt'
-config['geotop']['targV'] = 'snow_water_equivalent.mm.' #'X100.000000'
-config['geotop']['beg'] = "01/09/2011 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"02/09/2011 00:00:00" # fix this to accept main time parameters
+config['geotop']['targV'] = 'snow_water_equivalent.mm.'#'X100.000000' # 'snow_water_equivalent.mm.'
+config['geotop']['beg'] = "02/09/2011 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"04/12/2012 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp

@@ -303,7 +303,7 @@ for Ngrid in range(1,int(ncells)+1):
 		print "Grid "+ str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid+1)
 
 #====================================================================
-#	Spatialise toposub results
+#	Spatialise toposub results SIMULATION MEAN
 #====================================================================
 if config['main']['runtype'] == 'bbox':
 
@@ -317,6 +317,19 @@ if config['main']['runtype'] == 'bbox':
 		post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["geotop"]["beg"],config["geotop"]["end"] )	
 
 
+#====================================================================
+#	Spatialise toposub results LATEST
+#====================================================================
+if config['main']['runtype'] == 'bbox':
+
+	print "Spatialising toposub results...."
+
+	for Ngrid in range(1,int(ncells)+1):
+		gridpath = wd +"/grid"+ str(Ngrid)
+
+		print "running spatialisation routines for grid " + str(Ngrid)
+		from toposub import toposub_postInstant as postInst
+		postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
 #====================================================================
 #	Give pdf of toposub results
