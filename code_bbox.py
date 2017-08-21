@@ -419,3 +419,7 @@ if config['main']['runtype'] == 'bbox':
 
 	# compare obs to mod
 	
+#====================================================================
+#	Retrive latest sentinel 2
+#====================================================================
+#https://www.evernote.com/Home.action#n=e77ce355-1b1e-4a89-896b-4036f905dfea&ses=1&sh=5&sds=5&x=sentinel&

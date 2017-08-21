@@ -23,3 +23,4 @@ Describe python/ R setup here
 - lon and lat written to lsp in toposub.R as mean values of grid - this is required by toposcale_sw in FALSE mode
 - makeSurface.R requires massive matrix calc (10+GB) and crashes frequently
 - need to reconcile shifts in domain when clip to ERA-grids
+- automate optional cleaning (command libne arg 'clean') and config run at start 
