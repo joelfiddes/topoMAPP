@@ -48,6 +48,7 @@ config['era-interim']['grid'] = 0.75
 #=================================================================
 config['toposub'] = {}
 config['toposub']['samples'] = 50
+ 
 
 #=================================================================
 # TopoSCale
@@ -64,8 +65,10 @@ config['geotop'] = {}
 config['geotop']['geotopInputsPath'] = '/home/joel/src/geotop/inputsfile/geotop.inpts'
 config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
-config['geotop']['file1'] = 'ground.txt'
-config['geotop']['targV'] = 'X100.000000'
+config['geotop']['file1'] = 'surface.txt'
+config['geotop']['targV'] = 'snow_water_equivalent.mm.' #'X100.000000'
+config['geotop']['beg'] = "01/09/2011 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"02/09/2011 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp
@@ -93,13 +96,19 @@ config['validation']['latCol'] = 8
 
 #=================================================================
 # MODIS
-#================================================================\
+#=================================================================
 config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
 # location of MODIStsp options file
 
+#=================================================================
+# DA
+#=================================================================
+config['da'] = {}
+config['da']['precipScale'] = 1 #factor to multiply precip by
+config['da']['tempScale'] = 0 #factor to add to temp
 config.write()
 
 
