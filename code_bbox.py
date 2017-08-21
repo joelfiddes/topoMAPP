@@ -167,7 +167,7 @@ if config['main']['runtype'] == 'bbox':
 	print "Running TopoSUB"
 	print ncells #debug
 
-	for Ngrid in range(1,int(ncells)):
+	for Ngrid in range(1,int(ncells)+1):
 		gridpath = wd +"/grid"+ str(Ngrid)
 		print gridpath
 		if os.path.exists(gridpath):
@@ -193,7 +193,7 @@ if config['main']['runtype'] == 'points':
 	print "Setting up simulation directories for " + ncells  + " ERA-Grids" 
 
 	# set up sim directoroes #and write metfiles
-	for Ngrid in range(1,int(ncells)):
+	for Ngrid in range(1,int(ncells)+1):
 		gridpath=wd +"/grid"+ str(Ngrid)
 
 		print "preparing surface layer " + str(Ngrid)
@@ -214,7 +214,7 @@ from toposcale import getGridEle as gele
 gele.main(wd)
 
 # set up sim directoroes #and write metfiles
-for Ngrid in range(1,int(ncells)):
+for Ngrid in range(1,int(ncells)+1):
 	gridpath = wd +"/grid"+ str(Ngrid)
 
 	if os.path.exists(gridpath):
@@ -249,7 +249,7 @@ ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
 print "Setup Geotop simulations" 
 
 # set up sim directoroes #and write metfiles
-for Ngrid in range(1,int(ncells)):
+for Ngrid in range(1,int(ncells)+1):
 	gridpath = wd +"/grid"+ str(Ngrid)
 
 	if os.path.exists(gridpath):
@@ -278,7 +278,7 @@ ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
 print "Running LSM" 
 
 # set up sim directoroes #and write metfiles
-for Ngrid in range(1,int(ncells)):
+for Ngrid in range(1,int(ncells)+1):
 	gridpath = wd +"/grid"+ str(Ngrid)
 
 	if os.path.exists(gridpath):
