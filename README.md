@@ -1,4 +1,4 @@
-# TO RUN
+# Too run
 1. set config by:
 - edit writeConfig.py
 - python writeConfig.py
@@ -6,14 +6,14 @@
 2. creat wd manually
 3. ./run.sh
 
-# DEPENDENCIES
+# Dependencies
 
 - GDAL > 2 MODIS R package
 
-# STRUCTURE
+# Structure
 Describe python/ R setup here
 
-# CONFIG  
+# Config  
 
 # Todo
 - check files exist and skip module if so
