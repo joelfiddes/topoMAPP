@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/getRasterDims.R
+../../workdir/getRasterDims.R

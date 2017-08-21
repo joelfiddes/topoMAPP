@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/runTopoSCALE.sh
+../../workdir/runTopoSCALE.sh

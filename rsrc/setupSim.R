@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/setupSim.R
+../../workdir/setupSim.R

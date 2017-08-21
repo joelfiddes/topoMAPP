@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/getGridEle.R
+../../workdir/getGridEle.R

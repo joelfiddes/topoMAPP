@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/tscale_tair.R
+../../workdir/tscale_tair.R

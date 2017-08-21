@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/spatialise.sh
+../../workdir/spatialise.sh

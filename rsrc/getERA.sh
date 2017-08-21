@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/getERA.sh
+../../workdir/getERA.sh

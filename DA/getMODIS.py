@@ -1,7 +1,21 @@
 #!/usr/bin/env python
 
-""" This module retrives MODIS fSCA product based on options file (DA/updateOptions.sh.
- 
+""" This module retrives MODIS fSCA product based on options file 
+https://github.com/lbusett/MODIStsp
+use to set params: "Rscript getMODIS_SCA.R TRUE $options_file"
+docs MÒDIS SCA https://modis-snow-ice.gsfc.nasa.gov/uploads/C6_MODIS_Snow_User_Guide.pdf
+Sript gets extent from DEM and sets options for SCA download
+
+#====================================================================
+# MODIS SA CODES
+#====================================================================
+# 0-100=NDSI snow 200=missing data
+# 201=no decision
+# 211=night
+# 237=inland water 239=ocean
+# 250=cloud
+# 254=detector saturated 255=fill
+
 Example:   
       as import: 
 

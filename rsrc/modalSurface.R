@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/modalSurface.R
+../../workdir/modalSurface.R

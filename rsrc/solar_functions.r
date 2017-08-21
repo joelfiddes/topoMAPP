@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/solar_functions.r
+../../workdir/solar_functions.r

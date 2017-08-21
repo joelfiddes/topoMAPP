@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/makeSurface.R
+../../workdir/makeSurface.R

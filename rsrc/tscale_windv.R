@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/tscale_windv.R
+../../workdir/tscale_windv.R

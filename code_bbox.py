@@ -385,3 +385,37 @@ if config['main']['runtype'] == 'points':
 
 	# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
+
+#====================================================================
+#	Get MODIS SCA for a given date
+#====================================================================
+if config['main']['runtype'] == 'bbox':
+	# clear data
+	import os, shutil
+	folder = config['modis']['sca_wd']
+	for the_file in os.listdir(folder):
+	    file_path = os.path.join(folder, the_file)
+	    try:
+	        if os.path.isfile(file_path):
+	            os.unlink(file_path)
+	        elif os.path.isdir(file_path): shutil.rmtree(file_path)
+	    except Exception as e:
+	        print(e)
+
+	# compute from dem
+	from getERA import getExtent as ext
+	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+	# call bash script that does grep type stuff to update values in options file
+	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['endDate'] , config['main']['endDate'] , config['modis']['options_file']]
+	subprocess.check_output( cmd)
+
+	# run MODIStsp tool
+	from DA import getMODIS as gmod
+	gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+
+	# compare obs to mod
+	

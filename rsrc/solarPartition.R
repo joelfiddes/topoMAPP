@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/solarPartition.R
+../../workdir/solarPartition.R

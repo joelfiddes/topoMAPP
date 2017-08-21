@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/makeGeotopInputs.R
+../../workdir/makeGeotopInputs.R

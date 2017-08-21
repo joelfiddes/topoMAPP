@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/sdirEleScale.R
+../../workdir/sdirEleScale.R

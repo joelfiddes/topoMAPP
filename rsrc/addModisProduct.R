@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/addModisProduct.R
+../../workdir/addModisProduct.R

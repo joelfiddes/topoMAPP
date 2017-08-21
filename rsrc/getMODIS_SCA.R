@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/getMODIS_SCA.R
+../../workdir/getMODIS_SCA.R

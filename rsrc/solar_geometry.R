@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/solar_geometry.R
+../../workdir/solar_geometry.R

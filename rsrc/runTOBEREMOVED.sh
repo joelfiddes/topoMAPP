@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/runTOBEREMOVED.sh
+../../workdir/runTOBEREMOVED.sh

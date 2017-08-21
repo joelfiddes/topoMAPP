@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/validate.sh
+../../workdir/validate.sh

@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/extractSCATimeseries.R
+../../workdir/extractSCATimeseries.R

@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/computeTopo.R
+../../workdir/computeTopo.R

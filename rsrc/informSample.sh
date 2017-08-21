@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/informSample.sh
+../../workdir/informSample.sh

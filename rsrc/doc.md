@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/doc.md
+../../workdir/doc.md

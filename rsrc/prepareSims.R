@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/prepareSims.R
+../../workdir/prepareSims.R

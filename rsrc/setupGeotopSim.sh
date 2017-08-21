@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/setupGeotopSim.sh
+../../workdir/setupGeotopSim.sh

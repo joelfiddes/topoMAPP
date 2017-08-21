@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/crop2points.R
+../../workdir/crop2points.R

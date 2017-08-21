@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/gt_control.R
+../../workdir/gt_control.R

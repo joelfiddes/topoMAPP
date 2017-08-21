@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/toposub_post_2.R
+../../workdir/toposub_post_2.R

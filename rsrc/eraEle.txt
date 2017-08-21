@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/eraEle.txt
+../../workdir/eraEle.txt

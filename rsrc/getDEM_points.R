@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/getDEM_points.R
+../../workdir/getDEM_points.R

@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/makebatch_toposcale.R
+../../workdir/makebatch_toposcale.R

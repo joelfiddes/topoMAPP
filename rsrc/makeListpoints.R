@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/makeListpoints.R
+../../workdir/makeListpoints.R

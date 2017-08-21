@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/surfFluxSrc.r
+../../workdir/surfFluxSrc.r

@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/setupDomain_points.sh
+../../workdir/setupDomain_points.sh

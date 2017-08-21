@@ -1,1 +1,1 @@
-/home/joel/src/TOPOMAP/toposubv2/workdir/toposcale_pre.R
+../../workdir/toposcale_pre.R
