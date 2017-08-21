@@ -20,11 +20,16 @@ config['main'] = {}
 config['main']['wd'] = '/home/joel/sim/topomap_augtest/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
-config['main']['runtype'] = 'bbox'
+config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2011-09-01'
 config['main']['endDate'] = '2011-09-02'
-config['main']['positions'] = [9.3,46.5,9.7,46.8 ]
-config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt'
+
+config['main']['lonw'] = 9.3
+config['main']['lats'] = 46.5
+config['main']['lone'] = 9.7
+config['main']['latn'] = 46.8
+
+config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
 config['main']['pkCol'] = 1
 config['main']['lonCol'] = 2
 config['main']['latCol'] = 3

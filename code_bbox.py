@@ -62,8 +62,13 @@ wd = config["main"]["wd"]
 fname = wd + "predictors/asp.tif"
 if os.path.isfile(fname) == False:
 
-	from domain_setup import getDEM_points as gdem
-	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
+	if config['main']['runtype'] == 'bbox':
+		from domain_setup import getDEM as gdem
+		gdem.main(wd ,config["main"]["demDir"] ,config['main']['lonw'],config['main']['lats'],config['main']['lone'],config['main']['latn'])
+
+	if config['main']['runtype'] == 'points':
+		from domain_setup import getDEM_points as gdem
+		gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
 	from domain_setup import clipToEra as era
 	era.main(wd ,config["era-interim"]["grid"])
@@ -155,45 +160,48 @@ sim.main(wd)
 #====================================================================
 #	TOPOSUB HERE
 #====================================================================
-from listpoints_make import getRasterDims as dims
-ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-print "Running TopoSUB"
+if config['main']['runtype'] == 'bbox':
 
-for Ngrid in range(1,int(ncells)):
-	gridpath = wd +"/grid"+ str(Ngrid)
-	
-	if os.path.exists(gridpath):
-		print "preparing surface layer " + str(Ngrid)
-		from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-		surf.main(gridpath, config["modis"]["MODISdir"] )
+	from listpoints_make import getRasterDims as dims
+	ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+	print "Running TopoSUB"
+	print ncells #debug
 
-		print "running TopoSUB for grid " + str(Ngrid)
-		from toposub import toposub as tsub
-		tsub.main(gridpath, config["toposub"]["samples"], str(Ngrid))	
+	for Ngrid in range(1,int(ncells)):
+		gridpath = wd +"/grid"+ str(Ngrid)
+		print gridpath
+		if os.path.exists(gridpath):
+			print "preparing surface layer " + str(Ngrid)
+			from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+			surf.main(gridpath, config["modis"]["MODISdir"] )
+
+			print "running TopoSUB for grid " + str(Ngrid)
+			from toposub import toposub as tsub
+			tsub.main(gridpath, config["toposub"]["samples"], str(Ngrid))	
 
 
 
 #====================================================================
 #	makeListpoint: creates a listpoints for each ERA-grid, only 
-#	required for point runs
+#	required for point runs. Removes Boxes that contain no points.
 #====================================================================
-# 
+if config['main']['runtype'] == 'points':
 
-# from listpoints_make import getRasterDims as dims
-# ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+	from listpoints_make import getRasterDims as dims
+	ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
 
-# print "Setting up simulation directories for " + ncells  + " ERA-Grids" 
+	print "Setting up simulation directories for " + ncells  + " ERA-Grids" 
 
-# # set up sim directoroes #and write metfiles
-# for Ngrid in range(1,int(ncells)):
-# 	gridpath=wd +"/grid"+ str(Ngrid)
+	# set up sim directoroes #and write metfiles
+	for Ngrid in range(1,int(ncells)):
+		gridpath=wd +"/grid"+ str(Ngrid)
 
-#	print "preparing surface layer " + str(Ngrid)
-#	from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-#	surf.main(gridpath, config["modis"]["MODISdir"] )
-# 	print "creating listpoints for grid " + str(Ngrid)
-# 	from listpoints_make import makeListpoints as list
-# 	list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
+		print "preparing surface layer " + str(Ngrid)
+		from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+		surf.main(gridpath, config["modis"]["MODISdir"] )
+		print "creating listpoints for grid " + str(Ngrid)
+		from listpoints_make import makeListpoints as list
+		list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
 
 #====================================================================
 #	run toposcale
