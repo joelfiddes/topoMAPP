@@ -7,6 +7,8 @@ Example:
 
 
 Attributes:
+tscale - scales airtemperature with additive factor
+pscale - scales precip with a multiplicative factor
 
 Todo:
  - move u/v conversion to 'TOPOSCALE'
@@ -17,9 +19,9 @@ Todo:
 path2script = "./rsrc/setupSim.R"
 
 # main
-def main(wd, svfComp):
+def main(wd, svfComp, tscale,pscale):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd, svfComp])
+    run_rscript_fileout(path2script,[wd, svfComp, tscale, pscale])
 
 # functions
 def run_rscript_stdout(path2script , args):
@@ -44,8 +46,9 @@ if __name__ == '__main__':
     import sys
     wd    = sys.argv[1]
     svfComp  = sys.argv[2]
-
-    main(wd, svfComp)
+    tscale  = sys.argv[3]
+    pscale  = sys.argv[4]
+    main(wd, svfComp, tscale,pscale)
 
 
 

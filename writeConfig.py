@@ -17,17 +17,17 @@ config.filename = 'topomapp.conf'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/topomap_augtest/'
+config['main']['wd'] = '/home/joel/sim/wfj_P2/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2015-09-01'
-config['main']['endDate'] = '2015-12-07'
+config['main']['startDate'] = '2015-08-31'
+config['main']['endDate'] = '2016-09-02'
 
-config['main']['lonw'] = 9.7
-config['main']['lats'] = 46.7
-config['main']['lone'] = 9.9
-config['main']['latn'] = 46.9
+config['main']['lonw'] = 9.80964
+config['main']['lats'] = 46.82973
+config['main']['lone'] = 9.80964
+config['main']['latn'] = 46.82973
 
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
 config['main']['pkCol'] = 1
@@ -36,12 +36,14 @@ config['main']['latCol'] = 3
 config['main']['tz'] = -1
 config['main']['googleEarthPlots'] = 'TRUE'
 config['main']['informSample'] = 'FALSE'
-
+config['main']['initSim'] = 'TRUE' # initialises interim data and dem from existing to allow perturbed experiment 
+config['main']['initDir'] = '/home/joel/sim/wfj_norm/'
+config['main']['initGrid'] = 3 # optional subset of grids to init sim with
 #=================================================================
 # ERA-Interim
 #=================================================================
 config['era-interim'] = {}
-config['era-interim']['grid'] = 0.75
+config['era-interim']['grid'] = 0.25
 
 #=================================================================
 # TopoSUb
@@ -67,8 +69,8 @@ config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
 config['geotop']['file1'] = 'surface.txt'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.'#'X100.000000' # 'snow_water_equivalent.mm.'
-config['geotop']['beg'] = "02/09/2015 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"07/12/2015 00:00:00" # fix this to accept main time parameters
+config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp
@@ -101,14 +103,15 @@ config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
+config['modis']['getMODISSCA'] = "FALSE"
 # location of MODIStsp options file
 
 #=================================================================
 # DA
 #=================================================================
 config['da'] = {}
-config['da']['precipScale'] = 1 #factor to multiply precip by
-config['da']['tempScale'] = 0 #factor to add to temp
+config['da']['pscale'] = 2 #factor to multiply precip by
+config['da']['tscale'] = 0 #factor to add to temp
 config.write()
 
 
