@@ -11,23 +11,23 @@ The config files that ConfigObj will read and write are based on the 'INI' forma
 
 from configobj import ConfigObj
 config = ConfigObj()
-config.filename = 'topomap.ini'
+config.filename = 'topomapp.conf'
 
 #=================================================================
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/greenland/'
+config['main']['wd'] = '/home/joel/sim/wfj_P2/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2016-08-31'
-config['main']['endDate'] = '2017-06-30'
+config['main']['startDate'] = '2015-08-31'
+config['main']['endDate'] = '2016-09-02'
 
-config['main']['lonw'] = -57
-config['main']['lats'] = 51
-config['main']['lone'] = -56
-config['main']['latn'] = 52
+config['main']['lonw'] = 9.80964
+config['main']['lats'] = 46.82973
+config['main']['lone'] = 9.80964
+config['main']['latn'] = 46.82973
 
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
 config['main']['pkCol'] = 1
@@ -36,7 +36,7 @@ config['main']['latCol'] = 3
 config['main']['tz'] = -1
 config['main']['googleEarthPlots'] = 'TRUE'
 config['main']['informSample'] = 'FALSE'
-config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
+config['main']['initSim'] = 'TRUE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/wfj_norm/'
 config['main']['initGrid'] = 3 # optional subset of grids to init sim with
 #=================================================================
@@ -69,8 +69,8 @@ config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
 config['geotop']['file1'] = 'surface.txt'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.'#'X100.000000' # 'snow_water_equivalent.mm.'
-config['geotop']['beg'] = "01/09/2016 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"29/06/2017 00:00:00" # fix this to accept main time parameters
+config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp
