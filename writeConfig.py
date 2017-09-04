@@ -39,11 +39,13 @@ config['main']['informSample'] = 'FALSE'
 config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/wfj_norm/'
 config['main']['initGrid'] = 3 # optional subset of grids to init sim with
+config['main']['demexists'] = 'TRUE'
+config['main']['dempath'] = '/home/joel/Downloads/20170904031441_1036626449.tif'
 #=================================================================
 # ERA-Interim
 #=================================================================
 config['era-interim'] = {}
-config['era-interim']['grid'] = 0.25
+config['era-interim']['grid'] = 0.75
 
 #=================================================================
 # TopoSUb

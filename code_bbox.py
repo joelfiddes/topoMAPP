@@ -110,8 +110,14 @@ fname = wd + "predictors/asp.tif"
 if os.path.isfile(fname) == False:		#NOT ROBUST
 
 	if config['main']['runtype'] == 'bbox':
-		from domain_setup import getDEM as gdem
-		gdem.main(wd ,config["main"]["demDir"] ,config['main']['lonw'],config['main']['lats'],config['main']['lone'],config['main']['latn'])
+		if config['main']['demexists'] == 'TRUE':
+			src = config['main']['dempath']
+			dst = wd +'/predictors/dem.tif'
+			cmd = "cp -r %s %s"%(src,dst)
+			os.system(cmd) 
+		elif config['main']['demexists'] == 'FALSE':
+			from domain_setup import getDEM as gdem
+			gdem.main(wd ,config["main"]["demDir"] ,config['main']['lonw'],config['main']['lats'],config['main']['lone'],config['main']['latn'])
 
 	if config['main']['runtype'] == 'points':
 		from domain_setup import getDEM_points as gdem
