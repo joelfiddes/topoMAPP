@@ -14,9 +14,9 @@ Todo:
 path2script = "./rsrc/toposub.R"
 
 # main
-def main(gridpath, samples, Ngrid):
+def main(gridpath, samples):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[gridpath, samples, Ngrid])
+    run_rscript_fileout(path2script,[gridpath, samples])
 
 # functions
 def run_rscript_stdout(path2script , args):
@@ -41,5 +41,4 @@ if __name__ == '__main__':
     import sys
     gridpath           = sys.argv[1]
     samples         = sys.argv[2]
-    Ngrid   = sys.argv[3]
-    main(gridpath, samples, Ngrid)
+    main(gridpath, samples)

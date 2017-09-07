@@ -95,7 +95,7 @@ if config["main"]["initSim"] == 'TRUE':
 	os.system(cmd)
 
 	src = config["main"]["initDir"] + "/grid" + config["main"]["initGrid"]
-	cmd = "cp -r %s %s"%(src,dst)
+	cmd = "cp -r  %s %s"%(src,dst)
 	os.system(cmd)
   
 #====================================================================
@@ -111,6 +111,8 @@ if os.path.isfile(fname) == False:		#NOT ROBUST
 
 	if config['main']['runtype'] == 'bbox':
 		if config['main']['demexists'] == 'TRUE':
+			cmd = "mkdir " + wd + "/predictors/"
+			os.system(cmd)
 			src = config['main']['dempath']
 			dst = wd +'/predictors/dem.tif'
 			cmd = "cp -r %s %s"%(src,dst)
@@ -237,15 +239,15 @@ if x != 1: #NOT ROBUST
 		print "[INFO]: Running TopoSUB"
 
 		for Ngrid in range(1,int(ncells)+1):
-			gridpath = wd +"/grid"+ Ngrid
+			gridpath = wd +"/grid"+ str(Ngrid)
 
-			print "[INFO]: preparing surface layer " + Ngrid
+			print "[INFO]: preparing surface layer " + str(Ngrid)
 			from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
 			surf.main(gridpath, config["modis"]["MODISdir"] )
 
-			print "[INFO]: running TopoSUB for grid " + Ngrid
+			print "[INFO]: running TopoSUB for grid " + str(Ngrid)
 			from toposub import toposub as tsub
-			tsub.main(gridpath, config["toposub"]["samples"], Ngrid)	
+			tsub.main(gridpath, config["toposub"]["samples"])	
 
 else:
 	print "[INFO]: TopoSUB already run"
@@ -263,12 +265,12 @@ if config['main']['runtype'] == 'points':
 
 	# set up sim directoroes #and write metfiles
 	for Ngrid in range(1,int(ncells)+1):
-		gridpath=wd +"/grid"+ Ngrid
+		gridpath=wd +"/grid"+ str(Ngrid)
 
-		print "[INFO]: preparing surface layer " + Ngrid
+		print "[INFO]: preparing surface layer " + str(Ngrid)
 		from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
 		surf.main(gridpath, config["modis"]["MODISdir"] )
-		print "[INFO]: creating listpoints for grid " + Ngrid
+		print "[INFO]: creating listpoints for grid " + str(Ngrid)
 		from listpoints_make import makeListpoints as list
 		list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
 
@@ -288,31 +290,31 @@ if x != 1: #NOT ROBUST
 
 	# set up sim directoroes #and write metfiles
 	for Ngrid in range(1,int(ncells)+1):
-		gridpath = wd +"/grid"+ Ngrid
+		gridpath = wd +"/grid"+ str(Ngrid)
 
 		if os.path.exists(gridpath):
-			print "[INFO]: running toposcale for grid " + Ngrid
+			print "[INFO]: running toposcale for grid " + str(Ngrid)
 
 			from toposcale import boxMetadata as box
-			box.main(gridpath, Ngrid)
+			box.main(gridpath, str(Ngrid))
 
 			from toposcale import tscale_plevel as plevel
-			plevel.main(gridpath, Ngrid, "rhumPl")
-			plevel.main(gridpath, Ngrid, "tairPl")
-			plevel.main(gridpath, Ngrid, "uPl")
-			plevel.main(gridpath, Ngrid, "vPl")
+			plevel.main(gridpath, str(Ngrid), "rhumPl")
+			plevel.main(gridpath, str(Ngrid), "tairPl")
+			plevel.main(gridpath, str(Ngrid), "uPl")
+			plevel.main(gridpath, str(Ngrid), "vPl")
 
 			from toposcale import tscale_sw as sw
-			sw.main( gridpath, Ngrid, config["toposcale"]["swTopo"], config["main"]["tz"]) #TRUE requires svf as does more computes 
+			sw.main( gridpath, str(Ngrid), config["toposcale"]["swTopo"], config["main"]["tz"]) #TRUE requires svf as does more computes 
 
 			from toposcale import tscale_lw as lw
-			lw.main( gridpath, Ngrid, config["toposcale"]["svfCompute"]) #TRUE requires svf as does more computes terrain/sky effects
+			lw.main( gridpath, str(Ngrid), config["toposcale"]["svfCompute"]) #TRUE requires svf as does more computes terrain/sky effects
 			
 			from toposcale import tscale_p as p
-			p.main( gridpath, Ngrid, config["toposcale"]["pfactor"])
+			p.main( gridpath, str(Ngrid), config["toposcale"]["pfactor"])
 
 		else:
-			print "[INFO]: Grid "+ Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid+1
+			print "[INFO]: Grid "+ str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid)+1
 else:
 	print "[INFO]: TopoSCALE already run"
 #====================================================================
@@ -327,11 +329,11 @@ print "[INFO]: Setup Geotop simulations"
 	#gridpath = wd +"/grid"+ Ngrid
 
 for Ngrid in grid_dirs:	
-	gridpath = Ngrid
+	gridpath = str(Ngrid)
 
 
 	if os.path.exists(gridpath):
-		print "[INFO]: Setting up geotop inputs " + Ngrid
+		print "[INFO]: Setting up geotop inputs " + str(Ngrid)
 
 	 	print "[INFO]: Creating met files...."
 	 	from gtop_setup import prepMet as met
@@ -347,7 +349,7 @@ for Ngrid in grid_dirs:
 		gInput.main(gridpath, config["geotop"]["geotopInputsPath"], config["main"]["startDate"], config["main"]["endDate"])
 
 	else:
-		print "[INFO]: " + Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid + "+1"
+		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 
 
 #====================================================================
@@ -362,7 +364,7 @@ for Ngrid in grid_dirs:
 
 	if os.path.exists(gridpath):
 
-	 	print "[INFO]: Simulations grid" + Ngrid + " running (parallel model runs)"
+	 	print "[INFO]: Simulations grid" + str(Ngrid) + " running (parallel model runs)"
 		batchfile="batch.sh"
 
 		sim_entries=gridpath +"/S*"
@@ -380,7 +382,7 @@ for Ngrid in grid_dirs:
 		subprocess.check_output( "./" + batchfile )
 
 	else:
-		print "[INFO]: " + Ngrid + " has been removed because it contained no points. Now processing grid" + Ngrid + "+1"
+		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 
 #====================================================================
 #	Spatialise toposub results SIMULATION MEAN
@@ -390,8 +392,8 @@ if config['main']['runtype'] == 'bbox':
 	print "[INFO]: Spatialising TopoSUB results...."
 
 	for Ngrid in grid_dirs:	
-		gridpath = Ngrid
-		print "[INFO]: running spatialisation routines for grid " + Ngrid
+		gridpath = str(Ngrid)
+		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
 		from toposub import toposub_post2 as post2
 		post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["geotop"]["beg"],config["geotop"]["end"] )	
 
@@ -404,9 +406,9 @@ if config['main']['runtype'] == 'bbox':
 	print "[INFO]: Spatialising TopoSUB results...."
 
 	for Ngrid in grid_dirs:	
-		gridpath = Ngrid
+		gridpath = str(Ngrid)
 
-		print "[INFO]: running spatialisation routines for grid " + Ngrid
+		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
 		from toposub import toposub_postInstant as postInst
 		postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
