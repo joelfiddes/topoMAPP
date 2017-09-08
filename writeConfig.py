@@ -73,8 +73,8 @@ config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
 
 # Define target variable  (make a list possible here)
-config['geotop']['file1'] = 'ground.txt' #''surface.txt'
-config['geotop']['targV'] = 'X100.000000' # 'snow_water_equivalent.mm.'
+config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
+config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
 config['geotop']['beg'] = "02/09/2016 00:00:00" # fix this to accept main time parameters
 config['geotop']['end'] =	"31/05/2017 00:00:00" # fix this to accept main time parameters
 

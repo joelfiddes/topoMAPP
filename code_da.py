@@ -430,6 +430,20 @@ if config['main']['runtype'] == 'bbox':
 		postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
 #====================================================================
+#	Coarse grid timeseries of toposub results 
+#====================================================================
+if config['main']['runtype'] == 'bbox':
+
+	print "[INFO]: Making coarse grid timeseries TopoSUB results...."
+
+	for Ngrid in grid_dirs:	
+		gridpath = str(Ngrid)
+
+		print "[INFO]: running timeseries routines for grid " + str(Ngrid)
+		from toposub import toposub_gridTS as gts
+		gts.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
+
+#====================================================================
 #	Give pdf of toposub results
 #====================================================================
 #if config['main']['runtype'] == 'bbox':	
