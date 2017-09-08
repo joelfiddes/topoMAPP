@@ -21,8 +21,8 @@ config['main']['wd'] = '/home/joel/sim/da_test/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2016-08-31'
-config['main']['endDate'] = '2016-09-6'
+config['main']['startDate'] = '2016-09-01'
+config['main']['endDate'] = '2017-06-01'
 
 config['main']['lonw'] = 8
 config['main']['lats'] = 46
@@ -38,9 +38,9 @@ config['main']['googleEarthPlots'] = 'TRUE'
 config['main']['informSample'] = 'FALSE'
 
 # control quick starts
-config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
-config['main']['initDir'] = '/home/joel/sim/wfj_norm/'
-config['main']['initGrid'] = 3 # optional subset of grids to init sim with
+config['main']['initSim'] = 'TRUE' # initialises interim data and dem from existing to allow perturbed experiment 
+config['main']['initDir'] = '/home/joel/sim/ensemble_norm/'
+config['main']['initGrid'] = 1 # optional subset of grids to init sim with
 config['main']['demexists'] = 'FALSE'
 config['main']['dempath'] = '/home/joel/Downloads/20170904031934_280341969.tif'
 #=================================================================
@@ -71,10 +71,12 @@ config['geotop'] = {}
 config['geotop']['geotopInputsPath'] = '/home/joel/src/geotop/inputsfile/geotop.inpts'
 config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
 config['geotop']['lsmExe'] = 'geotop1.226'
-config['geotop']['file1'] = 'surface.txt'
-config['geotop']['targV'] = 'snow_water_equivalent.mm.'#'X100.000000' # 'snow_water_equivalent.mm.'
-config['geotop']['beg'] = "01/09/2016 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"05/09/2016 00:00:00" # fix this to accept main time parameters
+
+# Define target variable  (make a list possible here)
+config['geotop']['file1'] = 'ground.txt' #''surface.txt'
+config['geotop']['targV'] = 'X100.000000' # 'snow_water_equivalent.mm.'
+config['geotop']['beg'] = "02/09/2016 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"31/05/2017 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp
@@ -107,7 +109,7 @@ config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
-config['modis']['getMODISSCA'] = "FALSE"
+config['modis']['getMODISSCA'] = "TRUE"
 # location of MODIStsp options file
 
 #=================================================================

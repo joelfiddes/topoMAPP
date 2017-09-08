@@ -22,10 +22,9 @@ Todo:
 path2script = "./rsrc/extractEraBbox.R"
 
 # main
-def main(file, coordID, coord):
+def main(file, coordID, lonw,lone, lats, latn):
     """Main entry point for the script."""
-    #print "Obtaining " + coord + " from " + elePath
-    x = run_rscript_stdout(path2script,[elePath, coord, coordID])
+    x = run_rscript_stdout(path2script,[file, coordID, lonw,lone, lats, latn])
     return(x)
 
 # functions
@@ -49,7 +48,10 @@ def run_rscript_fileout(path2script , args):
 # calling main
 if __name__ == '__main__':
     import sys
-    elePath         = sys.argv[1]
+    file         = sys.argv[1]
     coordID = sys.argv[2]
-    coord = sys.argv[3]
-    main(file, coordID, coord)
+    lonw= sys.argv[3]
+    lone= sys.argv[4]
+    lats= sys.argv[5]
+    latn= sys.argv[6]
+    main(file, coordID, lonw,lone, lats, latn)

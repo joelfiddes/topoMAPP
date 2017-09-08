@@ -51,7 +51,6 @@ print sys.argv[0]
 #	Timer
 #====================================================================
 import time
-# at the beginning:
 start_time = time.time()
 
 #====================================================================
@@ -165,17 +164,22 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 
 
 
-	from getERA import getExtent as ext
-	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+	# from getERA import getExtent as ext
+	# latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+	# latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+	# lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+	# lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
-	# from getERA import extractEraBbox as bbox
-	# latN = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "latN", config['main']['latn'])
-	# latS = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "latS", config['main']['lats'])
-	# lonW = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "lonW", config['main']['lonw'] )
-	# lonE = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "lonE" ,config['main']['lone'] )
+	from getERA import extractEraBbox as ext
+	latN = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "latN",config['main']['lonw'],config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+
+	latS = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "latS", config['main']['lonw'] ,config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+
+	lonW = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "lonW", config['main']['lonw'] ,config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+
+	lonE = ext.main(
+		"/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" ,"lonE",	config['main']['lonw'],	config['main']['lone'],	config['main']['lats'],  config['main']['latn'] )
+
 
 
 	eraDir = wd + "/eraDat"
@@ -212,13 +216,13 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	print("[INFO]: Running:" + str(cmd))
 	subprocess.check_output(cmd, shell = "TRUE")
 
-	from getERA import era_prep as prep
-	prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 
 else:
 	print "[INFO]: SURF.nc and PLEVEL.nc precomputed"
 
 	#os.chdir(config["main"]["srcdir"])
+from getERA import era_prep as prep
+prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 
 if config["main"]["initSim"] != 'TRUE':
 	from getERA import prepSims as sim
@@ -324,6 +328,12 @@ if x != 1: #NOT ROBUST
 			print "[INFO]: Grid "+ str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid)+1
 else:
 	print "[INFO]: TopoSCALE already run"
+
+#====================================================================
+#	DA
+#====================================================================
+
+
 #====================================================================
 #	Setup Geotop simulations
 #====================================================================
@@ -478,6 +488,39 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 	#====================================================================
 	#	Get MODIS SCA for a given date
 	#====================================================================
+	# if config['main']['runtype'] == 'bbox':
+	# 	# clear data
+	# 	import os, shutil
+	# 	folder = config['modis']['sca_wd']
+	# 	for the_file in os.listdir(folder):
+	# 	    file_path = os.path.join(folder, the_file)
+	# 	    try:
+	# 	        if os.path.isfile(file_path):
+	# 	            os.unlink(file_path)
+	# 	        elif os.path.isdir(file_path): shutil.rmtree(file_path)
+	# 	    except Exception as e:
+	# 	        print(e)
+
+	# 	# compute from dem
+	# 	from getERA import getExtent as ext
+	# 	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+	# 	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+	# 	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+	# 	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+	# 	# call bash script that does grep type stuff to update values in options file
+	# 	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['endDate'] , config['main']['endDate'] , config['modis']['options_file']]
+	# 	subprocess.check_output( cmd)
+
+	# 	# run MODIStsp tool
+	# 	from DA import getMODIS as gmod
+	# 	gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+
+	# 	# compare obs to mod
+	
+#====================================================================
+#	Get MODIS SCA for a string of dates
+#====================================================================
 	if config['main']['runtype'] == 'bbox':
 		# clear data
 		import os, shutil
@@ -499,20 +542,22 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['endDate'] , config['main']['endDate'] , config['modis']['options_file']]
+		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['startDate'] , config['main']['endDate'] , config['modis']['options_file']]
 		subprocess.check_output( cmd)
 
 		# run MODIStsp tool
 		from DA import getMODIS as gmod
 		gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
 
-		# compare obs to mod
-		
+		# extract timersies per point
+		from DA import scaTS
+		scaTS.main(wd ,config['modis']['sca_wd'] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+
+		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
+
 else:
 	print "[INFO]: No MODIS SCA retrieved"
-	#====================================================================
-	#	Get MODIS SCA for a string of dates
-	#====================================================================
+
 
 #====================================================================
 #	Retrive latest sentinel 2
