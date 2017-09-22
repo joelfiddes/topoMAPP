@@ -21,8 +21,8 @@ config['main']['wd'] = '/home/joel/sim/da_test/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2016-09-01'
-config['main']['endDate'] = '2017-06-01'
+config['main']['startDate'] = '2015-09-01'
+config['main']['endDate'] = '2016-09-01'
 
 config['main']['lonw'] = 8
 config['main']['lats'] = 46
@@ -53,7 +53,7 @@ config['era-interim']['grid'] = 0.75
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 5
+config['toposub']['samples'] = 50
  
 
 #=================================================================
@@ -75,8 +75,8 @@ config['geotop']['lsmExe'] = 'geotop1.226'
 # Define target variable  (make a list possible here)
 config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
-config['geotop']['beg'] = "02/09/2016 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"31/05/2017 00:00:00" # fix this to accept main time parameters
+config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
+config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp

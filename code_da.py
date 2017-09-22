@@ -28,7 +28,7 @@ import glob
 # import logging.handlers
 # log = logging.getLogger(__name__)
 # log.addHandler(logging.StreamHandler())  # Prints to console.
-# log.addHandler(logging.handlers.RotatingFileHandler('logfile.log'))
+# log.addHandler(logging.handlers.RotatingFileHandler("logfile.log"))
 # log.setLevel(logging.INFO)  # Set logging level here.
 #================================================================
 
@@ -76,7 +76,7 @@ print "[INFO]: Simulation directory:" + wd
 #	Initialise run: this can be used to copy meteo and surfaces to a new sim directory. 
 # 	Main application is in ensemble runs
 #====================================================================
-if config["main"]["initSim"] == 'TRUE':
+if config["main"]["initSim"] == "TRUE":
 	print "[INFO]: initialising " + wd + " from " + config["main"]["initDir"]
 	print "[INFO]: copying only Grid" + config["main"]["initGrid"]
 
@@ -108,19 +108,19 @@ config.write()
 fname = wd + "predictors/asp.tif"
 if os.path.isfile(fname) == False:		#NOT ROBUST
 
-	if config['main']['runtype'] == 'bbox':
-		if config['main']['demexists'] == 'TRUE':
+	if config["main"]["runtype"] == "bbox":
+		if config["main"]["demexists"] == "TRUE":
 			cmd = "mkdir " + wd + "/predictors/"
 			os.system(cmd)
-			src = config['main']['dempath']
-			dst = wd +'/predictors/dem.tif'
+			src = config["main"]["dempath"]
+			dst = wd +"/predictors/dem.tif"
 			cmd = "cp -r %s %s"%(src,dst)
 			os.system(cmd) 
-		elif config['main']['demexists'] == 'FALSE':
+		elif config["main"]["demexists"] == "FALSE":
 			from domain_setup import getDEM as gdem
-			gdem.main(wd ,config["main"]["demDir"] ,config['main']['lonw'],config['main']['lats'],config['main']['lone'],config['main']['latn'])
+			gdem.main(wd ,config["main"]["demDir"] ,config["main"]["lonw"],config["main"]["lats"],config["main"]["lone"],config["main"]["latn"])
 
-	if config['main']['runtype'] == 'points':
+	if config["main"]["runtype"] == "points":
 		from domain_setup import getDEM_points as gdem
 		gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
@@ -130,11 +130,11 @@ if os.path.isfile(fname) == False:		#NOT ROBUST
 	from domain_setup import clipToEra as era
 	era.main(wd ,config["era-interim"]["grid"])
 
-	if config['main']['runtype'] == 'bbox':
+	if config["main"]["runtype"] == "bbox":
 		from domain_setup import domainPlot as dplot
 		dplot.main(wd , "FALSE") # shp = TRUE for points  run
 
-	if config['main']['runtype'] == 'points':
+	if config["main"]["runtype"] == "points":
 		from domain_setup import domainPlot as dplot
 		dplot.main(wd , "TRUE") # shp = TRUE for points  run
 
@@ -171,14 +171,14 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	# lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 	from getERA import extractEraBbox as ext
-	latN = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "latN",config['main']['lonw'],config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+	latN = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
-	latS = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "latS", config['main']['lonw'] ,config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+	latS = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
-	lonW = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "lonW", config['main']['lonw'] ,config['main']['lone'],config['main']['lats'],  config['main']['latn'])
+	lonW = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
 	lonE = ext.main(
-		"/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" ,"lonE",	config['main']['lonw'],	config['main']['lone'],	config['main']['lats'],  config['main']['latn'] )
+		"/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
 
 
 
@@ -224,26 +224,26 @@ else:
 from getERA import era_prep as prep
 prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 
-if config["main"]["initSim"] != 'TRUE':
+if config["main"]["initSim"] != "TRUE":
 	from getERA import prepSims as sim
 	sim.main(wd)
 
 # define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
-grid_dirs = glob.glob(wd +'/grid*')
+grid_dirs = glob.glob(wd +"/grid*")
 ncells = len(grid_dirs)
 print "[INFO]: This simulation contains ", ncells, " grids"
 print "[INFO]: grids to be computed " + str(grid_dirs)
 
 #====================================================================
-#	TOPOSUB: Toposub.R contains hardcoded 'normal' parameters 
+#	TOPOSUB: Toposub.R contains hardcoded "normal" parameters 
 #====================================================================
 from utils import fileSearch
 path=wd
-file='landform.tif'
+file="landform.tif"
 x=fileSearch.search(path, file)
 if x != 1: #NOT ROBUST
 
-	if config['main']['runtype'] == 'bbox':
+	if config["main"]["runtype"] == "bbox":
 
 		#from listpoints_make import getRasterDims as dims
 		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
@@ -267,7 +267,7 @@ else:
 #	makeListpoint: creates a listpoints for each ERA-grid, only 
 #	required for point runs. Removes Boxes that contain no points.
 #====================================================================
-if config['main']['runtype'] == 'points':
+if config["main"]["runtype"] == "points":
 
 	
 	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
@@ -289,7 +289,7 @@ if config['main']['runtype'] == 'points':
 #	run toposcale
 #====================================================================
 path=wd
-file='tPoint.txt'
+file="tPoint.txt"
 x=fileSearch.search(path, file)
 if x != 1: #NOT ROBUST
 
@@ -354,7 +354,7 @@ for Ngrid in grid_dirs:
 
 	 	print "[INFO]: Creating met files...."
 	 	from gtop_setup import prepMet as met
-		met.main(gridpath, config["toposcale"]["svfCompute"],config['da']['tscale'],config['da']['pscale'])
+		met.main(gridpath, config["toposcale"]["svfCompute"],config["da"]["tscale"],config["da"]["pscale"])
 
 
 		print "[INFO]: extract surface properties"
@@ -387,9 +387,9 @@ for Ngrid in grid_dirs:
 		sim_entries=gridpath +"/S*"
 
 		f = open(batchfile, "w+")
-		f.write("#!/bin/bash"+ '\n')
-		f.write("cd " + config["geotop"]["lsmPath"] + '\n')
-		f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + '\n')
+		f.write("#!/bin/bash"+ "\n")
+		f.write("cd " + config["geotop"]["lsmPath"] + "\n")
+		f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
 		f.close()
 
 		import os, sys, stat
@@ -404,7 +404,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Spatialise toposub results SIMULATION MEAN
 #====================================================================
-if config['main']['runtype'] == 'bbox':
+if config["main"]["runtype"] == "bbox":
 
 	print "[INFO]: Spatialising TopoSUB results...."
 
@@ -418,7 +418,7 @@ if config['main']['runtype'] == 'bbox':
 #====================================================================
 #	Spatialise toposub results LATEST
 #====================================================================
-if config['main']['runtype'] == 'bbox':
+if config["main"]["runtype"] == "bbox":
 
 	print "[INFO]: Spatialising TopoSUB results...."
 
@@ -432,7 +432,7 @@ if config['main']['runtype'] == 'bbox':
 #====================================================================
 #	Coarse grid timeseries of toposub results 
 #====================================================================
-if config['main']['runtype'] == 'bbox':
+if config["main"]["runtype"] == "bbox":
 
 	print "[INFO]: Making coarse grid timeseries TopoSUB results...."
 
@@ -446,8 +446,8 @@ if config['main']['runtype'] == 'bbox':
 #====================================================================
 #	Give pdf of toposub results
 #====================================================================
-#if config['main']['runtype'] == 'bbox':	
-# if config['main']['runtype'] == 'bbox':
+#if config["main"]["runtype"] == "bbox":	
+# if config["main"]["runtype"] == "bbox":
 
 # 	print "Spatialising toposub results...."
 
@@ -460,14 +460,14 @@ if config['main']['runtype'] == 'bbox':
 # 		post1.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
 
-if config['modis']['getMODISSCA'] == 'TRUE':
+if config["modis"]["getMODISSCA"] == "TRUE":
 	#====================================================================
 	#	Get MODIS SCA
 	#====================================================================
-	if config['main']['runtype'] == 'points':
+	if config["main"]["runtype"] == "points":
 		# clear data
 		import os, shutil
-		folder = config['modis']['sca_wd']
+		folder = config["modis"]["sca_wd"]
 		for the_file in os.listdir(folder):
 		    file_path = os.path.join(folder, the_file)
 		    try:
@@ -485,16 +485,16 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['startDate'] , config['main']['endDate'] , config['modis']['options_file']]
+		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
 		subprocess.check_output( cmd)
 
 		# run MODIStsp tool
 		from DA import getMODIS as gmod
-		gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+		gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
 
 		# extract timersies per point
 		from DA import scaTS
-		scaTS.main(wd ,config['modis']['sca_wd'] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+		scaTS.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 
 		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
@@ -502,10 +502,10 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 	#====================================================================
 	#	Get MODIS SCA for a given date
 	#====================================================================
-	# if config['main']['runtype'] == 'bbox':
+	# if config["main"]["runtype"] == "bbox":
 	# 	# clear data
 	# 	import os, shutil
-	# 	folder = config['modis']['sca_wd']
+	# 	folder = config["modis"]["sca_wd"]
 	# 	for the_file in os.listdir(folder):
 	# 	    file_path = os.path.join(folder, the_file)
 	# 	    try:
@@ -523,30 +523,33 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 	# 	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 	# 	# call bash script that does grep type stuff to update values in options file
-	# 	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['endDate'] , config['main']['endDate'] , config['modis']['options_file']]
+	# 	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["endDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
 	# 	subprocess.check_output( cmd)
 
 	# 	# run MODIStsp tool
 	# 	from DA import getMODIS as gmod
-	# 	gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+	# 	gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
 
 	# 	# compare obs to mod
 	
 #====================================================================
-#	Get MODIS SCA for a string of dates
+#	Get MODIS SCA for bbox
 #====================================================================
-	if config['main']['runtype'] == 'bbox':
-		# clear data
-		import os, shutil
-		folder = config['modis']['sca_wd']
-		for the_file in os.listdir(folder):
-		    file_path = os.path.join(folder, the_file)
-		    try:
-		        if os.path.isfile(file_path):
-		            os.unlink(file_path)
-		        elif os.path.isdir(file_path): shutil.rmtree(file_path)
-		    except Exception as e:
-		        print(e)
+	if config["main"]["runtype"] == "bbox":
+		
+
+		# clear data: MAKE SWITCH FOR THIS
+
+		# import os, shutil
+		# folder = config["modis"]["sca_wd"]
+		# for the_file in os.listdir(folder):
+		#     file_path = os.path.join(folder, the_file)
+		#     try:
+		#         if os.path.isfile(file_path):
+		#             os.unlink(file_path)
+		#         elif os.path.isdir(file_path): shutil.rmtree(file_path)
+		#     except Exception as e:
+		#         print(e)
 
 		# compute from dem
 		from getERA import getExtent as ext
@@ -556,16 +559,16 @@ if config['modis']['getMODISSCA'] == 'TRUE':
 		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config['main']['startDate'] , config['main']['endDate'] , config['modis']['options_file']]
+		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
 		subprocess.check_output( cmd)
 
 		# run MODIStsp tool
 		from DA import getMODIS as gmod
-		gmod.main('FALSE' , config['modis']['options_file']) #  able to run non-interactively now
+		gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
 
 		# extract timersies per point
-		from DA import scaTS
-		scaTS.main(wd ,config['modis']['sca_wd'] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+		from DA import scaTS_GRID
+		scaTS.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 
 		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 

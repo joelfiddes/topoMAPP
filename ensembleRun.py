@@ -4,6 +4,8 @@ import pandas as pd
 import time
 import sys
 
+#set root
+root = "/home/joel/sim/ensembler2/"
 # Timer
 start_time = time.time()
 
@@ -19,7 +21,7 @@ if len(sys.argv) == 2 and sys.argv[1] == 'NORM':
 	from configobj import ConfigObj
 	config = ConfigObj("topomap.ini")
 	config.filename = "topomap.ini"
-	config["main"]["wd"]  = "/home/joel/sim/ensemble_norm/"
+	config["main"]["wd"]  = root + "ensemble_norm/"
 	config["main"]["initSim"]  = 'FALSE'
 	config["da"]["pscale"] = pbias #factor to multiply precip by
 	config["da"]["tscale"] = tbias #factor to add to temp
@@ -36,10 +38,10 @@ if len(sys.argv) == 2 and sys.argv[1] == 'NORM':
 
 
 # check norm exists
-if os.path.isdir("/home/joel/sim/ensemble_norm") == False:
+if os.path.isdir(root + "ensemble_norm") == False:
 	print "No ensemble_norm, run <ensembleRun.py NORM> to generate.. ABORTING"
 	exit()
-elif os.path.isdir("/home/joel/sim/ensemble_norm") == True:
+elif os.path.isdir(root + "ensemble_norm") == True:
 	print "ensemble_norm found"	
 
 # start ensemble runs
@@ -67,7 +69,7 @@ for i in range(0,N):
 	from configobj import ConfigObj
 	config = ConfigObj("topomap.ini")
 	config.filename = "topomap.ini"
-	config["main"]["wd"]  = "/home/joel/sim/ensemble" + str(i) + "/"
+	config["main"]["wd"]  = root + "ensemble" + str(i) + "/"
 	config["da"]["pscale"] = pbias #factor to multiply precip by
 	config["da"]["tscale"] = tbias #factor to add to temp
 	config['modis']['getMODISSCA'] = "FALSE"

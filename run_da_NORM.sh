@@ -2,4 +2,4 @@
 
 file=ensembleRun
 rm $file.log 
-python $file.py &> $file.log
+python $file.py NORM &> $file.log
