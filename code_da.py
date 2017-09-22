@@ -412,7 +412,7 @@ if config["main"]["runtype"] == "bbox":
 		gridpath = str(Ngrid)
 		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
 		from toposub import toposub_post2 as post2
-		post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["geotop"]["beg"],config["geotop"]["end"] )	
+		post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["main"]["startDate"],config["main"]["endDate"] )	
 
 
 #====================================================================

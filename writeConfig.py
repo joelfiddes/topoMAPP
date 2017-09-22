@@ -75,8 +75,8 @@ config['geotop']['lsmExe'] = 'geotop1.226'
 # Define target variable  (make a list possible here)
 config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
-config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
-config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
+#config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
+#config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
 
 # dynamically plot KML on the fly
 # #https://github.com/lbusett/MODIStsp
