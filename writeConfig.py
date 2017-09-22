@@ -34,11 +34,11 @@ config['main']['pkCol'] = 1
 config['main']['lonCol'] = 2
 config['main']['latCol'] = 3
 config['main']['tz'] = -1
-config['main']['googleEarthPlots'] = 'TRUE'
+config['main']['googleEarthPlots'] = 'FALSE'
 config['main']['informSample'] = 'FALSE'
 
 # control quick starts
-config['main']['initSim'] = 'TRUE' # initialises interim data and dem from existing to allow perturbed experiment 
+config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/ensemble_norm/'
 config['main']['initGrid'] = 1 # optional subset of grids to init sim with
 config['main']['demexists'] = 'FALSE'

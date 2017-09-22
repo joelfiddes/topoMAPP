@@ -1,6 +1,85 @@
+Loading required package: ncdf4
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: MODIS
+Loading required package: mapdata
+Loading required package: maps
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+
+Loading required package: rgdal
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required namespace: rgeos
+Loading required package: rgdal
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: raster
+Warning messages:
+1: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+2: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+3: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+4: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+5: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+6: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+7: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+8: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+9: Quick-TRANSfer stage steps exceeded maximum (= 4990850) 
+Warning message:
+Quick-TRANSfer stage steps exceeded maximum (= 303142800) 
+Loading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -21,7 +100,168 @@ The following objects are masked from ‘package:base’:
 
     format.pval, round.POSIXt, trunc.POSIXt, units
 
-There were 15 warnings (use warnings() to see them)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: insol
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 50 or more warnings (use warnings() to see the first 50)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -54,21 +294,35 @@ The following object is masked from ‘package:base’:
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
+Error in read.table(paste(esPath, "/meanX_", col, ".txt", sep = ""), sep = ",") : 
+  no lines available in input
+Calls: crispSpatial2 -> read.table
+Execution halted
 ['/home/joel/src/TOPOMAP/toposubv2/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
 code_da.py
 [INFO]: Simulation directory:/home/joel/sim/da_test/
 [INFO]: topo predictors precomputed
 [INFO]: SURF.nc and PLEVEL.nc precomputed
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/da_test/', '2015-09-01', '2016-09-01']
 Running:['Rscript', './rsrc/prepareSims.R', '/home/joel/sim/da_test/']
 [INFO]: This simulation contains  1  grids
 [INFO]: grids to be computed ['/home/joel/sim/da_test/grid1']
-/home/joel/sim/da_test/grid1/landform.tif
-[INFO]: TopoSUB already run
-/home/joel/sim/da_test/grid1/tPoint.txt
-[INFO]: TopoSCALE already run
+[INFO]: Running TopoSUB
+[INFO]: preparing surface layer 1
+Running:['Rscript', './rsrc/makeSurface.R', '/home/joel/sim/da_test//grid1', '/home/joel/data/MODIS_ARC/PROCESSED']
+[INFO]: running TopoSUB for grid 1
+Running:['Rscript', './rsrc/toposub.R', '/home/joel/sim/da_test//grid1', '50']
+[INFO]: Running TopoSCALE
+Running:['Rscript', './rsrc/getGridEle.R', '/home/joel/sim/da_test/']
+[INFO]: running toposcale for grid 1
+Running:['Rscript', './rsrc/boxMetadata.R', '/home/joel/sim/da_test//grid1', '1']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/da_test//grid1', '1', 'rhumPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/da_test//grid1', '1', 'tairPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/da_test//grid1', '1', 'uPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/da_test//grid1', '1', 'vPl']
+Running:['Rscript', './rsrc/tscale_sw.R', '/home/joel/sim/da_test//grid1', '1', 'FALSE', '-1']
+Running:['Rscript', './rsrc/tscale_lw.R', '/home/joel/sim/da_test//grid1', '1', 'FALSE']
+Running:['Rscript', './rsrc/tscale_p.R', '/home/joel/sim/da_test//grid1', '1', '0.25']
 [INFO]: Setup Geotop simulations
 [INFO]: Setting up geotop inputs /home/joel/sim/da_test/grid1
 [INFO]: Creating met files....
@@ -76,14 +330,19 @@ Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/da_test/grid1', 'FALSE'
 [INFO]: extract surface properties
 Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/da_test/grid1']
 [INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/da_test/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-08-31', '2016-09-6']
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/da_test/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
 [INFO]: Running LSM
 [INFO]: Simulations grid/home/joel/sim/da_test/grid1 running (parallel model runs)
 [INFO]: Spatialising TopoSUB results....
 [INFO]: running spatialisation routines for grid /home/joel/sim/da_test/grid1
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/da_test/grid1', '5', 'ground.txt', 'X100.000000', '01/09/2016 00:00:00', '05/09/2016 00:00:00']
-[INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/da_test/grid1
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/da_test/grid1', '5', 'ground.txt', 'X100.000000']
-[INFO]: No MODIS SCA retrieved
-[INFO]: 1.060000 minutes for run
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/da_test/grid1', '50', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
+Traceback (most recent call last):
+  File "code_da.py", line 415, in <module>
+    post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["main"]["startDate"],config["main"]["endDate"] )	
+  File "/home/joel/src/TOPOMAP/toposubv2/topoMAPP/toposub/toposub_post2.py", line 19, in main
+    run_rscript_fileout(path2script,[gridpath, samples, file1, targV,beg, end])
+  File "/home/joel/src/TOPOMAP/toposubv2/topoMAPP/toposub/toposub_post2.py", line 37, in run_rscript_fileout
+    subprocess.check_output(cmd)
+  File "/usr/lib/python2.7/subprocess.py", line 574, in check_output
+    raise CalledProcessError(retcode, cmd, output=output)
+subprocess.CalledProcessError: Command '['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/da_test/grid1', '50', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']' returned non-zero exit status 1
