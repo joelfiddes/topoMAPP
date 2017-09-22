@@ -1,14 +1,14 @@
 
 # TopoMAPP
 
-This toll combines previously published tool TopoSUB and TopoSCALE with and ensemble modelling and data assimilation framework. The tool can be run in 3 modes:
+This modelling framework combines previously published tools TopoSUB and TopoSCALE with ensemble and data assimilation methods. The tool can be run in 3 modes:
 - NORM
 - ENSEMBLE
 - DA
 
 and at 2 scales:
--bbox
--point
+- bbox
+- point
 
 # Setup
 ## To run
