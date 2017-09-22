@@ -148,6 +148,7 @@ if os.path.isfile(fname) == False:		#NOT ROBUST
 
 	#from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
 	#surf.main(wd, config["modis"]["MODISdir"] )
+	#MOVED: to toposub or listpoints to ensiure is run on only one grid at a time, reduce memory load.
 
 else:
 	print "[INFO]: topo predictors precomputed"
