@@ -1,4 +1,17 @@
-# To run
+
+# TopoMAPP
+
+This toll combines previously published tool TopoSUB and TopoSCALE with and ensemble modelling and data assimilation framework. The tool can be run in 3 modes:
+- NORM
+- ENSEMBLE
+- DA
+
+and at 2 scales:
+-bbox
+-point
+
+# Setup
+## To run
 1. set config by:
 - edit writeConfig.py
 - python writeConfig.py
@@ -6,21 +19,19 @@
 2. create wd manually
 3. ./run.sh
 
-# Dependencies
-
+## Dependencies
 - GDAL > 2 MODIS R package
 
-# Structure
+## Structure
 Describe python/ R setup here
 
-# Config  
+## Config  
 
-# Todo
+## Todo
 - check files exist and skip module if so
 
-# Notes
-
+## Notes
 - lon and lat written to lsp in toposub.R as mean values of grid - this is required by toposcale_sw in FALSE mode
-- makeSurface.R requires massive matrix calc (10+GB) and crashes frequently
+- makeSurface.R requires massive matrix calc (10+GB) and crashes frequently SOLVED
 - need to reconcile shifts in domain when clip to ERA-grids
 - automate optional cleaning (command libne arg 'clean') and config run at start 
