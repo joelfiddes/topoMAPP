@@ -569,7 +569,7 @@ if config["modis"]["getMODISSCA"] == "TRUE":
 
 		# extract timersies per point
 		from DA import scaTS_GRID
-		scaTS.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+		scaTS_GRID.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" )
 
 		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 

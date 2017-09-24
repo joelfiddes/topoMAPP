@@ -19,15 +19,19 @@
 #	- save w (100)
 #	end
 ## out:	
-#matrix of w = 2500*100 [pix * ensemble]
+#matrix of w = 25000*100 [pix * ensemble]
 #convert to rasterstack?
  
 # ======== code ===================
-t1 <- Sys.time()
+
+#source fast PBS
+source("./rsrc/PBS.R") 
+
 # variables
 nens=100
 R=0.016
 Nclust=50
+sdThresh <- 0
  
 require(raster) 
 
@@ -35,7 +39,7 @@ require(raster)
 landform = raster("/home/joel/sim/ensembler2/ensemble0/grid1/landform.tif")
 rstack = brick("/home/joel/sim/da_test/fsca_stack.tif")
 obsTS = read.csv("/home/joel/sim/da_test/fsca_dates.csv")
-
+wd = "/home/joel/sim/ensembler2/"
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # pixel based timeseries 
@@ -47,9 +51,28 @@ npix = ncell( rstack )
 #pixel loop
 #npix_vec=c()
 
+# retrieve results matrix: ensemble members * samples * timestamps
+rstStack=stack()
+for (i in 1: nens){ #python index
+
+	resMat=c()
+	for (j in 1: Nclust){ 
+		simindex=paste0('S',formatC(j, width=5,flag='0'))
+		dat = read.table(paste0(wd,"ensemble",i-1,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+		resMat = cbind(resMat,dat$snow_water_equivalent.mm.)
+		rst=raster(resMat)
+	}
+rstStack=stack(rstStack, rst)
+myarray = as.array(rstStack)
+}
+
+# convert swe > sdThresh to snowcover = TRUE/1
+myarray[myarray>sdThresh]<-1
+
+#vectorise all below
 
 wmat=c()
-
+t1 <- Sys.time()
 for (i in 1 : npix)
 	{
 	print(i)
@@ -57,8 +80,8 @@ for (i in 1 : npix)
 	# Extract pixel based timesries of MODIS obs
 	y = pixTS[i,]
 	
-	# rm x/y coordinates from element 1:2
-	obs = y[3: length(y)]
+	# rm x/y coordinates from element 1:2 and scale 
+	obs = y[3: length(y)] /100
 
 	
 	# MODIS pixel,i mask
@@ -71,52 +94,44 @@ for (i in 1 : npix)
 	sampids = values(smlPix) 
 
 	
-	#ensemble loop 
-	# init HX
+		#ensemble loop 
+		# init HX
 		HX = c()
 		for ( j in 1 : nens){
-		
-		#prepare results matrix
-		
+	
 		
 		# number of smallpix in MODIS pixel
 		nsmlpix <- length(sampids)
 		
 		# get unique sim ids 
-		simindexs=paste0('S',formatC(unique(sampids[!is.na(sampids)]), width=5,flag='0'))
+		simindexs <- unique(sampids[!is.na(sampids)])
 		
 		# number of unique samples in pixel
-		nSamp = length(simindexs)
+		nSamp <- length(simindexs)
 		
 		# number of NA's in pixel
 		nNA = length(which(is.na(sampids)==TRUE))
 
-			# extract vector of each sample swe that occurs in pixel, covert to SD.
-			mat=c()
-			
-			for (k in simindexs){
-			
-			dat = read.table(paste0("/home/joel/sim/ensembler2/ensemble0/grid1/",k,"/out/surface.txt"), sep=',', header=TRUE)
-			var = dat$snow_water_equivalent.mm.
-			
-			# binary snow/no snow add buffer here?
-			var[var>0]<-1
-			
-			mat=cbind(var,mat)
-		}
-			
+		# extract vector of each sample swe that occurs in pixel, covert to SD.
+		mat <- myarray[,simindexs,j]
+		mat <- mat[1:40,]
+
 		# count occurance of each in sample
 		tab <- as.data.frame(table(sampids))
 		tabmat <- t(mat)*tab$Freq
+		
+		# fSCA for pixel i and ensemble j
 		fsca = colSums(tabmat)/nsmlpix
+		
+		# append to ensemble matrix
 		HX= cbind(HX, fsca)
 
 	}
-	 #w=PBS(HX,obs,R)
-	 w=obs
-		wmat = cbind(wmat,w)
-		t2 <- Sys.time() -t1
-print(t2)
+	w=PBS(HX,obs,R)
+	wmat = cbind(wmat,w)
+	t2 <- Sys.time() -t1
+	print(t2)
 }
+write.csv(wmat, "wmat.csv")
 
 
