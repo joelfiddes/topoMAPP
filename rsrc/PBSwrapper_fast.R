@@ -43,15 +43,23 @@ wd = "/home/joel/sim/ensembler2/"
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # pixel based timeseries 
-pixTS = rasterToPoints( rstack )
+pixTS = extract( rstack , 1:ncell(rstack) )
 
 # total number of MODIS pixels
-npix = ncell( rstack )
+npix = ncell( rstack)
 
 #pixel loop
 #npix_vec=c()
 
 # retrieve results matrix: ensemble members * samples * timestamps
+# NEED TO SELECT ONLY TIMESTAMPOS in obsTS 
+d=strptime(obsTS$x, format='%Y-%m-%d')
+d2=format(d, '%d/%m/%Y %H:%M')
+
+dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
+obsIndex = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
+
+#convert obsTS to geotop time get index of results that fit obsTS
 rstStack=stack()
 for (i in 1: nens){ #python index
 
@@ -59,7 +67,9 @@ for (i in 1: nens){ #python index
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
 		dat = read.table(paste0(wd,"ensemble",i-1,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
-		resMat = cbind(resMat,dat$snow_water_equivalent.mm.)
+		
+		
+		resMat = cbind(resMat,dat$snow_water_equivalent.mm.[obsIndex])
 		rst=raster(resMat)
 	}
 rstStack=stack(rstStack, rst)
@@ -77,12 +87,8 @@ for (i in 1 : npix)
 	{
 	print(i)
 	
-	# Extract pixel based timesries of MODIS obs
-	y = pixTS[i,]
-	
-	# rm x/y coordinates from element 1:2 and scale 
-	obs = y[3: length(y)] /100
-
+	# Extract pixel based timesries of MODIS obs and scale
+	obs = pixTS[i,] /100
 	
 	# MODIS pixel,i mask
 	singlecell = rasterFromCells(rstack[[1]], i, values=TRUE)
@@ -114,7 +120,8 @@ for (i in 1 : npix)
 
 		# extract vector of each sample swe that occurs in pixel, covert to SD.
 		mat <- myarray[,simindexs,j]
-		mat <- mat[1:40,]
+		
+		#mat <- mat[1:length(obs),] # this has to be replaced by correct date matching
 
 		# count occurance of each in sample
 		tab <- as.data.frame(table(sampids))
@@ -127,11 +134,54 @@ for (i in 1 : npix)
 		HX= cbind(HX, fsca)
 
 	}
+	print(dim(HX))
+	print(length(obs))
 	w=PBS(HX,obs,R)
 	wmat = cbind(wmat,w)
 	t2 <- Sys.time() -t1
 	print(t2)
 }
 write.csv(wmat, "wmat.csv")
+# dim pix * ensemb
+
+
+# compute mean w per samples
+maxEns = apply(wmat, 2, max) 
+plot(density(maxEns)) # bimodal distribution (approx means at 0.2 + 1)
+
+# compute ensemble index of max weight per pixel
+maxEns = apply(wmat, 2, which.max) 
+
+# generate raster from vectorise
+rst <- raster(matrix(maxEns, nrow= nrow(rstack), ncol=ncol(rstack))) # I dont see any topographical features in this, should I?
+
+#dummy <- rstack[[1]]
+#values(dummy) <- maxEns
+#rst2 = resample(dummy, landform, method='ngb')
+
+enscol_vec = c()
+samplN_vec = c()
+# assign max weight at MODIS pix to smlpix level
+for (i in 1 : npix) {
+print(i)
+	# MODIS pixel,i mask
+	singlecell = rasterFromCells(rstack[[1]], i, values=TRUE)
+	
+	# extract smallpix using mask
+	smlPix = crop(landform, singlecell)
+	
+	# 
+	nens <- maxEns[i]
+	enscol = rep(nens, ncell(smlPix))
+	samplN = getValues(smlPix)
+	enscol_vec = c(enscol_vec, enscol)
+	samplN_vec = c(samplN_vec,samplN)
+        #df <- data.frame(samplN, enscol)
+        #df_alt <- c(df_alt,df)
+        }
+	
+df <- data.frame(samplN_vec, enscol_vec)
+write.csv(df, "df.csv")
+# Median/modal ensemble memeber per sample or take all ensembles and do weighted average of ppars per sample
 
 

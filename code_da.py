@@ -403,6 +403,150 @@ for Ngrid in grid_dirs:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 
 #====================================================================
+# Informed sampling
+#====================================================================
+if config["toposub"]["inform"] == "TRUE":
+
+
+		# set up sim directoroes #and write metfiles
+	for Ngrid in range(1,int(ncells)+1):
+		gridpath = wd +"/grid"+ str(Ngrid)
+
+		cmd = "Rscript toposub_post_1.R" + gridpath + config['toposub']['samples'] + config['geotop']['file1'] + config['geotop']['targV']
+		subprocess.check_output(CMD)
+		
+		cmd = "Rscript toposub_pre_inform.R" + gridpath + config['toposub']['samples'] + config['geotop']['targV'] + config['toposcale']['svfCompute']
+		subprocess.check_output(CMD)
+
+	# ./informSample.sh
+	# ./runTopoSCALE.sh
+	# ./setupGeotopSim.sh
+	 #./runLSM.sh
+
+
+	#====================================================================
+	#	run toposcale INFORM!!
+	#====================================================================
+	path=wd
+	file="tPoint.txt"
+	x=fileSearch.search(path, file)
+	if x != 1: #NOT ROBUST
+
+		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+		print "[INFO]: Running TopoSCALE"
+
+		from toposcale import getGridEle as gele
+		gele.main(wd)
+
+		# set up sim directoroes #and write metfiles
+		for Ngrid in range(1,int(ncells)+1):
+			gridpath = wd +"/grid"+ str(Ngrid)
+
+			if os.path.exists(gridpath):
+				print "[INFO]: running toposcale for grid " + str(Ngrid)
+
+				from toposcale import boxMetadata as box
+				box.main(gridpath, str(Ngrid))
+
+				from toposcale import tscale_plevel as plevel
+				plevel.main(gridpath, str(Ngrid), "rhumPl")
+				plevel.main(gridpath, str(Ngrid), "tairPl")
+				plevel.main(gridpath, str(Ngrid), "uPl")
+				plevel.main(gridpath, str(Ngrid), "vPl")
+
+				from toposcale import tscale_sw as sw
+				sw.main( gridpath, str(Ngrid), config["toposcale"]["swTopo"], config["main"]["tz"]) #TRUE requires svf as does more computes 
+
+				from toposcale import tscale_lw as lw
+				lw.main( gridpath, str(Ngrid), config["toposcale"]["svfCompute"]) #TRUE requires svf as does more computes terrain/sky effects
+				
+				from toposcale import tscale_p as p
+				p.main( gridpath, str(Ngrid), config["toposcale"]["pfactor"])
+
+			else:
+				print "[INFO]: Grid "+ str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid)+1
+	else:
+		print "[INFO]: TopoSCALE already run"
+
+
+	#====================================================================
+	#	Setup Geotop simulations INFORM!!
+	#====================================================================
+
+	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+	print "[INFO]: Setup Geotop simulations" 
+
+	# set up sim directoroes #and write metfiles
+	#for Ngrid in range(1,int(ncells)+1):
+		#gridpath = wd +"/grid"+ Ngrid
+
+	for Ngrid in grid_dirs:	
+		gridpath = str(Ngrid)
+
+
+		if os.path.exists(gridpath):
+			print "[INFO]: Setting up geotop inputs " + str(Ngrid)
+
+		 	print "[INFO]: Creating met files...."
+		 	from gtop_setup import prepMet as met
+			met.main(gridpath, config["toposcale"]["svfCompute"],config["da"]["tscale"],config["da"]["pscale"])
+
+
+			print "[INFO]: extract surface properties"
+			from gtop_setup import pointsSurface as psurf
+			psurf.main(gridpath)
+
+			print "[INFO]: making inputs file"
+			from gtop_setup import makeGeotopInputs as gInput
+			gInput.main(gridpath, config["geotop"]["geotopInputsPath"], config["main"]["startDate"], config["main"]["endDate"])
+
+		else:
+			print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
+
+
+	#====================================================================
+	#	Run LSM INFORM!!
+	#====================================================================
+	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+	print "[INFO]: Running LSM" 
+
+	# set up sim directoroes #and write metfiles
+	for Ngrid in grid_dirs:	
+		gridpath = Ngrid
+
+		if os.path.exists(gridpath):
+
+		 	print "[INFO]: Simulations grid" + str(Ngrid) + " running (parallel model runs)"
+			batchfile="batch.sh"
+
+			sim_entries=gridpath +"/S*"
+
+			f = open(batchfile, "w+")
+			f.write("#!/bin/bash"+ "\n")
+			f.write("cd " + config["geotop"]["lsmPath"] + "\n")
+			f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
+			f.close()
+
+			import os, sys, stat
+			os.chmod(batchfile, stat.S_IRWXU)
+
+			cmd     = ["./" + batchfile]
+			subprocess.check_output( "./" + batchfile )
+
+		else:
+			print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
+
+
+
+
+
+
+
+
+
+
+
+#====================================================================
 #	Spatialise toposub results SIMULATION MEAN
 #====================================================================
 if config["main"]["runtype"] == "bbox":

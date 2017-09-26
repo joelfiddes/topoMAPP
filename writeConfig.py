@@ -17,7 +17,7 @@ config.filename = 'topomap.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/da_test/'
+config['main']['wd'] = '/home/joel/sim/da_test2/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
@@ -38,7 +38,7 @@ config['main']['googleEarthPlots'] = 'FALSE'
 config['main']['informSample'] = 'FALSE'
 
 # control quick starts
-config['main']['initSim'] = 'TRUE' # initialises interim data and dem from existing to allow perturbed experiment 
+config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/da_test'
 config['main']['initGrid'] = 1 # optional subset of grids to init sim with
 config['main']['demexists'] = 'FALSE'
@@ -53,8 +53,8 @@ config['era-interim']['grid'] = 0.75
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 50
- 
+config['toposub']['samples'] = 150
+config['toposub']['inform'] = 'FALSE'
 
 #=================================================================
 # TopoSCale
@@ -109,7 +109,7 @@ config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
-config['modis']['getMODISSCA'] = "TRUE"
+config['modis']['getMODISSCA'] = "FALSE"
 # location of MODIStsp options file
 
 #=================================================================
