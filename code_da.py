@@ -382,7 +382,7 @@ for Ngrid in grid_dirs:
 
 	if os.path.exists(gridpath):
 
-	 	print "[INFO]: Simulations grid" + str(Ngrid) + " running (parallel model runs)"
+	 	print "[INFO]: Simulations grid " + str(Ngrid) + " running (parallel model runs)"
 		batchfile="batch.sh"
 
 		sim_entries=gridpath +"/S*"
@@ -406,34 +406,24 @@ for Ngrid in grid_dirs:
 # Informed sampling
 #====================================================================
 if config["toposub"]["inform"] == "TRUE":
-
+	print "[INFO]: Running Toposub INFORM!"
 
 		# set up sim directoroes #and write metfiles
 	for Ngrid in range(1,int(ncells)+1):
 		gridpath = wd +"/grid"+ str(Ngrid)
+		print gridpath
+		from toposub import toposub_post1 as p1
+		p1.main(gridpath ,config['toposub']['samples'] ,config['geotop']['file1'] ,config['geotop']['targV']) #TRUE requires svf as does more computes 
 
-		cmd = "Rscript toposub_post_1.R" + gridpath + config['toposub']['samples'] + config['geotop']['file1'] + config['geotop']['targV']
-		subprocess.check_output(CMD)
-		
-		cmd = "Rscript toposub_pre_inform.R" + gridpath + config['toposub']['samples'] + config['geotop']['targV'] + config['toposcale']['svfCompute']
-		subprocess.check_output(CMD)
-
-	# ./informSample.sh
-	# ./runTopoSCALE.sh
-	# ./setupGeotopSim.sh
-	 #./runLSM.sh
-
+		from toposub import toposub_pre_inform as inform
+		inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
 
 	#====================================================================
 	#	run toposcale INFORM!!
-	#====================================================================
-	path=wd
-	file="tPoint.txt"
-	x=fileSearch.search(path, file)
-	if x != 1: #NOT ROBUST
+	#==================================================================
 
 		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-		print "[INFO]: Running TopoSCALE"
+		print "[INFO]: Running TopoSCALE INFORM!"
 
 		from toposcale import getGridEle as gele
 		gele.main(wd)
@@ -474,7 +464,7 @@ if config["toposub"]["inform"] == "TRUE":
 	#====================================================================
 
 	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-	print "[INFO]: Setup Geotop simulations" 
+	print "[INFO]: Setup Geotop simulations INFORM!" 
 
 	# set up sim directoroes #and write metfiles
 	#for Ngrid in range(1,int(ncells)+1):
@@ -508,7 +498,7 @@ if config["toposub"]["inform"] == "TRUE":
 	#	Run LSM INFORM!!
 	#====================================================================
 	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-	print "[INFO]: Running LSM" 
+	print "[INFO]: Running LSM INFORM!" 
 
 	# set up sim directoroes #and write metfiles
 	for Ngrid in grid_dirs:	

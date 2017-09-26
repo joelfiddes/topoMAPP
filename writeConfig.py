@@ -54,7 +54,7 @@ config['era-interim']['grid'] = 0.75
 #=================================================================
 config['toposub'] = {}
 config['toposub']['samples'] = 150
-config['toposub']['inform'] = 'FALSE'
+config['toposub']['inform'] = 'TRUE'
 
 #=================================================================
 # TopoSCale

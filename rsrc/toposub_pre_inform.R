@@ -159,6 +159,13 @@ members<-mem$ele
 colnames(samp_mean)[1] <- "id"
 lsp<-data.frame(members,samp_mean)
 
+# Add long lat of gridbox for each sample (which are positionless) in order to satisfy toposcale_sw.R (FALSE)-> solarCompute()
+e=extent(rst)
+lonbox=e@xmin + (e@xmax-e@xmin)/2
+latbox=e@ymin + (e@ymax-e@ymin)/2
+lsp$lat <-rep(latbox,dim(lsp)[1])
+lsp$lon <-rep(lonbox,dim(lsp)[1])
+
 write.csv(round(lsp,2),paste0(gridpath, '/listpoints.txt'), row.names=FALSE)
 
 pdf(paste0(gridpath, '/sampleDistributionsInform.pdf'), width=6, height =12)
