@@ -5,7 +5,7 @@ import time
 import sys
 
 #set root
-root = "/home/joel/sim/ensembler2/"
+root = "/home/joel/sim/ensembler3/"
 # Timer
 start_time = time.time()
 
@@ -74,7 +74,10 @@ for i in range(0,N):
 	config["da"]["tscale"] = tbias #factor to add to temp
 	config['modis']['getMODISSCA'] = "FALSE"
 	config["main"]["initSim"]  = 'TRUE'
-	config['main']['initDir'] = '/home/joel/sim/da_test'
+	config['main']['initDir'] = '/home/joel/sim/da_test2'
+	config['toposub']['inform'] = 'FALSE'
+
+
 	config.write()
 
 	print "[INFO]: Config settings used"

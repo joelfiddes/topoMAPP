@@ -23,6 +23,10 @@ vals=getValues(eleVal)
 mean(vals,na.rm=T)
 sd(vals,na.rm=T)
 rmse(vals)
+
 # eval at certain points
 point= shapefile(p)
 extract(eleVal, point)
+
+# evaluate forcing
+

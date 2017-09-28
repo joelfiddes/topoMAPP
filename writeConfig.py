@@ -17,16 +17,16 @@ config.filename = 'topomap.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/da_test2/'
+config['main']['wd'] = '/home/joel/sim/scale_test/'
 config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2015-09-01'
-config['main']['endDate'] = '2016-09-01'
+config['main']['startDate'] = '2016-01-01'
+config['main']['endDate'] = '2016-02-01'
 
 config['main']['lonw'] = 8
-config['main']['lats'] = 46
-config['main']['lone'] = 9
+config['main']['lats'] = 45
+config['main']['lone'] = 10
 config['main']['latn'] = 47
 
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
@@ -53,7 +53,7 @@ config['era-interim']['grid'] = 0.75
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 150
+config['toposub']['samples'] = 5
 config['toposub']['inform'] = 'TRUE'
 
 #=================================================================
