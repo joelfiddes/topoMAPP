@@ -33,7 +33,7 @@ import glob
 #================================================================
 
 
-sys.path.append("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/")
+sys.path.append("/home/joel/src/topoMAPP/")
 print sys.path
 print sys.argv[0]
 # print "sys.argv", sys.argv
@@ -56,7 +56,7 @@ start_time = time.time()
 #====================================================================
 #	Config setup
 #====================================================================
-#os.system("python writeConfig.py") # update config
+#os.system("python writeConfig.py") # update config DONE IN run.sh file
 
 from configobj import ConfigObj
 config = ConfigObj("topomap.ini")
@@ -102,25 +102,37 @@ if config["main"]["initSim"] == "TRUE":
 #==================================================================== 
 config.filename = wd + "topomap.ini"
 config.write()
+
 #====================================================================
 #	Setup domain
 #====================================================================
-fname = wd + "predictors/asp.tif"
-if os.path.isfile(fname) == False:		#NOT ROBUST
 
+# control statement to skip if "asp.tif" exist - indicator fileNOT ROBUST
+fname = wd + "predictors/asp.tif"
+if os.path.isfile(fname) == False:		
+
+	# Dop this only for bbox runs
 	if config["main"]["runtype"] == "bbox":
+
+		# copy preexisting dem
 		if config["main"]["demexists"] == "TRUE":
+
 			cmd = "mkdir " + wd + "/predictors/"
 			os.system(cmd)
 			src = config["main"]["dempath"]
 			dst = wd +"/predictors/dem.tif"
 			cmd = "cp -r %s %s"%(src,dst)
 			os.system(cmd) 
+
+		# fetch new srtm dem from nasa
 		elif config["main"]["demexists"] == "FALSE":
+
 			from domain_setup import getDEM as gdem
 			gdem.main(wd ,config["main"]["demDir"] ,config["main"]["lonw"],config["main"]["lats"],config["main"]["lone"],config["main"]["latn"])
 
+	# do this only for point runs		
 	if config["main"]["runtype"] == "points":
+
 		from domain_setup import getDEM_points as gdem
 		gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
@@ -134,6 +146,9 @@ if os.path.isfile(fname) == False:		#NOT ROBUST
 		from domain_setup import domainPlot as dplot
 		dplot.main(wd , "FALSE") # shp = TRUE for points  run
 
+		cmd = "Rscript ./rsrc/makePoly.R " +config['main']['latn']+" "+config['main']['lats']+" " +config['main']['lone']+" "+config['main']['lonw']+" "+wd+"/spatial/extentRequest.shp"
+		os.system(cmd)
+
 	if config["main"]["runtype"] == "points":
 		from domain_setup import domainPlot as dplot
 		dplot.main(wd , "TRUE") # shp = TRUE for points  run
@@ -142,6 +157,8 @@ if os.path.isfile(fname) == False:		#NOT ROBUST
 	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")
 	        
 	kml.main(wd, wd + "/spatial/eraExtent.tif", "raster", wd + "/spatial/eraExtent")
+
+	#kml.main(wd, wd + "/spatial/extentRequest.shp", "raster", wd + "/spatial/extentRequest")
 
 	from domain_setup import computeTopo as topo
 	topo.main(wd, config["toposcale"]["svfCompute"])
@@ -162,9 +179,6 @@ fname1 = wd + "eraDat/SURF.nc"
 fname2 = wd + "eraDat/PLEVEL.nc"
 if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROBUST
 
-
-
-
 	# from getERA import getExtent as ext
 	# latN = ext.main(wd + "/predictors/ele.tif" , "latN")
 	# latS = ext.main(wd + "/predictors/ele.tif" , "latS")
@@ -172,14 +186,13 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	# lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
 	from getERA import extractEraBbox as ext
-	latN = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	latN = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif" , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
-	latS = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	latS = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif", "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
-	lonW = ext.main("/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif", "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	lonW = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif", "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
 
-	lonE = ext.main(
-		"/home/joel/src/TOPOMAP/toposubv2/topoMAPP/dat/eraigrid75.tif" ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
+	lonE = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif" ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
 
 
 
@@ -249,6 +262,39 @@ if x != 1: #NOT ROBUST
 		#from listpoints_make import getRasterDims as dims
 		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
 		print "[INFO]: Running TopoSUB"
+
+		
+
+		# for Ngrid in range(1,int(ncells)+1):
+		# 	gridpath = wd +"/grid"+ str(Ngrid)
+
+		# 	print "[INFO]: preparing surface layer " + str(Ngrid)
+		# 	from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
+		# 	surf.main(gridpath, config["modis"]["MODISdir"] )
+
+
+
+		# from joblib import Parallel, delayed 
+		# import multiprocessing 
+
+		# def processInput(Ngrid): 
+		# 			gridpath = wd +"/grid"+ str(Ngrid)
+
+		# 			print "[INFO]: preparing surface layer " + str(Ngrid)
+		# 			from domain_setup import makeSurface as surf 
+		# 			surf.main(gridpath, config["modis"]["MODISdir"] )
+
+		# 			print "[INFO]: running TopoSUB for grid " + str(Ngrid)
+		# 			from toposub import toposub as tsub
+		# 			tsub.main(gridpath, config["toposub"]["samples"])	 	
+
+		# #if __name__ == '__main__': 
+		# # what are your inputs, and what operation do you want to # perform on each input. For example... 
+		# inputs = range(1,int(ncells)+1) 
+		# num_cores = multiprocessing.cpu_count() 
+		# results = Parallel(n_jobs=4)(delayed(processInput)(Ngrid) for Ngrid in inputs) 
+
+
 
 		for Ngrid in range(1,int(ncells)+1):
 			gridpath = wd +"/grid"+ str(Ngrid)

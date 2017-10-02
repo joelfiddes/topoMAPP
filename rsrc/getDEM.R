@@ -152,6 +152,9 @@ dem<-rast.mosaic
 }
 setwd(wd)
 writeRaster(dem, 'predictors/dem.tif', overwrite=TRUE)
+
+#outline = rasterToPolygons(dem)
+#shapefile(outline,"extentRequest.shp")
 #====================================================================
 # CLIP TO NEAREST ERA EXTENT
 #====================================================================

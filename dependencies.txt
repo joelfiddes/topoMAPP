@@ -1,0 +1,50 @@
+#R packages
+install.packages(c("raster", "horizon","rgdal", "MODIS", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel"))
+
+#test successful
+require(raster)
+require(horizon)
+require(rgdal)
+require(MODIS)
+require(ncdf4)
+require(Hmisc)
+require(MODIStsp) # (install and dependencies https://github.com/lbusett/MODIStsp)
+require(plotKML)
+require(gdata)
+require(foreach)
+require(doParallel)
+
+
+#Linux
+
+dpkg -l gdal-bin r-base python cdo curl netcdf-bin
+
+
+
+gdal-bin
+#gdal-config (sudo apt install libgdal-dev)
+R
+python
+cdo 
+pip
+
+Cairo >= 1.0.0, ATK >= 1.10.0, Pango >= 1.10.0, GTK+ >= 2.8.0, GLib >= 2.8.0 (required by package RGtk2)
+Curl (required by package curl)
+
+
+#accounts (credential files required)
+NASA data: DEM, MODIS: https://urs.earthdata.nasa.gov/profile
+ERA-data: https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets
+
+#python-pip
+
+import pip
+installed_packages = pip.get_installed_distributions()
+flat_installed_packages = [package.project_name for package in installed_packages]
+
+lib='joblib'
+if lib in flat_installed_packages:                                   
+	print lib, 'installled'
+else:
+	print lib, 'notfound'
+

@@ -18,16 +18,16 @@ config.filename = 'topomap.ini'
 #=================================================================
 config['main'] = {}
 config['main']['wd'] = '/home/joel/sim/scale_test/'
-config['main']['srcdir'] = '/home/joel/src/TOPOMAP/toposubv2/topoMAPP'
+config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2016-01-01'
-config['main']['endDate'] = '2016-02-01'
+config['main']['startDate'] = '2000-09-01'
+config['main']['endDate'] = '2016-09-01'
 
-config['main']['lonw'] = 8
+config['main']['lonw'] = 7
 config['main']['lats'] = 45
-config['main']['lone'] = 10
-config['main']['latn'] = 47
+config['main']['lone'] = 11
+config['main']['latn'] = 48
 
 config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
 config['main']['pkCol'] = 1
@@ -40,7 +40,7 @@ config['main']['informSample'] = 'FALSE'
 # control quick starts
 config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/da_test'
-config['main']['initGrid'] = 1 # optional subset of grids to init sim with
+config['main']['initGrid'] = 1 # optional subset of grids to init sim with, can be "*" for all grids
 config['main']['demexists'] = 'FALSE'
 config['main']['dempath'] = '/home/joel/Downloads/20170904031934_280341969.tif'
 #=================================================================
@@ -53,7 +53,7 @@ config['era-interim']['grid'] = 0.75
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 5
+config['toposub']['samples'] = 150
 config['toposub']['inform'] = 'TRUE'
 
 #=================================================================
@@ -109,7 +109,7 @@ config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
-config['modis']['getMODISSCA'] = "FALSE"
+config['modis']['getMODISSCA'] = "TRUE"
 # location of MODIStsp options file
 
 #=================================================================

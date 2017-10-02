@@ -27,7 +27,9 @@ shpname=args[3]
 setwd(sca_wd)
 shp = shapefile(shpname)
 rstack=stack(list.files(pattern='MOD*'))
-MOD = extract(rstack, shp)
+
+
+MOD = extract(fsca, shp)
 rstack=stack(list.files(pattern='MYD*'))
 MYD = extract(rstack, shp)
 

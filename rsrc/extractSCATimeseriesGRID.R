@@ -78,7 +78,15 @@ for(i in 1: length( names(rstack)))
 }
 
 setwd(wd)
-writeRaster(rstack, "fsca_stack.tif", overwrite=TRUE)
+
+
+#====================================================================
+# convert ndsi to fsca
+#====================================================================
+fsca= (-0.01 + (1.45*rstack)) # https://modis-snow-ice.gsfc.nasa.gov/uploads/C6_MODIS_Snow_User_Guide.pdf
+fsca [fsca >100]<-100
+
+writeRaster(fsca, "fsca_stack.tif", overwrite=TRUE)
 write.csv(date,"fsca_dates.csv", row.names=FALSE )
 
 

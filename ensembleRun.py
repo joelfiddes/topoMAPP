@@ -5,7 +5,7 @@ import time
 import sys
 
 #set root
-root = "/home/joel/sim/ensembler3/"
+root = "/home/joel/sim/ensembler_scale/"
 # Timer
 start_time = time.time()
 
@@ -48,7 +48,7 @@ os.system("python writeConfig.py")
 print "Running ensemble members"
 
 # number of ensemble memebers
-N = 100
+N = 3
 
 #generate ensemble
 os.system("Rscript rsrc/ensemGen.R " + str(N))
@@ -59,7 +59,7 @@ df = pd.read_csv("ensemble.csv")
 # Assimilation cycle loop start here
 
 
-#loop over ensemble memebers
+#loop over ensemble members
 for i in range(0,N):
 	print "Running ensemble member:" + str(i)
 	pbias = df['pbias'][i]
@@ -74,10 +74,9 @@ for i in range(0,N):
 	config["da"]["tscale"] = tbias #factor to add to temp
 	config['modis']['getMODISSCA'] = "FALSE"
 	config["main"]["initSim"]  = 'TRUE'
-	config['main']['initDir'] = '/home/joel/sim/da_test2'
+	config['main']['initDir'] = '/home/joel/sim/scale_test'
 	config['toposub']['inform'] = 'FALSE'
-
-
+	config['main']['initGrid'] = "*"
 	config.write()
 
 	print "[INFO]: Config settings used"

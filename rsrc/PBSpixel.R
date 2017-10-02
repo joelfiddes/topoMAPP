@@ -28,6 +28,9 @@
 wd = "/home/joel/sim/ensembler3/"
 priorwd = "/home/joel/sim/da_test2/" 
 
+# output
+outfile = "wmat_trunc0_all2.rd"
+
 # dependency
 source("./rsrc/PBS.R") 
 library("foreach")
@@ -52,14 +55,19 @@ sdThresh <- 0
 cores=6
  
 # identify melt season 
-start=15
-end=40
 
+# using a curve to find max
+#x=1:length(r)
+#y=r
+#xyplot(y ~ x, type=c("smooth", "p"))
+
+start=180
+end=358
 
 # readin
 landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
-rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+rstack = brick(paste0(priorwd,"fsca_stack_all.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates_all.csv"))
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # pixel based timeseries 
@@ -174,7 +182,7 @@ t2=Sys.time()-t1
 stopCluster(cl) # shut down the cluster
 
 #write.csv(result, paste0(wd,"wmat.csv"))
-save (wmat, file = paste0(wd,"wmat_trunc0.rd"))
+save (wmat, file = paste0(wd,outfile))
 
 print(paste0("PBSpixel run took: ", t2, " to process ", npix, " MODIS pixels"))
 
