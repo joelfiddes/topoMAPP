@@ -64,13 +64,13 @@ cores=6
 
 # using a curve to find max
 #require(lattice)
-#mean_sca=cellStats(rstack, "mean")
+#mean_sca=cellStats(rstack, "mean")R
 #x=1:length(mean_sca)
 #y=mean_sca
 #xyplot(y ~ x, type=c("smooth", "p"))
 
 start=38
-end=80
+end=78
 
 
 # pixel based timeseries 
@@ -122,6 +122,7 @@ cl <- makeCluster(cores) # create a cluster with 2 cores
 registerDoParallel(cl) # register the cluster
 
 
+
 wmat = foreach(i = 1:npix, 
               .combine = "rbind",.packages = "raster") %dopar% {
               
@@ -130,6 +131,20 @@ wmat = foreach(i = 1:npix,
 	# Extract pixel based timesries of MODIS obs and scale
 	obs = pixTS[i,] /100
 	
+	# identify missing dates and reset start end index
+	obsind = which(!is.na(obs)==T)
+	
+	# if less than two obs are present then PBS fails, this function steps back though pixels already processed until at least 2 obs are found
+	n=1
+	while(length(obsind)<2){
+
+	obs = pixTS[i-n,] /100
+	obsind = which(!is.na(obs)==T)
+	n<-n+1
+	print(n)
+	print(i-n)
+	}
+
 	# MODIS pixel,i mask
 	singlecell = rasterFromCells(rstack[[1]], i, values=TRUE)
 	
@@ -176,7 +191,7 @@ wmat = foreach(i = 1:npix,
 		HX= cbind(HX, fsca)
 
 	}
-	w=PBS(HX[start:end,],obs[start:end],R)
+	w=PBS(HX[obsind,],obs[obsind],R)
 	#wmat = cbind(wmat,w)
 
 }

@@ -119,12 +119,12 @@ myarray = as.array(rstStack)
 myarray_swe <- myarray
 
 # compute sca results
-myarray[myarray<=sdThresh]<-0
-myarray[myarray>sdThresh]<-1
+#myarray[myarray<=sdThresh]<-0
+#myarray[myarray>sdThresh]<-1
 
 
 #===============================================================================
-#			compute weight ensemble per sample
+#			compute weight ensemble per sample - posterior
 #===============================================================================
  
  we_mat=c()
