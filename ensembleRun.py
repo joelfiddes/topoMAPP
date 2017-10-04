@@ -5,7 +5,9 @@ import time
 import sys
 
 #set root
-root = "/home/joel/sim/ensembler_scale/"
+root = "/home/joel/sim/ensembler_scale_sml/"
+# number of ensemble memebers
+N = 50
 # Timer
 start_time = time.time()
 
@@ -44,11 +46,12 @@ os.system("python writeConfig.py")
 # elif os.path.isdir(root + "ensemble_norm") == True:
 # 	print "ensemble_norm found"	
 
-# start ensemble runs
-print "Running ensemble members"
 
-# number of ensemble memebers
-N = 3
+
+
+
+# start ensemble runs
+print "Running ensemble members: " + str(N)
 
 #generate ensemble
 os.system("Rscript rsrc/ensemGen.R " + str(N))
@@ -74,9 +77,9 @@ for i in range(0,N):
 	config["da"]["tscale"] = tbias #factor to add to temp
 	config['modis']['getMODISSCA'] = "FALSE"
 	config["main"]["initSim"]  = 'TRUE'
-	config['main']['initDir'] = '/home/joel/sim/scale_test'
+	config['main']['initDir'] = '/home/joel/sim/scale_test_sml'
 	config['toposub']['inform'] = 'FALSE'
-	config['main']['initGrid'] = "*"
+	config['main']['initGrid'] = "9"
 	config.write()
 
 	print "[INFO]: Config settings used"

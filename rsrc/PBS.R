@@ -61,7 +61,7 @@ Inn = kronecker(matrix(1,1,dim(HX)[2]),Y)-HX # innovation?
 
 
 # with %*% gives NA
-EObj=colMeans(Rinv*(Inn^2),na.rm=T)                    # [1 x Ne] ensemble objective function.
+EObj=Rinv%*%(Inn^2)                  # [1 x Ne] ensemble objective function.
 
 LH=exp(-0.5*EObj)                     # Scaled likelihood. 
 # NB! The likelihood coefficient (1/sqrt(2*pi...)) is

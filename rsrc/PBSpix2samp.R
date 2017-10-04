@@ -1,14 +1,17 @@
+# dependency
+library("foreach")
+library("doParallel")
+require(raster) 
+
 # env
 wd = "/home/joel/sim/ensembler3/"
 priorwd = "/home/joel/sim/da_test2/" 
 
-plotout=("~/plot_all2.pdf")
-load( paste0(wd,"wmat_trunc0_all2.rd"))
-# dependency
-
-library("foreach")
-library("doParallel")
-require(raster) 
+# IO files
+plotout=("~/plot_fscacorrect.pdf")
+load( paste0(wd,"wmat_trunc0.rd"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
 # variables
 
@@ -29,45 +32,25 @@ cores=4
  
  
 # ======== code ===================
+
 # readin
 landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
-rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
-# pixel based timeseries 
-#pixTS = extract( rstack , 1:ncell(rstack) )
+
 
 # total number of MODIS pixels
 npix = ncell( rstack)
 
-#d=strptime(obsTS$x, format='%Y-%m-%d')
-#d2=format(d, '%d/%m/%Y %H:%M')
-#dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
-
-#
-
-
 # compute ensemble index of max weight per pixel
 ID.max.weight = apply(wmat, 1, which.max) 
-
-# generate raster from vectorise
-#rst <- raster(matrix(as.numeric(ID.max.weight), nrow= nrow(rstack), ncol=ncol(rstack)))
 
 # make raster container
 rst <- rstack[[1]]
 
 # fill with values ensemble ID
 rst = setValues(rst, as.numeric(ID.max.weight))
-
-
-#dummy <- rstack[[1]]
-#values(dummy) <- ID.max.weight
-#rst2 = resample(dummy, landform, method='ngb')
-
-#enscol_vec = c()
-#samplN_vec = c()
-# assign max weight at MODIS pix to smlpix level
 
 #===============================================================================
 #	Run pixel calcs in vectorised form
@@ -103,37 +86,14 @@ meid = getmode(vec)
 modal_ensembID=c(modal_ensembID, meid)
 }
 
-
-
-
 save(mylist, file = paste0(wd,"mylist.rd"))
 
-#===============================================================================
-#	compute results matrix - this is copied from PBSgrid
-#===============================================================================
-
-# pixel based timeseries 
-#pixTS = extract( rstack , 1:ncell(rstack) )
-
-# total number of MODIS pixels
-#npix = ncell( rstack)
-
-# pixel loop
-# npix_vec=c()
-
-# retrieve results matrix: ensemble members * samples * timestamps
-# NEED TO SELECT ONLY TIMESTAMPOS in obsTS 
 
 #===============================================================================
-#			get timestamps of modis obs
+#			get results matrix
 #===============================================================================
-#d=strptime(obsTS$x, format='%Y-%m-%d')
-#d2=format(d, '%d/%m/%Y %H:%M')
 
-#dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
-#obsIndex = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
-#convert obsTS to geotop time get index of results that fit obsTS
 rstStack=stack()
 for (i in 1: nens){ #python index
 
@@ -182,53 +142,6 @@ myarray[myarray>sdThresh]<-1
  
  }
 	
-#===============================================================================
-#			PBS SCA
-#===============================================================================
-	
-	# compute grid average obs
-#	obs <- cellStats(rstack, 'mean') /100
-#	
-#	HX=c()
-#	for( i in 1:100){
-#	
-#	tivec=c()
-#	for( j in 1:40){
-#	ti = sum(myarray[j,,i]*sampMembers )/totalMembers
-#	tivec=c(tivec,ti)
-#	
-#	}
-#	HX=cbind(HX,tivec)
-#	}	
-
-##apply time filter
-#start=1# 15
-#end=40
-##HX=HX[start:end,]	
-#obs=obs[start:end]
-# run particle batch smoother	
-#w = PBS(HX,obs, R)	
-
-#ensembP=rowSums(HX*w)
-#ensembMed = HX[,which.max(w)]
-
-
-
-
-#===============================================================================
-#			get timestamps of modis obs
-#===============================================================================
-	
-
-
-#
-#d=strptime(obsTS$x, format='%Y-%m-%d')
-#d2=format(d, '%d/%m/%Y %H:%M')
-
-#dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
-
-# Extract timestamp corresponding to observation
-#obsIndex = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #===============================================================================
 #	construct sample observed SCA
@@ -236,6 +149,8 @@ myarray[myarray>sdThresh]<-1
 shp=shapefile("/home/joel/data/GCOS/metadata_easy.shp")
 pointObs= extract(rstack,shp)
 
+# get generic results set for timestamps vector
+dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
 # get obs values
 #which(obsTS in )
 

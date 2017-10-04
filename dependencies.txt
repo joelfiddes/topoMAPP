@@ -1,3 +1,6 @@
+# on server login with -X to allow cairo stuff to work in install.package(MODStsp)
+ssh -X fiddes@wessel.uio.no	
+
 #R packages
 install.packages(c("raster", "horizon","rgdal", "MODIS", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel"))
 
@@ -15,10 +18,10 @@ require(foreach)
 require(doParallel)
 
 
+
 #Linux
 
 dpkg -l gdal-bin r-base python cdo curl netcdf-bin
-
 
 
 gdal-bin
@@ -28,9 +31,14 @@ python
 cdo 
 pip
 
+#for MODIStsp
 Cairo >= 1.0.0, ATK >= 1.10.0, Pango >= 1.10.0, GTK+ >= 2.8.0, GLib >= 2.8.0 (required by package RGtk2)
 Curl (required by package curl)
 
+
+
+sudo apt-get install r-cran-cairodevice r-cran-rgtk2 libcairo2-dev libatk1.0-dev libpango1.0-dev 
+libgtk2.0-dev libglib2.0-dev libcurl4-openssl-dev libgdal-dev libproj-dev
 
 #accounts (credential files required)
 NASA data: DEM, MODIS: https://urs.earthdata.nasa.gov/profile
@@ -47,4 +55,105 @@ if lib in flat_installed_packages:
 	print lib, 'installled'
 else:
 	print lib, 'notfound'
+	
+================================================================================================================	
+# on server login with -X to allow cairo stuff to work in install.package(MODStsp)
+ssh -X fiddes@wessel.uio.no	
+	
+# ==== local cairo insrtall (not sure need this if login with X11 turned on)
+http://jovingelabsoftware.github.io/blog/2016/02/15/make-r-locally-with-cairo/	
+	
+
+Need to install R locally, and want to be able to render graphics to file without X11 resources available?
+
+Here we install pixman, cairo, and then R…
+
+# create some nice directory to hold all your locally built software
+mkdir local
+
+wget http://cairographics.org/releases/LATEST-cairo-1.14.6
+tar -xvf LATEST-cairo-1.14.6
+wget http://cairographics.org/releases/LATEST-pixman-0.34.0
+tar -xvf LATEST_pixman-0.34.0
+
+# first build pixman backend for cairo
+# adjust version numbers to match what actually downloaded
+cd pixman-0.34.0 
+./configure --prefix=/full/path/to/local
+make
+make install
+
+# now tell our environment where stuff is (adjust path as needed)
+PKG_CONFIG_PATH=/full/path/to/local/lib/pkgconfig
+LD_LIBRARY_PATH=/full/path/to/local/lib
+export PKG_CONFIG_PATH LD_LIBRARY_PATH
+
+# now build cairo
+# adjust version numbers to match what actually downloaded
+cd ../cairo-1.14.6
+./configure --prefix=/full/path/to/local
+make
+make install
+
+# now build R with cairo support
+wget https://stat.ethz.ch/R/daily/R-devel.tar.gz
+tar -zxvf R-devel.tar.gz
+cd R-devel
+./configure --prefix=/full/path/to/local --with-cairo
+make
+install
+Done.
+
+You can test it with:
+
+/full/path/to/local/bin/R
+png(file="test.png", type="cairo")
+plot(1)
+dev.off()
+q()
+Finally, if you haven’t already, make life easier by adjusting your path by adding the following line to ~/.bashrc and restarting your bash session:
+
+PATH=$PATH:/full/path/to/local/bin
+
+==============================================================================
+udunits2
+
+install.packages("udunits2",configure.args = c("--with-udunits2-include=/uio/kant/geo-gjest-u1/fiddes/mylocal/include/", " --with-udunits2-lib=/uio/kant/geo-gjest-u1/fiddes/mylocal/lib/"),type='source', repos = "http://cran.rstudio.com")
+
+============================================================================
+gdal
+
+Install in non-root directory :
+installpath = /uio/kant/geo-gjest-u1/fiddes/mylocal/
+ cd gdal
+ ./configure --prefix=$installpath 
+ make
+ make install
+ export PATH=$installpath/bin:$PATH
+ export LD_LIBRARY_PATH=$installpath/lib:$LD_LIBRARY_PATH
+ export GDAL_DATA=$installpath/share/gdal
+# Test
+ gdalinfo --version
+# See below for installation of Python bindings
+
+=============================================================================
+geos
+mkdir mylocal
+cd mylocal
+http://download.osgeo.org/geos/latest_version_here
+tar xjf geos-3.6.2.tar.bz2
+cd geos-3.6.2
+./configure --prefix=fullpathtomylocal
+make make install
+
+pathtolocal=/uio/kant/geo-gjest-u1/fiddes/mylocal
+PKG_CONFIG_PATH=$pathtolocal/lib/pkgconfig
+LD_LIBRARY_PATH=$pathtolocal/lib
+export PKG_CONFIG_PATH LD_LIBRARY_PATH
+
+Gotcha!
+need "geos-config"
+
+
+install cairo locally
 

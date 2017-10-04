@@ -920,4 +920,44 @@ crispSpatialInstant<-function(col,Nclust,esPath, landform){
 		rst=round(rst,2)
 		writeRaster(rst, paste(esPath,'/crispINST_',col,'_','.tif', sep=''),overwrite=T)
 		}
+		
+		
+		
 
+sampleResultsNow <- function(gridpath, sampleN, targV, date){		
+ 
+
+	if(targV == "snow_water_equivalent.mm."){file1 <- "surface.txt"}
+	if(targV == "X100.000000"){file1 <- "ground.txt"}
+
+
+
+	#gsimindex=formatC(i, width=5,flag='0')
+	simindex <- paste0(gridpath, '/S',formatC(sampleN, width=5,flag='0'))
+
+	#read in lsm output
+	sim_dat <- read.table(paste(simindex,'/out/',file1,sep=''), sep=',', header=T)
+
+	# Get last data point
+	dateIndex = which(sim_dat$Date12.DDMMYYYYhhmm.== date)
+	
+	# 	
+	dat <- sim_dat[dateIndex,targV]
+	return(dat)
+
+}
+
+
+
+crispSpatialNow<-function(resultsVec, landform){
+		require(raster)
+		l <- length(resultsVec)
+		s <- 1:l
+		df <- data.frame(s,resultsVec)
+		rst <- subs(landform, df,by=1, which=2)
+		rst=round(rst,2)
+		return(rst)
+		}
+		
+		
+		

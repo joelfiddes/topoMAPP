@@ -17,11 +17,11 @@ config.filename = 'topomap.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/scale_test/'
+config['main']['wd'] = '/home/joel/sim/scale_test_sml/'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
-config['main']['startDate'] = '2000-09-01'
+config['main']['startDate'] = '2015-09-01'
 config['main']['endDate'] = '2016-09-01'
 
 config['main']['lonw'] = 7
@@ -109,7 +109,7 @@ config['modis'] = {}
 config['modis']['options_file'] = '/home/joel/data/MODIS_ARC/SCA/options.json'
 config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
-config['modis']['getMODISSCA'] = "TRUE"
+config['modis']['getMODISSCA'] = "FALSE"
 # location of MODIStsp options file
 
 #=================================================================

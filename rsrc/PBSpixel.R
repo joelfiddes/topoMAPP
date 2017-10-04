@@ -29,13 +29,19 @@ wd = "/home/joel/sim/ensembler3/"
 priorwd = "/home/joel/sim/da_test2/" 
 
 # output
-outfile = "wmat_trunc0_all2.rd"
+outfile = "wmat_trunc0.rd"
 
 # dependency
 source("./rsrc/PBS.R") 
 library("foreach")
 library("doParallel")
 require(raster) 
+
+# readin
+landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # variables
 
@@ -57,18 +63,15 @@ cores=6
 # identify melt season 
 
 # using a curve to find max
-#x=1:length(r)
-#y=r
+#require(lattice)
+#mean_sca=cellStats(rstack, "mean")
+#x=1:length(mean_sca)
+#y=mean_sca
 #xyplot(y ~ x, type=c("smooth", "p"))
 
-start=180
-end=358
+start=38
+end=80
 
-# readin
-landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
-rstack = brick(paste0(priorwd,"fsca_stack_all.tif"))
-obsTS = read.csv(paste0(priorwd,"fsca_dates_all.csv"))
-# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # pixel based timeseries 
 pixTS = extract( rstack , 1:ncell(rstack) )
@@ -97,8 +100,7 @@ for (i in 1: nens){ #python index
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
 		dat = read.table(paste0(wd,"ensemble",i-1,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
-		
-		
+				
 		resMat = cbind(resMat,dat$snow_water_equivalent.mm.[obsIndex])
 		rst=raster(resMat)
 	}
@@ -145,7 +147,9 @@ wmat = foreach(i = 1:npix,
 	
 		print(i)
 		# number of smallpix in MODIS pixel
-		nsmlpix <- length(sampids)
+		#nsmlpix <- length(sampids)
+		nsmlpix <- length(which(!is.na(sampids)==TRUE))
+
 		
 		# get unique sim ids 
 		simindexs <- unique(sampids[!is.na(sampids)])

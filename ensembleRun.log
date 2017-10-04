@@ -38,57 +38,7 @@ The following objects are masked from ‘package:base’:
 
     format.pval, round.POSIXt, trunc.POSIXt, units
 
-There were 15 warnings (use warnings() to see them)
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-rgdal: version: 1.2-7, (SVN revision 660)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
- Path to GDAL shared files: /usr/share/gdal/1.11
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-4 
-Loading required package: gdata
-gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
-
-gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
-
-Attaching package: ‘gdata’
-
-The following object is masked from ‘package:stats’:
-
-    nobs
-
-The following object is masked from ‘package:utils’:
-
-    object.size
-
-The following object is masked from ‘package:base’:
-
-    startsWith
-
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: ncdf4
-Loading required package: Hmisc
-Loading required package: lattice
-Loading required package: survival
-Loading required package: Formula
-Loading required package: ggplot2
-
-Attaching package: ‘Hmisc’
-
-The following objects are masked from ‘package:raster’:
-
-    mask, zoom
-
-The following objects are masked from ‘package:base’:
-
-    format.pval, round.POSIXt, trunc.POSIXt, units
-
-There were 15 warnings (use warnings() to see them)
+There were 50 or more warnings (use warnings() to see the first 50)
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -127,64 +77,41 @@ Loading required package: sp
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
 code_da.py
-[INFO]: Simulation directory:/home/joel/sim/ensembler_scale/ensemble0/
-[INFO]: initialising /home/joel/sim/ensembler_scale/ensemble0/ from /home/joel/sim/scale_test
-[INFO]: copying only Grid*
+[INFO]: Simulation directory:/home/joel/sim/ensembler_scale_sml/ensemble0/
+[INFO]: initialising /home/joel/sim/ensembler_scale_sml/ensemble0/ from /home/joel/sim/scale_test_sml
+[INFO]: copying only Grid9
 [INFO]: topo predictors precomputed
 [INFO]: SURF.nc and PLEVEL.nc precomputed
-Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale/ensemble0/', '2016-01-01', '2016-02-01']
-[INFO]: This simulation contains  2  grids
-[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale/ensemble0/grid2', '/home/joel/sim/ensembler_scale/ensemble0/grid1']
-/home/joel/sim/ensembler_scale/ensemble0/grid2/landform.tif
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/', '2015-09-01', '2016-09-01']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale_sml/ensemble0/grid9']
+/home/joel/sim/ensembler_scale_sml/ensemble0/grid9/landform.tif
 [INFO]: TopoSUB already run
-/home/joel/sim/ensembler_scale/ensemble0/grid2/tPoint.txt
+/home/joel/sim/ensembler_scale_sml/ensemble0/grid9/tPoint.txt
 [INFO]: TopoSCALE already run
 [INFO]: Setup Geotop simulations
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble0/grid2
+[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale_sml/ensemble0/grid9
 [INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2', 'FALSE', '0.0288204388658', '1.09738579786']
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9', 'FALSE', '0.130160117029', '0.664466193551']
 [INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2']
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9']
 [INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble0/grid1
-[INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1', 'FALSE', '0.0288204388658', '1.09738579786']
-[INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1']
-[INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
 [INFO]: Running LSM
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble0/grid2 running (parallel model runs)
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble0/grid1 running (parallel model runs)
+[INFO]: Simulations grid /home/joel/sim/ensembler_scale_sml/ensemble0/grid9 running (parallel model runs)
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid2
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid1
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble0/grid9
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid2
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid1
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble0/grid9
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: Making coarse grid timeseries TopoSUB results....
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid2
-Running:Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble0/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble0/grid1
-Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble0/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale_sml/ensemble0/grid9
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale_sml/ensemble0/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: No MODIS SCA retrieved
-[INFO]: 2.460000 minutes for run
+[INFO]: 6.380000 minutes for run
 Loading required package: ncdf4
 Loading required package: raster
 Loading required package: methods
@@ -225,57 +152,7 @@ The following objects are masked from ‘package:base’:
 
     format.pval, round.POSIXt, trunc.POSIXt, units
 
-There were 15 warnings (use warnings() to see them)
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-rgdal: version: 1.2-7, (SVN revision 660)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
- Path to GDAL shared files: /usr/share/gdal/1.11
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-4 
-Loading required package: gdata
-gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
-
-gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
-
-Attaching package: ‘gdata’
-
-The following object is masked from ‘package:stats’:
-
-    nobs
-
-The following object is masked from ‘package:utils’:
-
-    object.size
-
-The following object is masked from ‘package:base’:
-
-    startsWith
-
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: ncdf4
-Loading required package: Hmisc
-Loading required package: lattice
-Loading required package: survival
-Loading required package: Formula
-Loading required package: ggplot2
-
-Attaching package: ‘Hmisc’
-
-The following objects are masked from ‘package:raster’:
-
-    mask, zoom
-
-The following objects are masked from ‘package:base’:
-
-    format.pval, round.POSIXt, trunc.POSIXt, units
-
-There were 15 warnings (use warnings() to see them)
+There were 50 or more warnings (use warnings() to see the first 50)
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -314,79 +191,56 @@ Loading required package: sp
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
 code_da.py
-[INFO]: Simulation directory:/home/joel/sim/ensembler_scale/ensemble1/
-[INFO]: initialising /home/joel/sim/ensembler_scale/ensemble1/ from /home/joel/sim/scale_test
-[INFO]: copying only Grid*
+[INFO]: Simulation directory:/home/joel/sim/ensembler_scale_sml/ensemble1/
+[INFO]: initialising /home/joel/sim/ensembler_scale_sml/ensemble1/ from /home/joel/sim/scale_test_sml
+[INFO]: copying only Grid9
 [INFO]: topo predictors precomputed
 [INFO]: SURF.nc and PLEVEL.nc precomputed
-Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale/ensemble1/', '2016-01-01', '2016-02-01']
-[INFO]: This simulation contains  2  grids
-[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale/ensemble1/grid2', '/home/joel/sim/ensembler_scale/ensemble1/grid1']
-/home/joel/sim/ensembler_scale/ensemble1/grid2/landform.tif
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/', '2015-09-01', '2016-09-01']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale_sml/ensemble1/grid9']
+/home/joel/sim/ensembler_scale_sml/ensemble1/grid9/landform.tif
 [INFO]: TopoSUB already run
-/home/joel/sim/ensembler_scale/ensemble1/grid2/tPoint.txt
+/home/joel/sim/ensembler_scale_sml/ensemble1/grid9/tPoint.txt
 [INFO]: TopoSCALE already run
 [INFO]: Setup Geotop simulations
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble1/grid2
+[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale_sml/ensemble1/grid9
 [INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2', 'FALSE', '-0.564411959981', '0.937946415188']
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9', 'FALSE', '0.144561155697', '0.549010474632']
 [INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2']
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9']
 [INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble1/grid1
-[INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1', 'FALSE', '-0.564411959981', '0.937946415188']
-[INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1']
-[INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
 [INFO]: Running LSM
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble1/grid2 running (parallel model runs)
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble1/grid1 running (parallel model runs)
+[INFO]: Simulations grid /home/joel/sim/ensembler_scale_sml/ensemble1/grid9 running (parallel model runs)
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid2
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid1
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble1/grid9
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid2
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid1
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble1/grid9
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: Making coarse grid timeseries TopoSUB results....
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid2
-RunninLoading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-g:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble1/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble1/grid1
-Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble1/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale_sml/ensemble1/grid9
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale_sml/ensemble1/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: No MODIS SCA retrieved
-[INFO]: 2.380000 minutes for run
-Running ensemble members
+[INFO]: 6.280000 minutes for run
+Running ensemble members: 50
 Running ensemble member:0
 [INFO]: Config ensemble members
 [INFO]: Config settings used
-{'main': {'wd': '/home/joel/sim/ensembler_scale/ensemble0/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2016-01-01', 'endDate': '2016-02-01', 'lonw': '8', 'lats': '45', 'lone': '10', 'latn': '47', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test', 'initGrid': '*', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '5', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 1.0973857978603001, 'tscale': 0.0288204388658156}}
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble0/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '150', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.6644661935511279, 'tscale': 0.130160117029441}}
 [INFO]: Running code_da.py
 Running ensemble member:1
 [INFO]: Config ensemble members
 [INFO]: Config settings used
-{'main': {'wd': '/home/joel/sim/ensembler_scale/ensemble1/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2016-01-01', 'endDate': '2016-02-01', 'lonw': '8', 'lats': '45', 'lone': '10', 'latn': '47', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test', 'initGrid': '*', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '5', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.93794641518847899, 'tscale': -0.56441195998093707}}
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble1/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '150', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.54901047463229902, 'tscale': 0.14456115569729}}
 [INFO]: Running code_da.py
 Running ensemble member:2
 [INFO]: Config ensemble members
 [INFO]: Config settings used
-{'main': {'wd': '/home/joel/sim/ensembler_scale/ensemble2/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2016-01-01', 'endDate': '2016-02-01', 'lonw': '8', 'lats': '45', 'lone': '10', 'latn': '47', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test', 'initGrid': '*', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '5', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'Loading required package: ncdf4
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble2/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '150', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/Loading required package: ncdf4
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -426,57 +280,7 @@ The following objects are masked from ‘package:base’:
 
     format.pval, round.POSIXt, trunc.POSIXt, units
 
-There were 15 warnings (use warnings() to see them)
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-rgdal: version: 1.2-7, (SVN revision 660)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
- Path to GDAL shared files: /usr/share/gdal/1.11
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-4 
-Loading required package: gdata
-gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
-
-gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
-
-Attaching package: ‘gdata’
-
-The following object is masked from ‘package:stats’:
-
-    nobs
-
-The following object is masked from ‘package:utils’:
-
-    object.size
-
-The following object is masked from ‘package:base’:
-
-    startsWith
-
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-Loading required package: ncdf4
-Loading required package: Hmisc
-Loading required package: lattice
-Loading required package: survival
-Loading required package: Formula
-Loading required package: ggplot2
-
-Attaching package: ‘Hmisc’
-
-The following objects are masked from ‘package:raster’:
-
-    mask, zoom
-
-The following objects are masked from ‘package:base’:
-
-    format.pval, round.POSIXt, trunc.POSIXt, units
-
-There were 15 warnings (use warnings() to see them)
+There were 50 or more warnings (use warnings() to see the first 50)
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
@@ -515,64 +319,351 @@ Loading required package: sp
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-Loading required package: raster
-Loading required package: methods
-Loading required package: sp
-['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/TOPOMAP/toposubv2/topoMAPP/']
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
 code_da.py
-[INFO]: Simulation directory:/home/joel/sim/ensembler_scale/ensemble2/
-[INFO]: initialising /home/joel/sim/ensembler_scale/ensemble2/ from /home/joel/sim/scale_test
-[INFO]: copying only Grid*
+[INFO]: Simulation directory:/home/joel/sim/ensembler_scale_sml/ensemble2/
+[INFO]: initialising /home/joel/sim/ensembler_scale_sml/ensemble2/ from /home/joel/sim/scale_test_sml
+[INFO]: copying only Grid9
 [INFO]: topo predictors precomputed
 [INFO]: SURF.nc and PLEVEL.nc precomputed
-Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale/ensemble2/', '2016-01-01', '2016-02-01']
-[INFO]: This simulation contains  2  grids
-[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale/ensemble2/grid2', '/home/joel/sim/ensembler_scale/ensemble2/grid1']
-/home/joel/sim/ensembler_scale/ensemble2/grid2/landform.tif
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/', '2015-09-01', '2016-09-01']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale_sml/ensemble2/grid9']
+/home/joel/sim/ensembler_scale_sml/ensemble2/grid9/landform.tif
 [INFO]: TopoSUB already run
-/home/joel/sim/ensembler_scale/ensemble2/grid2/tPoint.txt
+/home/joel/sim/ensembler_scale_sml/ensemble2/grid9/tPoint.txt
 [INFO]: TopoSCALE already run
 [INFO]: Setup Geotop simulations
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble2/grid2
+[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale_sml/ensemble2/grid9
 [INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2', 'FALSE', '0.335420243024', '0.909742184325']
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9', 'FALSE', '-0.0126022592176', '0.737983761669']
 [INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2']
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9']
 [INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
-[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale/ensemble2/grid1
-[INFO]: Creating met files....
-Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1', 'FALSE', '0.335420243024', '0.909742184325']
-[INFO]: extract surface properties
-Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1']
-[INFO]: making inputs file
-Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2016-01-01', '2016-02-01']
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
 [INFO]: Running LSM
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble2/grid2 running (parallel model runs)
-[INFO]: Simulations grid /home/joel/sim/ensembler_scale/ensemble2/grid1 running (parallel model runs)
+[INFO]: Simulations grid /home/joel/sim/ensembler_scale_sml/ensemble2/grid9 running (parallel model runs)
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid2
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid1
-Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.', '2016-01-01', '2016-02-01']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble2/grid9
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
 [INFO]: Spatialising TopoSUB results....
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid2
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid1
-Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble2/grid9
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: Making coarse grid timeseries TopoSUB results....
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid2
-Running:Loading required package: raster
+[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale_sml/ensemble2/grid9
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale_sml/ensemble2/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: No MODIS SCA retrieved
+[INFO]: 7.330000 minutes for run
+Loading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 50 or more warnings (use warnings() to see the first 50)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: gdata
+gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+
+gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+
+Attaching package: ‘gdata’
+
+The following object is masked from ‘package:stats’:
+
+    nobs
+
+The following object is masked from ‘package:utils’:
+
+    object.size
+
+The following object is masked from ‘package:base’:
+
+    startsWith
+
+Loading required package: raster
 Loading required package: methods
 Loading required package: sp
 Loading required package: raster
 Loading required package: methods
 Loading required package: sp
-['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble2/grid2', '5', 'surface.txt', 'snow_water_equivalent.mm.']
-[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale/ensemble2/grid1
-Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale/ensemble2/grid1', '5', 'surface.txt', 'snow_water_equivalent.mm.']
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
+code_da.py
+[INFO]: Simulation directory:/home/joel/sim/ensembler_scale_sml/ensemble3/
+[INFO]: initialising /home/joel/sim/ensembler_scale_sml/ensemble3/ from /home/joel/sim/scale_test_sml
+[INFO]: copying only Grid9
+[INFO]: topo predictors precomputed
+[INFO]: SURF.nc and PLEVEL.nc precomputed
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/', '2015-09-01', '2016-09-01']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale_sml/ensemble3/grid9']
+/home/joel/sim/ensembler_scale_sml/ensemble3/grid9/landform.tif
+[INFO]: TopoSUB already run
+/home/joel/sim/ensembler_scale_sml/ensemble3/grid9/tPoint.txt
+[INFO]: TopoSCALE already run
+[INFO]: Setup Geotop simulations
+[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale_sml/ensemble3/grid9
+[INFO]: Creating met files....
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9', 'FALSE', '0.1639125885', '0.547175085338']
+[INFO]: extract surface properties
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9']
+[INFO]: making inputs file
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
+[INFO]: Running LSM
+[INFO]: Simulations grid /home/joel/sim/ensembler_scale_sml/ensemble3/grid9 running (parallel model runs)
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble3/grid9
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble3/grid9
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: Making coarse grid timeseries TopoSUB results....
+[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale_sml/ensemble3/grid9
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale_sml/ensemble3/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
 [INFO]: No MODIS SCA retrieved
-[INFO]: 2.330000 minutes for run
-meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.90974218432480503, 'tscale': 0.33542024302443196}}
+[INFO]: 14.170000 minutes for run
+Loading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 50 or more warnings (use warnings() to see the first 50)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: gdata
+gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+
+gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+
+Attaching package: ‘gdata’
+
+The following object is masked from ‘package:stats’:
+
+    nobs
+
+The following object is masked from ‘package:utils’:
+
+    object.size
+
+The following object is masked from ‘package:base’:
+
+    startsWith
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
+code_da.py
+[INFO]: Simulation directory:/home/joel/sim/ensembler_scale_sml/ensemble4/
+[INFO]: initialising /home/joel/sim/ensembler_scale_sml/ensemble4/ from /home/joel/sim/scale_test_sml
+[INFO]: copying only Grid9
+[INFO]: topo predictors precomputed
+[INFO]: SURF.nc and PLEVEL.nc precomputed
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/', '2015-09-01', '2016-09-01']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/ensembler_scale_sml/ensemble4/grid9']
+/home/joel/sim/ensembler_scale_sml/ensemble4/grid9/landform.tif
+[INFO]: TopoSUB already run
+/home/joel/sim/ensembler_scale_sml/ensemble4/grid9/tPoint.txt
+[INFO]: TopoSCALE already run
+[INFO]: Setup Geotop simulations
+[INFO]: Setting up geotop inputs /home/joel/sim/ensembler_scale_sml/ensemble4/grid9
+[INFO]: Creating met files....
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9', 'FALSE', '-0.723012905361', '1.16064623569']
+[INFO]: extract surface properties
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9']
+[INFO]: making inputs file
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2016-09-01']
+[INFO]: Running LSM
+[INFO]: Simulations grid /home/joel/sim/ensembler_scale_sml/ensemble4/grid9 running (parallel model runs)
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble4/grid9
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.', '2015-09-01', '2016-09-01']
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/ensembler_scale_sml/ensemble4/grid9
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: Making coarse grid timeseries TopoSUB results....
+[INFO]: running timeseries routines for grid /home/joel/sim/ensembler_scale_sml/ensemble4/grid9
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/ensembler_scale_sml/ensemble4/grid9', '150', 'surface.txt', 'snow_water_equivalent.mm.']
+[INFO]: No MODIS SCA retrieved
+[INFO]: 12.790000 minutes for run
+valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.73798376166856916, 'tscale': -0.012602259217590501}}
 [INFO]: Running code_da.py
-[INFO]: 7.170000 minutes for run of ensemble members
+Running ensemble member:3
+[INFO]: Config ensemble members
+[INFO]: Config settings used
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble3/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '150', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 0.54717508533841797, 'tscale': 0.16391258849957902}}
+[INFO]: Running code_da.py
+Running ensemble member:4
+[INFO]: Config ensemble members
+[INFO]: Config settings used
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble4/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposub': {'samples': '150', 'inform': 'FALSE'}, 'toposcale': {'swTopo': 'FALSE', 'svfCompute': 'FALSE', 'pfactor': '0.25'}, 'geotop': {'geotopInputsPath': '/home/joel/src/geotop/inputsfile/geotop.inpts', 'lsmPath': '/home/joel/src/geotop/geotop1.226', 'lsmExe': 'geotop1.226', 'file1': 'surface.txt', 'targV': 'snow_water_equivalent.mm.'}, 'validation': {'valDat': '/home/joel/valData2009.txt', 'modDat': 'meanX_X100.000000.txt', 'magstCol': '3', 'lonCol': '7', 'latCol': '8'}, 'modis': {'options_file': '/home/joel/data/MODIS_ARC/SCA/options.json', 'sca_wd': '/home/joel/data/MODIS_ARC/SCA/data', 'MODISdir': '/home/joel/data/MODIS_ARC/PROCESSED', 'getMODISSCA': 'FALSE'}, 'da': {'pscale': 1.16064623568727, 'tscale': -0.72301290536148588}}
+[INFO]: Running code_da.py
+Running ensemble member:5
+[INFO]: Config ensemble members
+[INFO]: Config settings used
+{'main': {'wd': '/home/joel/sim/ensembler_scale_sml/ensemble5/', 'srcdir': '/home/joel/src/topoMAPP', 'demDir': '/home/joel/data/DEM/srtm', 'runtype': 'bbox', 'startDate': '2015-09-01', 'endDate': '2016-09-01', 'lonw': '7', 'lats': '45', 'lone': '11', 'latn': '48', 'pointsFile': '/home/joel/data/GCOS/points_all.txt', 'pkCol': '1', 'lonCol': '2', 'latCol': '3', 'tz': '-1', 'googleEarthPlots': 'FALSE', 'informSample': 'FALSE', 'initSim': 'TRUE', 'initDir': '/home/joel/sim/scale_test_sml', 'initGrid': '9', 'demexists': 'FALSE', 'dempath': '/home/joel/Downloads/20170904031934_280341969.tif'}, 'era-interim': {'grid': '0.75'}, 'toposubLoading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 50 or more warnings (use warnings() to see the first 50)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: gdata
+gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+
+gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+
+Attaching package: ‘gdata’
+
+The following object is masked from ‘package:stats’:
+
+    nobs
+
+The following object is masked from ‘package:utils’:
+
+    object.size
+
+The following object is masked from ‘package:base’:
+
+    startsWith
+
