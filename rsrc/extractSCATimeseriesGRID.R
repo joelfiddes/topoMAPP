@@ -17,7 +17,7 @@ args = commandArgs(trailingOnly=TRUE)
 wd=args[1]
 sca_wd=args[2] 
 
-cloudThreshold <- 0.2 # max cloud % to be considered "cloudfree"
+cloudThreshold <- 100 # max cloud % to be considered "cloudfree"
 
 # shpname = '/home/joel/sim/topomap_points/spatial/points.shp' 
 
@@ -81,7 +81,7 @@ MOD.fill = cover(MOD.layerfill, MYD.layerfill)
 MOD.na <- length(which(is.na(values(MOD))) )
 MOD.fill.na <- length(which(is.na(values(MOD.fill))) )
 
-Print("orig NAs in MOD=",,"New NAs in MOD=",,"")
+print(paste0("orig NAs in MOD=",MOD.na,"New NAs in MOD=",MOD.fill.na,""))
 
 
 #compute cloudiness / NA

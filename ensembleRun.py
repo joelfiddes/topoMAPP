@@ -77,7 +77,7 @@ for i in range(0,N):
 	config["da"]["tscale"] = tbias #factor to add to temp
 	config['modis']['getMODISSCA'] = "FALSE"
 	config["main"]["initSim"]  = 'TRUE'
-	config['main']['initDir'] = '/home/joel/sim/scale_test_sml'
+	config['main']['initDir'] = '/home/joel/sim/scale_test_smlkk'
 	config['toposub']['inform'] = 'FALSE'
 	config['main']['initGrid'] = "9"
 	config.write()

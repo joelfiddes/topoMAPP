@@ -8,13 +8,14 @@ wd = "/home/joel/sim/ensembler3/"
 priorwd = "/home/joel/sim/da_test2/" 
 
 # IO files
-plotout=("~/plot_fscacorrect.pdf")
-load( paste0(wd,"wmat_trunc0.rd"))
+plotout=("~/plot_fscacorrect_allcloud.pdf")
+load( paste0(wd,"wmat_1.rd"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
 # variables
-
+start=180
+end=300
 # number of ensembles
 nens=100
 
@@ -25,7 +26,7 @@ R=0.016
 Nclust=150
 
 # threshold for converting swe --> sca
-sdThresh <- 1 
+sdThresh <- 13
 
 # cores used in parallel jobs
 cores=4
@@ -38,14 +39,13 @@ landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
 
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
-
-
 # total number of MODIS pixels
 npix = ncell( rstack)
 
 # compute ensemble index of max weight per pixel
 ID.max.weight = apply(wmat, 1, which.max) 
 
+max.weight = apply(wmat, 1, max) 
 # make raster container
 rst <- rstack[[1]]
 
@@ -119,12 +119,12 @@ myarray = as.array(rstStack)
 myarray_swe <- myarray
 
 # compute sca results
-#myarray[myarray<=sdThresh]<-0
-#myarray[myarray>sdThresh]<-1
+myarray[myarray<=sdThresh]<-0
+myarray[myarray>sdThresh]<-1
 
 
 #===============================================================================
-#			compute weight ensemble per sample - posterior
+#			compute weight ensemble per sample - posterior SWE
 #===============================================================================
  
  we_mat=c()
@@ -134,14 +134,34 @@ myarray_swe <- myarray
 	
 	# vector of ensemble weights 
 	weights = as.numeric((mylist[[i]]))
-	 
+	 #weights[ which.max(weights) ]<-1
+	# weights[weights<1]<-0
 	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
-	we <-  myarray_swe[,i,ids] *weights
-	if(!is.null(dim(we))){we = rowSums(we)}
+	we <-  myarray_swe[,i,ids] %*%weights
+	#if(!is.null(dim(we))){we = rowSums(we)}
 	we_mat=cbind(we_mat, we) # time * samples weighted 
  
  }
 	
+#===============================================================================
+#			compute weight ensemble per sample - posterior sca
+#===============================================================================
+ 
+ we_mat_sca=c()
+ for ( i in 1:Nclust ){
+	# vector of ensemble IDs
+	ids = as.numeric(names(mylist[[i]]))
+	
+	# vector of ensemble weights 
+	weights = as.numeric((mylist[[i]]))
+	 
+	
+	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+	we <-  myarray[,i,ids] %*%weights
+	#if(!is.null(dim(we))){we = rowSums(we)}
+	we_mat_sca=cbind(we_mat_sca, we) # time * samples weighted 
+ 
+ }
 
 #===============================================================================
 #	construct sample observed SCA
@@ -325,12 +345,14 @@ rmse(error)
 
 
 
+
+
 #===============================================================================
 #			an
 #===============================================================================
 pdf(plotout,width=7, height=12 )
 par(mfrow=c(3,1))
-lwd=1
+lwd=3
 # SAMPLE CORRESPONDING TO TR
 simindex = "S00006" # samples[1]
 id=6
@@ -345,30 +367,31 @@ obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
 dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
-prior = dat$snow_water_equivalent.mm.
+prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
 val = an$SWE.mm
 
 #get posterioi
-post = we_mat[,id]
-
+post_swe = we_mat[,id]
+post_sca = we_mat_sca[,id]*1000
 # rmse
-error = val - post[obsIndexVal]
+error = val - post_swe[obsIndexVal]
 rms = rmse(error)
 
 # plot prior,post, obs
-plot(prior, ylim=c(0,1000),col='red', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
+# plot prior,post, obs
+plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
 for (i in 1:100){lines(myarray_swe[,id,i], col='grey')}
-lines(post,col='blue',lwd=lwd) #post
-points(obsIndexVal,val, lwd=lwd, cex=2, col='green',pch=24,bg='green') #obs
-lines(prior, col='red',lwd=3)
-lines(ma(post,20), col='green',lwd=3)
-lines(obsIndex.MOD,pointObs[2,]*10, col='orange',lwd=3)
-points(obsIndex.MOD,pointObs[2,]*10, col='orange',cex=2)
+lines(post_swe,col='red',lwd=lwd) #post
+points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+lines(prior_swe, col='blue',lwd=3)
+#lines(ma(post,20), col='green',lwd=3)
+#lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
+#points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
+#lines(post_sca, col='red', lwd=lwd , lty=2)
 axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("prior", "post" , "post_smooth", "SWE_obs", "fSCA_obs*10"),col= c("red","blue", "green","green", "orange"), lty=c(1,1,1,NA,1),pch=c(NA,NA,NA,1,NA),lwd=lwd)
-
+legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)
 #===============================================================================
 #			trUBSEE tr
 #===============================================================================
@@ -385,32 +408,31 @@ obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
 dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
-prior = dat$snow_water_equivalent.mm.
+prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
 val = tr$SWE.mm
 
 #get posterioi
-post = we_mat[,id]
-
+post_swe = we_mat[,id]
+post_sca = we_mat_sca[,id]*1000
 
 # rmse
-error = val - post[obsIndexVal]
+error = val - post_swe[obsIndexVal]
 rms = rmse(error)
 
 # plot prior,post, obs
-plot(prior, ylim=c(0,1000),col='red', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
+plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
 for (i in 1:100){lines(myarray_swe[,id,i], col='grey')}
-lines(post,col='blue',lwd=lwd) #post
-points(obsIndexVal,val, lwd=lwd, cex=2, col='green',pch=24,bg='green') #obs
-lines(prior, col='red',lwd=3)
-lines(ma(post,20), col='green',lwd=3)
-lines(obsIndex.MOD,pointObs[3,]*10, col='orange',lwd=3)
-points(obsIndex.MOD,pointObs[3,]*10, col='orange',cex=2)
+lines(post_swe,col='red',lwd=lwd) #post
+points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+lines(prior_swe, col='blue',lwd=3)
+#lines(ma(post,20), col='green',lwd=3)
+#lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
+#points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
+#lines(post_sca, col='red', lwd=lwd , lty=2)
 axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("prior", "post" , "post_smooth", "SWE_obs", "fSCA_obs*10"),col= c("red","blue", "green","green", "orange"), lty=c(1,1,1,NA,1),pch=c(NA,NA,NA,1,NA),lwd=lwd)
-
-
+legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)
 
 #===============================================================================
 #			UL
@@ -428,29 +450,37 @@ obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
 dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
-prior = dat$snow_water_equivalent.mm.
+prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
 val = ul$SWE.mm
 
 #get posterioi
-post = we_mat[,id]
+post_swe = we_mat[,id]
+post_sca = we_mat_sca[,id]*1000
 
 # rmse
-error = val - post[obsIndexVal]
+error = val - post_swe[obsIndexVal]
 rms = rmse(error)
 
+# plot prior,post, obs swe
 # plot prior,post, obs
-plot(prior, ylim=c(0,1000),col='red', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
+plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
 for (i in 1:100){lines(myarray_swe[,id,i], col='grey')}
-lines(post,col='blue',lwd=lwd) #post
-points(obsIndexVal,val, cex=2, col='green',pch=24,bg='green') #obs
-lines(prior, col='red',lwd=3)
-lines(ma(post,20), col='green',lwd=3)
-lines(obsIndex.MOD,pointObs[4,]*10, col='orange',lwd=3)
-points(obsIndex.MOD,pointObs[4,]*10, col='orange',cex=2)
+lines(post_swe,col='red',lwd=lwd) #post
+points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+lines(prior_swe, col='blue',lwd=3)
+#lines(ma(post,20), col='green',lwd=3)
+#lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
+#points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
+#lines(post_sca, col='red', lwd=lwd , lty=2)
 axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("prior", "post" , "post_smooth", "SWE_obs", "fSCA_obs*10"),col= c("red","blue", "green","green", "orange"), lty=c(1,1,1,NA,1),pch=c(NA,NA,NA,1,NA),lwd=lwd)
+legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)
+
+#legend("topright",c("SWE_prior", "SWE_post", "SWE_obs", "fSCA_post", "fSCA_obs"),col= c("blue", "red","black", "red", "black"), lty=c(1,1,1,NA,1),pch=c(NA,NA,NA,1,NA),lwd=lwd)
+
+# plot prior,post, obs SCA
+
 
 
 dev.off()

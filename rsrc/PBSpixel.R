@@ -25,11 +25,12 @@
 # ======== code ===================
 
 # env
-wd = "/home/joel/sim/ensembler3/"
-priorwd = "/home/joel/sim/da_test2/" 
+wd = "/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
+priorwd = "/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
 
 # output
-outfile = "wmat_trunc0.rd"
+outfile = "wmat_1.rd" #"wmat_trunc20.rd"
+
 
 # dependency
 source("./rsrc/PBS.R") 
@@ -46,7 +47,7 @@ obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 # variables
 
 # number of ensembles
-nens=100
+nens=100 #50
 
 # R value for PBS algorithm
 R=0.016
@@ -63,14 +64,14 @@ cores=6
 # identify melt season 
 
 # using a curve to find max
-#require(lattice)
-#mean_sca=cellStats(rstack, "mean")R
-#x=1:length(mean_sca)
-#y=mean_sca
-#xyplot(y ~ x, type=c("smooth", "p"))
+require(lattice)
+mean_sca=cellStats(rstack, "mean")
+x=1:length(mean_sca)
+y=mean_sca
+xyplot(y ~ x, type=c("smooth", "p"))
 
-start=38
-end=78
+start=180
+end=300
 
 
 # pixel based timeseries 
@@ -134,12 +135,16 @@ wmat = foreach(i = 1:npix,
 	# identify missing dates and reset start end index
 	obsind = which(!is.na(obs)==T)
 	
+	# cut to start end points (melt season )
+	obsind <- obsind[obsind >= start & obsind <= end]
+	
 	# if less than two obs are present then PBS fails, this function steps back though pixels already processed until at least 2 obs are found
 	n=1
 	while(length(obsind)<2){
 
-	obs = pixTS[i-n,] /100
-	obsind = which(!is.na(obs)==T)
+	obs <- pixTS[i-n,] /100
+	obsind <- which(!is.na(obs)==T)
+	obsind <- obsind[obsind >= start & obsind <= end]
 	n<-n+1
 	print(n)
 	print(i-n)
