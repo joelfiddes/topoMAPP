@@ -1,26 +1,4 @@
-#in:
-# tObs=vector timestamps of obs, size = No*1 [16]
-# MODISgrid=raster stack of obs covering domain = No*MODpix^2 [16*50*50]
 
-# need inverse of landform (each smlPix has cluster id), overlay bigPix grid on 
-# smlPix grid, extract sample IDs per pixel (could be ragged dataframe for geolocation issues)
-#read in landform
-#read in MODISgrid
-#R=0.016
-
-## 
-#pixelloop i in 1:n:
-#	- extract sampids for bigPix[i]
-#	- compute fSCAObs per pixel  (this is Y=16*1)	
-#	ensemble loop j in 1:n:
-#		- compute fSCATsub per pixel[i] using sampids for each ensemble[j] (this is HX=16*100)
-#		end	
-#	- w=PBS(HX,Y,R)
-#	- save w (100)
-#	end
-## out:	
-#matrix of w = 25000*100 [pix * ensemble]
-#convert to rasterstack?
  
 # ======== code ===================
 
@@ -34,8 +12,8 @@ outfile = "wmat_2.rd" #"wmat_trunc20.rd"
 
 # dependency
 source("./rsrc/PBS.R") 
-library("foreach")
-library("doParallel")
+require(foreach)
+require(doParallel)
 require(raster) 
 
 # readin
@@ -49,13 +27,13 @@ rstack = crop(rstack, landform)
 # variables
 
 # number of ensembles
-nens=50 #50
+nens <- 50 #50
 
 # R value for PBS algorithm
-R=0.016
+R <- 0.016
 
 # number of tsub clusters
-Nclust=150
+Nclust <- 150
 
 # threshold for converting swe --> sca
 sdThresh <- 0
