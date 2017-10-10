@@ -2,6 +2,12 @@
 # import ipdb
 # ipdb.set_trace
 
+"""
+INI file should be configured named and supplied as argument of fullpathtofile or just filename if in curent wd eg 
+
+run python code_da.py yala.ini"""
+
+
 """ This is a port of run_points.sh"""
 import sys
 import os
@@ -59,7 +65,7 @@ start_time = time.time()
 #os.system("python writeConfig.py") # update config DONE IN run.sh file
 
 from configobj import ConfigObj
-config = ConfigObj("topomap.ini")
+config = ConfigObj(sys.argv[1])
 
 wd = config["main"]["wd"] # set commonly used configs
 
@@ -100,7 +106,9 @@ if config["main"]["initSim"] == "TRUE":
 #====================================================================
 # Copy config to simulation directory
 #==================================================================== 
-config.filename = wd + "topomap.ini"
+configfilename = os.path.basename(sys.argv[1])
+
+config.filename = wd + configfilename
 config.write()
 
 #====================================================================
@@ -300,10 +308,19 @@ if x != 1: #NOT ROBUST
 			gridpath = wd +"/grid"+ str(Ngrid)
 
 			print "[INFO]: preparing surface layer " + str(Ngrid)
-			from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-			surf.main(gridpath, config["modis"]["MODISdir"] )
+			from domain_setup import makeSurface as surf
+			
+
+			# make output directories if they dont exist
+			ndvi_wd=gridpath + "/MODIS/NDVI"
+			if not os.path.exists(ndvi_wd):
+				os.makedirs(ndvi_wd)
+				os.makedirs(ndvi_wd + "/PROCESSED")
+			from domain_setup import makeSurface as surf
+			surf.main(gridpath, ndvi_wd )
 
 			print "[INFO]: running TopoSUB for grid " + str(Ngrid)
+
 			from toposub import toposub as tsub
 			tsub.main(gridpath, config["toposub"]["samples"])	
 
@@ -326,9 +343,18 @@ if config["main"]["runtype"] == "points":
 		gridpath=wd +"/grid"+ str(Ngrid)
 
 		print "[INFO]: preparing surface layer " + str(Ngrid)
-		from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-		surf.main(gridpath, config["modis"]["MODISdir"] )
+		 
+		# make output directories if they dont exist
+		ndvi_wd=gridpath + "/MODIS/NDVI"
+		if not os.path.exists(ndvi_wd):
+			os.makedirs(ndvi_wd)
+			os.makedirs(ndvi_wd + "/PROCESSED")
+		
+		from domain_setup import makeSurface as surf
+		surf.main(gridpath, ndvi_wd)
+
 		print "[INFO]: creating listpoints for grid " + str(Ngrid)
+
 		from listpoints_make import makeListpoints as list
 		list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
 
@@ -610,7 +636,7 @@ if config["main"]["runtype"] == "bbox":
 		postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
 #====================================================================
-#	Coarse grid timeseries of toposub results 
+#	Averaged coarse grid timeseries of toposub results 
 #====================================================================
 if config["main"]["runtype"] == "bbox":
 
@@ -639,118 +665,99 @@ if config["main"]["runtype"] == "bbox":
 # 		from toposub import toposub_post1 as post1
 # 		post1.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
+#====================================================================
+#	Get MODIS SCA
+#====================================================================
 
 if config["modis"]["getMODISSCA"] == "TRUE":
-	#====================================================================
-	#	Get MODIS SCA
-	#====================================================================
-	if config["main"]["runtype"] == "points":
-		# clear data
-		import os, shutil
-		folder = config["modis"]["sca_wd"]
-		for the_file in os.listdir(folder):
-		    file_path = os.path.join(folder, the_file)
-		    try:
-		        if os.path.isfile(file_path):
-		            os.unlink(file_path)
-		        elif os.path.isdir(file_path): shutil.rmtree(file_path)
-		    except Exception as e:
-		        print(e)
-
-		# compute from dem
-		from getERA import getExtent as ext
-		latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-		latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-		lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
-
-		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
-		subprocess.check_output( cmd)
-
-		# run MODIStsp tool
-		from DA import getMODIS as gmod
-		gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
-
-		# extract timersies per point
-		from DA import scaTS
-		scaTS.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
-
-		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
+	for Ngrid in grid_dirs:	
+		gridpath = str(Ngrid)
 
 
-	#====================================================================
-	#	Get MODIS SCA for a given date
-	#====================================================================
-	# if config["main"]["runtype"] == "bbox":
-	# 	# clear data
-	# 	import os, shutil
-	# 	folder = config["modis"]["sca_wd"]
-	# 	for the_file in os.listdir(folder):
-	# 	    file_path = os.path.join(folder, the_file)
-	# 	    try:
-	# 	        if os.path.isfile(file_path):
-	# 	            os.unlink(file_path)
-	# 	        elif os.path.isdir(file_path): shutil.rmtree(file_path)
-	# 	    except Exception as e:
-	# 	        print(e)
+		if os.path.exists(gridpath):
 
-	# 	# compute from dem
-	# 	from getERA import getExtent as ext
-	# 	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-	# 	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-	# 	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-	# 	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
-
-	# 	# call bash script that does grep type stuff to update values in options file
-	# 	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["endDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
-	# 	subprocess.check_output( cmd)
-
-	# 	# run MODIStsp tool
-	# 	from DA import getMODIS as gmod
-	# 	gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
-
-	# 	# compare obs to mod
-	
+			# set up directory
+			sca_wd=gridpath + "/MODIS/SC"
+			if not os.path.exists(sca_wd):
+				os.makedirs(sca_wd)
 #====================================================================
-#	Get MODIS SCA for bbox
+#	Points
 #====================================================================
-	if config["main"]["runtype"] == "bbox":
-		
+			if config["main"]["runtype"] == "points":
+				# clear data
+				import os, shutil
+				folder = config["modis"]["sca_wd"]
+				for the_file in os.listdir(folder):
+				    file_path = os.path.join(folder, the_file)
+				    try:
+				        if os.path.isfile(file_path):
+				            os.unlink(file_path)
+				        elif os.path.isdir(file_path): shutil.rmtree(file_path)
+				    except Exception as e:
+				        print(e)
 
-		# clear data: MAKE SWITCH FOR THIS
+				# compute from dem
+				from getERA import getExtent as ext
+				latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+				latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+				lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+				lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
-		# import os, shutil
-		# folder = config["modis"]["sca_wd"]
-		# for the_file in os.listdir(folder):
-		#     file_path = os.path.join(folder, the_file)
-		#     try:
-		#         if os.path.isfile(file_path):
-		#             os.unlink(file_path)
-		#         elif os.path.isdir(file_path): shutil.rmtree(file_path)
-		#     except Exception as e:
-		#         print(e)
+				# call bash script that does grep type stuff to update values in options file
+				cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"], sca_wd]
+				subprocess.check_output( cmd)
 
-		# compute from dem
-		from getERA import getExtent as ext
-		latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-		latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-		lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+				# run MODIStsp tool
+				from DA import getMODIS as gmod
+				gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
 
-		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
-		subprocess.check_output( cmd)
+				# extract timersies per point
+				from DA import scaTS
+				scaTS.main(wd ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 
-		# run MODIStsp tool
-		from DA import getMODIS as gmod
-		gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
+				# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
-		# extract timersies per point
-		from DA import scaTS_GRID
-		scaTS_GRID.main(wd ,config["modis"]["sca_wd"] + "/Snow_Cov_Daily_500m_v5/SC" )
 
-		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
+
+#====================================================================
+#	bbox
+#====================================================================
+			if config["main"]["runtype"] == "bbox":
+				
+
+				# clear data: MAKE SWITCH FOR THIS
+
+				# import os, shutil
+				# folder = config["modis"]["sca_wd"]
+				# for the_file in os.listdir(folder):
+				#     file_path = os.path.join(folder, the_file)
+				#     try:
+				#         if os.path.isfile(file_path):
+				#             os.unlink(file_path)
+				#         elif os.path.isdir(file_path): shutil.rmtree(file_path)
+				#     except Exception as e:
+				#         print(e)
+
+				# compute from dem
+				from getERA import getExtent as ext
+				latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+				latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+				lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+				lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+				# call bash script that does grep type stuff to update values in options file
+				cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file"],sca_wd]
+				subprocess.check_output( cmd)
+
+				# run MODIStsp tool
+				from DA import getMODIS as gmod
+				gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
+
+				# extract timersies per point
+				from DA import scaTS_GRID
+				scaTS_GRID.main(wd ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
+
+				# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
 else:
 	print "[INFO]: No MODIS SCA retrieved"
@@ -762,3 +769,38 @@ else:
 #https://www.evernote.com/Home.action#n=e77ce355-1b1e-4a89-896b-4036f905dfea&ses=1&sh=5&sds=5&x=sentinel&
 
 print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
+
+
+
+			#====================================================================
+			#	Get MODIS SCA for a given date
+			#====================================================================
+			# if config["main"]["runtype"] == "bbox":
+			# 	# clear data
+			# 	import os, shutil
+			# 	folder = config["modis"]["sca_wd"]
+			# 	for the_file in os.listdir(folder):
+			# 	    file_path = os.path.join(folder, the_file)
+			# 	    try:
+			# 	        if os.path.isfile(file_path):
+			# 	            os.unlink(file_path)
+			# 	        elif os.path.isdir(file_path): shutil.rmtree(file_path)
+			# 	    except Exception as e:
+			# 	        print(e)
+
+			# 	# compute from dem
+			# 	from getERA import getExtent as ext
+			# 	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+			# 	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+			# 	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+			# 	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+			# 	# call bash script that does grep type stuff to update values in options file
+			# 	cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["endDate"] , config["main"]["endDate"] , config["modis"]["options_file"]]
+			# 	subprocess.check_output( cmd)
+
+			# 	# run MODIStsp tool
+			# 	from DA import getMODIS as gmod
+			# 	gmod.main("FALSE" , config["modis"]["options_file"]) #  able to run non-interactively now
+
+			# 	# compare obs to mod

@@ -4,7 +4,7 @@
 #INFO
 #make horizon files MOVED TO SEPERATE SCRISPT
 #hor(listPath=wd)
-
+#MODISoptions() controls settings
 
 #DEPENDENCY
 require('MODIS') # https://cran.r-project.org/web/packages/MODIS/MODIS.pdf
@@ -18,7 +18,15 @@ require('rgdal') #dont understand why need to load this manually
 #====================================================================
 args = commandArgs(trailingOnly=TRUE)
 wd=args[1]
-outDirPath =args[2]#given in MODISoptions()
+shortPath =args[2]#given in MODISoptions()
+
+# set output paths for MODISd
+longPath=paste0(shortPath,'/PROCESSED')
+
+print(shortPath)
+print(longPath)
+MODISoptions(localArcPath=shortPath)  
+MODISoptions(outDirPath=longPath)
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
@@ -40,7 +48,9 @@ setwd(wd)
 #	fetch and compute MODIS NDVI
 #====================================================================
 
-system(paste0('rm -r ', outDirPath, '/*'))
+# this removes duplicate processing of HDF (this is quick to redo) as multiple copies are organised in subfolders by processing time
+system(paste0('rm -r ', longPath, '/*'))
+
 #getProduct() #identify products to download
 myextent=raster('predictors/ele.tif') # output is projected and clipped to this extent
 
@@ -55,13 +65,15 @@ mydates=c("2000-08-12","2004-08-12","2008-08-12","2012-08-12","2016-08-12")
 	}
 #scale product by 0.0001 to get 0-1
 
-setwd(outDirPath)
+setwd(longPath)
 modStack=stack(list.files(pattern='*.tif$', recursive = TRUE))
-print("The following rasterStack will be used to compute avergae NDVI:")
+print("The following rasterStack will be used to compute average NDVI:")
 print(modStack)
 
 meanNDVI = mean(modStack, na.rm=TRUE)*0.0001 #mean of 5 periods plus scaling factor to make 0-1 NDVI value
 
+print(paste0("grid mean= " , cellStats(meanNDVI, 'mean')))
+print(paste0("grid sd= " ,cellStats(meanNDVI, 'sd')))
 #classify
 from=c(0, ndviThreshold)
 to=c(ndviThreshold, 1)

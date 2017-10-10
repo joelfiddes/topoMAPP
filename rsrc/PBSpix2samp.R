@@ -4,20 +4,23 @@ library("doParallel")
 require(raster) 
 
 # env
-wd = "/home/joel/sim/ensembler3/"
-priorwd = "/home/joel/sim/da_test2/" 
-
+#wd = "/home/joel/sim/ensembler3/"
+#priorwd = "/home/joel/sim/da_test2/" 
+wd = "/home/joel/sim/ensembler_scale_sml/" 
+priorwd = "/home/joel/sim/scale_test_sml/"
+grid=9
 # IO files
-plotout=("~/plot_fscacorrect_allcloud.pdf")
-load( paste0(wd,"wmat_1.rd"))
+plotout=("~/plot_fscacorrect_allcloud2.pdf")
+load( paste0(wd,"wmat_2.rd"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+
 
 # variables
 start=180
 end=300
 # number of ensembles
-nens=100
+nens=50
 
 # R value for PBS algorithm
 R=0.016
@@ -26,7 +29,7 @@ R=0.016
 Nclust=150
 
 # threshold for converting swe --> sca
-sdThresh <- 13
+sdThresh <- 0
 
 # cores used in parallel jobs
 cores=4
@@ -35,7 +38,10 @@ cores=4
 # ======== code ===================
 
 # readin
-landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
+landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
+
+# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
+rstack = crop(rstack, landform)
 
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
@@ -44,8 +50,8 @@ npix = ncell( rstack)
 
 # compute ensemble index of max weight per pixel
 ID.max.weight = apply(wmat, 1, which.max) 
+#max.weight = apply(wmat, 1, max) 
 
-max.weight = apply(wmat, 1, max) 
 # make raster container
 rst <- rstack[[1]]
 
@@ -100,7 +106,7 @@ for (i in 1: nens){ #python index
 	resMat=c()
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
-		dat = read.table(paste0(wd,"ensemble",i-1,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 		
 		
 		resMat = cbind(resMat,dat$snow_water_equivalent.mm.)
@@ -170,7 +176,7 @@ shp=shapefile("/home/joel/data/GCOS/metadata_easy.shp")
 pointObs= extract(rstack,shp)
 
 # get generic results set for timestamps vector
-dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(wd,"ensemble0/grid",grid,"/S00001/out/surface.txt"), sep=',', header=T)
 # get obs values
 #which(obsTS in )
 
@@ -229,7 +235,7 @@ d2=format(d, '%d/%m/%Y %H:%M') #geotop format
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior = dat$snow_water_equivalent.mm.[obsIndexVal]
 
 # obs
@@ -264,7 +270,7 @@ d2=format(d, '%d/%m/%Y %H:%M')
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior = dat$snow_water_equivalent.mm.[obsIndexVal]
 
 # obs
@@ -300,7 +306,7 @@ d2=format(d, '%d/%m/%Y %H:%M')
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior = dat$snow_water_equivalent.mm.[obsIndexVal]
 
 # obs
@@ -366,7 +372,7 @@ d2=format(d, '%d/%m/%Y %H:%M') #geotop format
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
@@ -407,7 +413,7 @@ d2=format(d, '%d/%m/%Y %H:%M')
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
@@ -449,7 +455,7 @@ d2=format(d, '%d/%m/%Y %H:%M')
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
 #get prior
-dat = read.table(paste0(priorwd,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 prior_swe = dat$snow_water_equivalent.mm.
 
 # obs
@@ -484,3 +490,17 @@ legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blu
 
 
 dev.off()
+
+
+#prior_swe[prior_swe <13] <- 0
+#plot(prior_sca, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
+#for (i in 1:100){lines(myarray_swe[,id,i], col='grey')}
+#lines(post_sca,col='red',lwd=lwd) #post
+#points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+#lines(prior_swe, col='blue',lwd=3)
+##lines(ma(post,20), col='green',lwd=3)
+##lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
+##points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
+##lines(post_sca, col='red', lwd=lwd , lty=2)
+#axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
+#legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)

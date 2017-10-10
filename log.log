@@ -1,4 +1,99 @@
-  File "ensembleRun.py", line 7
-    for i in p
-             ^
-SyntaxError: invalid syntax
+Loading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 30 warnings (use warnings() to see them)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: gdata
+gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+
+gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+
+Attaching package: ‘gdata’
+
+The following object is masked from ‘package:stats’:
+
+    nobs
+
+The following object is masked from ‘package:utils’:
+
+    object.size
+
+The following object is masked from ‘package:base’:
+
+    startsWith
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: MASS
+
+Attaching package: ‘MASS’
+
+The following objects are masked from ‘package:raster’:
+
+    area, select
+
+Loading required package: nlme
+
+Attaching package: ‘nlme’
+
+The following object is masked from ‘package:raster’:
+
+    getData
+
+Warning messages:
+1: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+2: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+3: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+4: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+5: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+6: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 

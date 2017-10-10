@@ -21,6 +21,10 @@ and at 2 scales:
 
 ## Dependencies
 - GDAL > 2 MODIS R package
+- CDO
+- Rlibs (packaged)
+- Pythonlibs (packaged)
+- Geotop (packaged)
 
 ## Structure
 Describe python/ R setup here

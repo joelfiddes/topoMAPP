@@ -8,6 +8,8 @@ latNorth=$4
 startDate=$5
 endDate=$6
 options_file=$7
+sca_wd=$8
+
 
 bbox=$longWest,$latSouth,$longEast,$latNorth
 startElement='"bbox": ['
@@ -33,3 +35,19 @@ oldParN=$(grep -n $findElement $options_file | awk -F: '{print $1}')
 lineNo=$oldParN
 var=$newPar
 sed -i "${lineNo}s/.*/$var/" $options_file
+
+#update write dir - | delim used to prevent clash with file path in $var under variable expansion
+findElement='"out_folder":'
+newPar=$findElement'"'$sca_wd'",'
+oldParN=$(grep -n $findElement $options_file | awk -F: '{print $1}')
+lineNo=$oldParN
+var=$newPar
+sed -i "${lineNo}s|.*|$var|" $options_file
+
+#update write dir2 =- | delim used to prevent clash with file path in $var under variable expansion
+findElement='"out_folder_mod":'
+newPar=$findElement'"'$sca_wd'",'
+oldParN=$(grep -n $findElement $options_file | awk -F: '{print $1}')
+lineNo=$oldParN
+var=$newPar
+sed -i "${lineNo}s|.*|$var|" $options_file

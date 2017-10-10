@@ -25,11 +25,11 @@
 # ======== code ===================
 
 # env
-wd = "/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
-priorwd = "/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
-
+wd = "/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
+priorwd = "/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
+grid=9
 # output
-outfile = "wmat_1.rd" #"wmat_trunc20.rd"
+outfile = "wmat_2.rd" #"wmat_trunc20.rd"
 
 
 # dependency
@@ -39,15 +39,17 @@ library("doParallel")
 require(raster) 
 
 # readin
-landform = raster(paste0(wd,"ensemble0/grid1/landform.tif"))
+landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
+rstack = crop(rstack, landform)
 
 # variables
 
 # number of ensembles
-nens=100 #50
+nens=50 #50
 
 # R value for PBS algorithm
 R=0.016
@@ -88,7 +90,7 @@ npix = ncell( rstack)
 d=strptime(obsTS$x, format='%Y-%m-%d')
 d2=format(d, '%d/%m/%Y %H:%M')
 
-dat = read.table(paste0(wd,"ensemble0/grid1/S00001/out/surface.txt"), sep=',', header=T)
+dat = read.table(paste0(wd,"ensemble0/grid",grid,"/S00001/out/surface.txt"), sep=',', header=T)
 
 # Extract timestamp corresponding to observation
 obsIndex = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
@@ -100,7 +102,7 @@ for (i in 1: nens){ #python index
 	resMat=c()
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
-		dat = read.table(paste0(wd,"ensemble",i-1,"/grid1/", simindex,"/out/surface.txt"), sep=',', header=T)
+		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
 				
 		resMat = cbind(resMat,dat$snow_water_equivalent.mm.[obsIndex])
 		rst=raster(resMat)
