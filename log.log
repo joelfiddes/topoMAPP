@@ -97,3 +97,366 @@ Warning messages:
 4: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
 5: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
 6: Quick-TRANSfer stage steps exceeded maximum (= 4991800) 
+Warning message:
+Quick-TRANSfer stage steps exceeded maximum (= 303142800) 
+Loading required package: ncdf4
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: insol
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Warning messages:
+1: In log(b/s) : NaNs produced
+2: In log(b/s) : NaNs produced
+3: In log(b/s) : NaNs produced
+4: In log(b/s) : NaNs produced
+5: In log(b/s) : NaNs produced
+6: In log(b/s) : NaNs produced
+7: In log(b/s) : NaNs produced
+8: In log(b/s) : NaNs produced
+9: In log(b/s) : NaNs produced
+10: In log(b/s) : NaNs produced
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: ncdf4
+Loading required package: Hmisc
+Loading required package: lattice
+Loading required package: survival
+Loading required package: Formula
+Loading required package: ggplot2
+
+Attaching package: ‘Hmisc’
+
+The following objects are masked from ‘package:raster’:
+
+    mask, zoom
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, round.POSIXt, trunc.POSIXt, units
+
+There were 30 warnings (use warnings() to see them)
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+rgdal: version: 1.2-7, (SVN revision 660)
+ Geospatial Data Abstraction Library extensions to R successfully loaded
+ Loaded GDAL runtime: GDAL 1.11.3, released 2015/09/16
+ Path to GDAL shared files: /usr/share/gdal/1.11
+ Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
+ Path to PROJ.4 shared files: (autodetected)
+ Linking to sp version: 1.2-4 
+Loading required package: gdata
+gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+
+gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+
+Attaching package: ‘gdata’
+
+The following object is masked from ‘package:stats’:
+
+    nobs
+
+The following object is masked from ‘package:utils’:
+
+    object.size
+
+The following object is masked from ‘package:base’:
+
+    startsWith
+
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+['/home/joel/src/topoMAPP', '/usr/local/lib/python2.7/dist-packages/pyandoc-0.0.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/smop-0.32_7_gcce8558-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/ply-3.10-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/python2.7/dist-packages/ubuntu-sso-client', '/home/joel/src/topoMAPP/']
+code_da.py
+[INFO]: Simulation directory:/home/joel/sim/test2/
+[INFO]: topo predictors precomputed
+[INFO]: SURF.nc and PLEVEL.nc precomputed
+Running:['Rscript', './rsrc/toposcale_pre2.R', '/home/joel/sim/test2/', '2015-09-01', '2015-09-02']
+Running:['Rscript', './rsrc/prepareSims.R', '/home/joel/sim/test2/']
+[INFO]: This simulation contains  1  grids
+[INFO]: grids to be computed ['/home/joel/sim/test2/grid1']
+/home/joel/sim/test2/grid1/landform.tif
+[INFO]: TopoSUB already run
+/home/joel/sim/test2/grid1/tPoint.txt
+[INFO]: TopoSCALE already run
+[INFO]: Setup Geotop simulations
+[INFO]: Setting up geotop inputs /home/joel/sim/test2/grid1
+[INFO]: Creating met files....
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/test2/grid1', 'FALSE', '0', '1']
+[INFO]: extract surface properties
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/test2/grid1']
+[INFO]: making inputs file
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/test2/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2015-09-02']
+[INFO]: Running LSM
+[INFO]: Simulations grid /home/joel/sim/test2/grid1 running (parallel model runs)
+[INFO]: Running Toposub INFORM!
+/home/joel/sim/test2//grid1
+Running:['Rscript', './rsrc/toposub_post_1.R', '/home/joel/sim/test2//grid1', '10', 'ground.txt', 'X100.000000']
+Running:['Rscript', './rsrc/toposub_pre_inform.R', '/home/joel/sim/test2//grid1', '10', 'X100.000000', 'FALSE']
+[INFO]: Running TopoSCALE INFORM!
+Running:['Rscript', './rsrc/getGridEle.R', '/home/joel/sim/test2/']
+[INFO]: running toposcale for grid 1
+Running:['Rscript', './rsrc/boxMetadata.R', '/home/joel/sim/test2//grid1', '1']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/test2//grid1', '1', 'rhumPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/test2//grid1', '1', 'tairPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/test2//grid1', '1', 'uPl']
+Running:['Rscript', './rsrc/tscale_plevel.R', '/home/joel/sim/test2//grid1', '1', 'vPl']
+Running:['Rscript', './rsrc/tscale_sw.R', '/home/joel/sim/test2//grid1', '1', 'FALSE', '-1']
+Running:['Rscript', './rsrc/tscale_lw.R', '/home/joel/sim/test2//grid1', '1', 'FALSE']
+Running:['Rscript', './rsrc/tscale_p.R', '/home/joel/sim/test2//grid1', '1', '0.25']
+[INFO]: Setup Geotop simulations INFORM!
+[INFO]: Setting up geotop inputs /home/joel/sim/test2/grid1
+[INFO]: Creating met files....
+Running:['Rscript', './rsrc/setupSim.R', '/home/joel/sim/test2/grid1', 'FALSE', '0', '1']
+[INFO]: extract surface properties
+Running:['Rscript', './rsrc/pointsSurface.R', '/home/joel/sim/test2/grid1']
+[INFO]: making inputs file
+Running:['Rscript', './rsrc/makeGeotopInputs.R', '/home/joel/sim/test2/grid1', '/home/joel/src/geotop/inputsfile/geotop.inpts', '2015-09-01', '2015-09-02']
+[INFO]: Running LSM INFORM!
+[INFO]: Simulations grid/home/joel/sim/test2/grid1 running (parallel model runs)
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/test2/grid1
+Running:['Rscript', './rsrc/toposub_post_2.R', '/home/joel/sim/test2/grid1', '10', 'ground.txt', 'X100.000000', '2015-09-01', '2015-09-02']
+[INFO]: Spatialising TopoSUB results....
+[INFO]: running spatialisation routines for grid /home/joel/sim/test2/grid1
+Running:['Rscript', './rsrc/toposubPostInstant.R', '/home/joel/sim/test2/grid1', '10', 'ground.txt', 'X100.000000']
+[INFO]: Making coarse grid timeseries TopoSUB results..Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+Loading required package: MODIStsp
+[Tue Oct 10 14:42:05 2017]Welcome to MODIStsp!
+
+We will now search for a valid GDAL installation - please wait
+(this will happen only once)
+Scanning for GDAL installations...
+Checking Sys.which...
+GDAL version 2.2.1
+GDAL version in use:1.11.3
+[Tue Oct 10 14:42:08 2017] Retrieving list of files from NASA server
+[Tue Oct 10 14:42:17 2017] Retrieving Files for Year 2015
+[Tue Oct 10 14:42:18 2017] Downloading Terra Files for date 2015_09_01 : 1 of 1
+[Tue Oct 10 14:42:22 2017] 1 files for date of 2015.09.01 were successfully downloaded!
+[Tue Oct 10 14:42:23 2017] Processing and Reprojecting Terra SC files for date: 2015_09_01
+[Tue Oct 10 14:42:28 2017] Downloading Terra Files for date 2015_09_02 : 1 of 1
+[Tue Oct 10 14:42:34 2017] 1 files for date of 2015.09.02 were successfully downloaded!
+[Tue Oct 10 14:42:35 2017] Processing and Reprojecting Terra SC files for date: 2015_09_02
+[Tue Oct 10 14:42:43 2017] Retrieving Files for Year 2015
+[Tue Oct 10 14:42:44 2017] Downloading Aqua Files for date 2015_09_01 : 1 of 1
+[Tue Oct 10 14:42:52 2017] 1 files for date of 2015.09.01 were successfully downloaded!
+[Tue Oct 10 14:42:52 2017] Processing and Reprojecting Aqua SC files for date: 2015_09_01
+[Tue Oct 10 14:42:56 2017] Downloading Aqua Files for date 2015_09_02 : 1 of 1
+[Tue Oct 10 14:43:00 2017] 1 files for date of 2015.09.02 were successfully downloaded!
+[Tue Oct 10 14:43:00 2017] Processing and Reprojecting Aqua SC files for date: 2015_09_02
+[Tue Oct 10 14:43:04 2017] Creating Virtual Files and rts time series for layer SC
+[Tue Oct 10 14:43:05 2017] Creating Virtual Files and rts time series for layer SC
+[Tue Oct 10 14:43:05 2017] Creating Virtual Files and rts time series for layer SC
+Loading required package: raster
+Loading required package: methods
+Loading required package: sp
+..
+[INFO]: running timeseries routines for grid /home/joel/sim/test2/grid1
+Running:['Rscript', './rsrc/toposub_gridTS.R', '/home/joel/sim/test2/grid1', '10', 'ground.txt', 'X100.000000']
+Obtaining latN from /home/joel/sim/test2//predictors/ele.tif
+Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/test2//predictors/ele.tif', 'latN']
+Obtaining latS from /home/joel/sim/test2//predictors/ele.tif
+Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/test2//predictors/ele.tif', 'latS']
+Obtaining lonW from /home/joel/sim/test2//predictors/ele.tif
+Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/test2//predictors/ele.tif', 'lonW']
+Obtaining lonE from /home/joel/sim/test2//predictors/ele.tif
+Running:['Rscript', './rsrc/getExtent.R', '/home/joel/sim/test2//predictors/ele.tif', 'lonE']
+Running:['Rscript', './rsrc/getMODIS_SCA.R', 'FALSE', '/home/joel/src/topoMAPP/DA/options.json']
+Running:['Rscript', './rsrc/extractSCATimeseriesGRID.R', '/home/joel/sim/test2/', '/home/joel/sim/test2/grid1/MODIS/SC/Snow_Cov_Daily_500m_v5/SC']
+[INFO]: 4.650000 minutes for run
