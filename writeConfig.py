@@ -92,8 +92,10 @@ config['modis'] = {}
 #config['modis']['sca_wd'] = '/home/joel/data/MODIS_ARC/SCA/data'
 #config['modis']['MODISdir'] = '/home/joel/data/MODIS_ARC/PROCESSED' # NDVI
 config['modis']['getMODISSCA'] = "TRUE"
-
-
+config['modis']['tileX_start'] = 18 # this is interim measure used as bbox doesnt work if outside specified tile
+config['modis']['tileX_end'] = 18# this is interim measure used as bbox doesnt work if outside specified tile
+config['modis']['tileY_start'] = 4
+config['modis']['tileY_end'] = 4
 
 
 
@@ -113,7 +115,8 @@ config['geotop']['lsmExe'] = 'geotop1.226'
 # MODIS
 #=================================================================
 # location of MODIStsp options file
-config['modis']['options_file'] = '/home/joel/src/topoMAPP/DA/options.json'
+config['modis']['options_file_SCA'] = '/home/joel/src/topoMAPP/DA/optionsSCA.json'
+config['modis']['options_file_NDVI'] = '/home/joel/src/topoMAPP/DA/optionsNDVI.json'
 #=================================================================
 # DA
 #=================================================================

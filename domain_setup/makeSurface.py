@@ -22,7 +22,7 @@ Attributes:
 Todo:
 
 """
-path2script = "./rsrc/makeSurface.R"
+path2script = "./rsrc/makeSurface2.R"
 
 # main
 def main(wd, outDirPath):

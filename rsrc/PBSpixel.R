@@ -36,7 +36,7 @@ R <- 0.016
 Nclust <- 150
 
 # threshold for converting swe --> sca
-sdThresh <- 0
+sdThresh <- 13
 
 # cores used in parallel jobs
 cores=6
@@ -50,8 +50,8 @@ x=1:length(mean_sca)
 y=mean_sca
 xyplot(y ~ x, type=c("smooth", "p"))
 
-start=180
-end=300
+start=200
+end=280
 
 
 # pixel based timeseries 

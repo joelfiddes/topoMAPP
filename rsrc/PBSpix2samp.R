@@ -13,7 +13,7 @@ wd = "/home/joel/sim/ensembler_scale_sml/"
 priorwd = "/home/joel/sim/scale_test_sml/"
 grid=9
 # IO files
-plotout=("~/plot_fscacorrect_allcloud2.pdf")
+plotout=(paste0(wd,"/daplot.pdf"))
 load( paste0(wd,"wmat_2.rd"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
@@ -270,19 +270,19 @@ myList <- lapply(myfilenames, read.csv)
 
 # generic plot pars
 lwd=3
-#pdf(plotout,width=7, height=12 )
+pdf(plotout,width=7, height=12 )
 
 par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
 
-for ( i in 1:Nval ) {
+for ( j in 1:Nval ) {
 
 
 # sample ID
-id=samples[i]
+id=samples[j]
 simindex=paste0('S',formatC(id, width=5,flag='0'))# samples[1]
 
 #
-valdat<- myList[[i]]
+valdat<- myList[[j]]
 # convert obs timestamps
 d = strptime(valdat$DATUM, format="%d.%m.%Y")
 d2=format(d, '%d/%m/%Y %H:%M') #geotop format
@@ -311,7 +311,7 @@ rms = rmse(error)
 
 # plot prior,post, obs
 # plot prior,post, obs
-plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0('RMSE=',round(rms,2))) # prior
+plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j],' RMSE=',round(rms,2))) # prior
 for (i in 1:nens){lines(myarray_swe[,id,i], col='grey')}
 lines(post_swe,col='red',lwd=lwd) #post
 points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
@@ -325,7 +325,7 @@ legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blu
 
 }
 
-
+dev.off()
 
 
 
