@@ -23,10 +23,10 @@ config.filename = 'test.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test2/'
+config['main']['wd'] = '/home/joel/sim/test2_points/'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
-config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
+config['main']['runtype'] = 'points' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2015-09-01'
 config['main']['endDate'] = '2015-09-02'
 
@@ -35,7 +35,7 @@ config['main']['lats'] = 46
 config['main']['lone'] = 9
 config['main']['latn'] = 47
 
-config['main']['pointsFile'] = '/home/joel/data/GCOS/points_all.txt' # only for points
+config['main']['pointsFile'] = '/home/joel/data/GCOS/pointsTEST.txt' # only for points
 config['main']['pkCol'] = 1
 config['main']['lonCol'] = 2
 config['main']['latCol'] = 3
@@ -78,7 +78,7 @@ config['toposcale']['pfactor'] = 0.25
 config['geotop'] = {}
 
 # Define target variable  (make a list possible here)
-config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
+config['geotop']['file1'] = 'ground.txt' #'ground.txt' #'
 config['geotop']['targV'] = 'X100.000000' #'snow_water_equivalent.mm.' # 'X100.000000' # 
 #config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
 #config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters

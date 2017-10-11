@@ -82,7 +82,10 @@ slpModelReclass = reclassify(slpModel, rcl)
 subsdf=data.frame(1,0)
 reclassVeg=subs(x=meanNDVIReclass,  y=subsdf, by=1, which=2, subsWithNA=TRUE) #values 1 (veg) become 2 , values 0 (no veg) become NA
 
-surfaceModel=cover(reclassVeg, slpModelReclass) #0= veg, 1=debris , 2=steep bedrock
+
+surf=resample(reclassVeg, slpModelReclass, method='ngb')
+
+surfaceModel=cover(surf, slpModelReclass) #0= veg, 1=debris , 2=steep bedrock
 
 #====================================================================
 #	output
