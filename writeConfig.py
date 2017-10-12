@@ -23,7 +23,7 @@ config.filename = 'test.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test2_points/'
+config['main']['wd'] = '/home/joel/sim/test_era/'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'points' #bbox or points add toposcale only option here
@@ -56,6 +56,7 @@ config['main']['dempath'] = '/home/joel/Downloads/20170904031934_280341969.tif'
 #=================================================================
 config['era-interim'] = {}
 config['era-interim']['grid'] = 0.75
+config['era-interim']['dataset'] = "interim" #"era"
 # https://software.ecmwf.int/wiki/display/CKB/Does+downloading+data+at+higher+resolution+improve+the+output
 #=================================================================
 # TopoSUb

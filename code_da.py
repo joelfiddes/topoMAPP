@@ -356,7 +356,7 @@ if config["main"]["runtype"] == "points":
 	
 	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
 
-	print "[INFO]: Setting up simulation directories for " + ncells  + " ERA-Grids" 
+	print "[INFO]: Setting up simulation directories for " + str(ncells)  + " ERA-Grids" 
 
 	# set up sim directoroes #and write metfiles
 	for Ngrid in range(1,int(ncells)+1):
@@ -433,7 +433,7 @@ if x != 1: #NOT ROBUST
 			sw.main( gridpath, str(Ngrid), config["toposcale"]["swTopo"], config["main"]["tz"]) #TRUE requires svf as does more computes 
 
 			from toposcale import tscale_lw as lw
-			lw.main( gridpath, str(Ngrid), config["toposcale"]["svfCompute"]) #TRUE requires svf as does more computes terrain/sky effects
+			lw.main( gridpath, str(Ngrid), config["toposcale"]["svfCompute"]) #TRUE requires svf as computes terrain/sky effects
 			
 			from toposcale import tscale_p as p
 			p.main( gridpath, str(Ngrid), config["toposcale"]["pfactor"])

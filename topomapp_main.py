@@ -127,6 +127,8 @@ if os.path.isfile(fname) == False:
 	from domain_setup import clipToEra as era
 	era.main(wd ,config["era-interim"]["grid"])
 
+	# clip to points here
+
 	if config["main"]["runtype"] == "bbox":
 		from domain_setup import domainPlot as dplot
 		dplot.main(wd , "FALSE") # shp = TRUE for points  run
@@ -163,11 +165,18 @@ fname1 = wd + "eraDat/SURF.nc"
 fname2 = wd + "eraDat/PLEVEL.nc"
 if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROBUST
 
-	# from getERA import getExtent as ext
-	# latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-	# latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-	# lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-	# lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+	# set ccords to those of downloaded dem extent
+	if config["main"]["runtype"] == "points":
+		from getERA import getExtent as ext
+		latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+		latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+		lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+
+		config["main"]["latn"]  = latN
+		config["main"]["lats"]  = latS
+		config["main"]["lonw"]  = lonW
+		config["main"]["lone"]  = lonE
 
 	from getERA import extractEraBbox as ext
 	latN = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif" , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
@@ -184,11 +193,11 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 
 	from getERA import eraRetrievePLEVEL as plevel
 	print "Retrieving ECWMF pressure-level data"
-	plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
+	plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
 
 	from getERA import eraRetrieveSURFACE as surf
 	print "Retrieving ECWMF surface data"
-	surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir)
+	surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
 
 	# Merge NC timeseries (requires linux package cdo)
 	import subprocess
@@ -221,60 +230,125 @@ prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 #====================================================================
 #	Prepare simulation directories - grid
 #====================================================================
-if config["main"]["initSim"] != "TRUE":
-	from getERA import prepSims as sim
-	sim.main(wd)
-
-# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
 grid_dirs = glob.glob(wd +"/grid*")
-ncells = len(grid_dirs)
-print "[INFO]: This simulation contains ", ncells, " grids"
-print "[INFO]: grids to be computed " + str(grid_dirs)
+if len(grid_dirs) < 1:
+
+	if config["main"]["initSim"] != "TRUE":
+		from getERA import prepSims as sim
+		sim.main(wd)
+
+	# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
+	grid_dirs = glob.glob(wd +"/grid*")
+	ncells = len(grid_dirs)
+	print "[INFO]: This simulation contains ", ncells, " grids"
+	print "[INFO]: grids to be computed " + str(grid_dirs)
+
+	#====================================================================
+	#	Loop through grids - prepare sims and remove grids not containing 
+	# 	points (buffer)
+	#====================================================================
+	if config["main"]["runtype"] == "points":
+		
+		for Ngrid in range(1,int(ncells)+1):
+			
+			gridpath = wd +"/grid"+ str(Ngrid)
+
+			print "[INFO]: creating listpoints for grid " + str(Ngrid)
+
+			from listpoints_make import makeListpoints as list
+			list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
+
+		# re define ncells here based on occurances of grid* directoriers after removals
+		grid_dirs = glob.glob(wd +"/grid*")
+		ncells = len(grid_dirs)
+		print "[INFO]: This simulation now contains ", ncells, " grids"
+		print "[INFO]: grids to be computed " + str(grid_dirs)
+
+#====================================================================
+#	Create MODIS dir for NDVI at wd level
+#====================================================================
+
+# make output directory at wd level so grids can share hdf scenes if overlap - save download time
+# in contrast sca is saved to gridpath and hdf not retained due to volume of files
+ndvi_wd=wd + "/MODIS/NDVI"
+if not os.path.exists(ndvi_wd):
+	os.makedirs(ndvi_wd)
+
+#====================================================================
+#	Start main Ngrid loop
+#====================================================================
+
+# start main grid loop here - make parallel here
+for Ngrid in grid_dirs:
+	gridpath = Ngrid
 
 #====================================================================
 #	Download MODIS NDVI here
 #====================================================================
-for Ngrid in range(1,int(ncells)+1):
-	gridpath = wd +"/grid"+ str(Ngrid)
+	# only run if surface tif doesnt exist
+	fname = gridpath + "/predictors/surface.tif"
+	if os.path.isfile(fname) == False:
 
-	print "[INFO]: preparing surface layer " + str(Ngrid)
-	
-	# make output directories if they dont exist
-	ndvi_wd=gridpath + "/MODIS/NDVI"
-	if not os.path.exists(ndvi_wd):
-		os.makedirs(ndvi_wd)
+		print "[INFO]: preparing surface layer " + Ngrid
+		
+		# compute from dem of small grid
+		from getERA import getExtent as ext
+		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
+		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
+		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
+		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
 
-	# compute from dem of small grid
-	from getERA import getExtent as ext
-	latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
-	latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
-	lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
-	lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
+		#need to run loop of five requests at set dates (can be fixed for now)
+		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12","2016-08-12"]
+		for date in mydates:
+			# call bash script that does grep type stuff to update values in options file
+			cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , date , date, config["modis"]["options_file_NDVI"], ndvi_wd,config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
+			subprocess.check_output(cmd)
 
-	#need to run loop of five requests at set dates (can be fixed for now)
-	mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12","2016-08-12"]
-	for date in mydates:
-		# call bash script that does grep type stuff to update values in options file
-		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , date , date, config["modis"]["options_file_NDVI"], ndvi_wd,config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
-		subprocess.check_output(cmd)
+			# run MODIStsp tool
+			from DA import getMODIS as gmod
+			gmod.main("FALSE" , config["modis"]["options_file_NDVI"]) #  able to run non-interactively now
 
-		# run MODIStsp tool
-		from DA import getMODIS as gmod
-		gmod.main("FALSE" , config["modis"]["options_file_NDVI"]) #  able to run non-interactively now
+		from domain_setup import makeSurface as surf
+		surf.main(gridpath, ndvi_wd )
 
-	from domain_setup import makeSurface as surf
-	surf.main(gridpath, ndvi_wd )
+#====================================================================
+#	Run bbox script
+#====================================================================
+	if config["main"]["runtype"] == "bbox":
+		import TMgrid
 
-		# for Ngrid in range(1,int(ncells)+1):
-		# 	gridpath = wd +"/grid"+ str(Ngrid)
+#====================================================================
+#	Run points script
+#====================================================================
 
-		# 	print "[INFO]: preparing surface layer " + str(Ngrid)
-		# 	from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-		# 	surf.main(gridpath, config["modis"]["MODISdir"] )
+# make into proper modules with arguments etc
+# import config and Ngrid
+	if config["main"]["runtype"] == "points":
+		import TMpoints
+		TMpoints.main(wd, Ngrid, config)
+
+#====================================================================
+#	Run ensemble
+#====================================================================
+	#if config["main"]["mode"] == "ensemble":
+		#import TMensemble.py
+
+#====================================================================
+#	Run DA
+#====================================================================
+	#if config["main"]["mode"] == "da":
+		#import TMensemble.py
+		#import TMda.py
+
+
+print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
 
 
 
-		# from joblib import Parallel, delayed 
+
+
+	# from joblib import Parallel, delayed 
 		# import multiprocessing 
 
 		# def processInput(Ngrid): 
@@ -293,24 +367,3 @@ for Ngrid in range(1,int(ncells)+1):
 		# inputs = range(1,int(ncells)+1) 
 		# num_cores = multiprocessing.cpu_count() 
 		# results = Parallel(n_jobs=4)(delayed(processInput)(Ngrid) for Ngrid in inputs) 
-
-
-#Do parallel grid loop here:
-# code takes single argumnt of gridnumber
-
-if config["main"]["runtype"] == "bbox":
-	import TMgrid.py
-
-if config["main"]["runtype"] == "points":
-	import TMpoints.py
-
-if config["main"]["mode"] == "ensemble":
-	#import TMensemble.py
-
-if config["main"]["mode"] == "da":
-	#import TMensemble.py
-	#import TMda.py
-
-
-print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
-

@@ -27,9 +27,7 @@ shpname=args[3]
 setwd(sca_wd)
 shp = shapefile(shpname)
 rstack=stack(list.files(pattern='MOD*'))
-
-
-MOD = extract(fsca, shp)
+MOD = extract(rstack, shp)
 rstack=stack(list.files(pattern='MYD*'))
 MYD = extract(rstack, shp)
 
@@ -98,6 +96,12 @@ MYD[MYD > 100]  <- NA
 my.na <- is.na(MOD)
 MOD[my.na] <- MYD[my.na]
 
+# convert ndsi to fsca
+fsca.df= (-0.01 + (1.45*MOD)) # https://modis-snow-ice.gsfc.nasa.gov/uploads/C6_MODIS_Snow_User_Guide.pdf
+fsca.df [fsca.df >100]<-100
+fsca.df [fsca.df <0]<-0
+
+
 #construct dates
 date = c()
 names(rstack)
@@ -111,13 +115,11 @@ for(i in 1: length( names(rstack)))
 }
 
 #construct dataframes
-
-
 for (i in 1:Npoints)
 {
-	fsca = as.vector(MOD[i,])
+	fsca = as.vector(fsca.df[i,])
 	df = data.frame(date, fsca)
-	write.csv(df, paste0(wd,'/spatial/fca_P',i,'.csv'))
+	write.csv(df, paste0(wd,'/MODIS/fca_P',i,'.csv'), quote=FALSE, row.names=FALSE)
 }
 #====================================================================
 # MODIS SA CODES

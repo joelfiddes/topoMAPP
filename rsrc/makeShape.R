@@ -34,6 +34,8 @@ setwd(wd)
 dat=read.table(infile, sep=',', header=T)
 shp=makePointShapeGeneriRc(lon=dat[,loncol],lat=dat[,latcol],data=dat,proj='+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
+# make outdir
+dir.create(paste0(wd, '/spatial'))
 
 #WRITE
 shapefile(x=shp,filename='spatial/points.shp',overwrite=TRUE)

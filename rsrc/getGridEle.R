@@ -16,7 +16,7 @@ wd=args[1]
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
-file = '/home/joel/sim/topomap_points/eraDat/SURF.nc'
+file = paste0(wd,'/eraDat/SURF.nc')
 #**********************  SCRIPT BEGIN *******************************
 setwd(wd)
 nc=nc_open(file)

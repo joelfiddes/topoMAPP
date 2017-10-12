@@ -1,18 +1,24 @@
+#!/usr/bin/env python
+
+
+import subprocess
+
+
+def main(Ngrid, config):
 #====================================================================
 #	Setup Geotop simulations
 #====================================================================
+	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+	print "[INFO]: Setup Geotop simulations" 
 
-#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-print "[INFO]: Setup Geotop simulations" 
+	# set up sim directoroes #and write metfiles
+	#for Ngrid in range(1,int(ncells)+1):
+		#gridpath = wd +"/grid"+ Ngrid
 
-# set up sim directoroes #and write metfiles
-#for Ngrid in range(1,int(ncells)+1):
-	#gridpath = wd +"/grid"+ Ngrid
-
-for Ngrid in grid_dirs:	
+	#for Ngrid in grid_dirs:	
 	gridpath = str(Ngrid)
 
-
+	import os
 	if os.path.exists(gridpath):
 		print "[INFO]: Setting up geotop inputs " + str(Ngrid)
 
@@ -36,11 +42,10 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Run LSM
 #====================================================================
-#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-print "[INFO]: Running LSM" 
+	print "[INFO]: Running LSM" 
 
-# set up sim directoroes #and write metfiles
-for Ngrid in grid_dirs:	
+	# set up sim directoroes #and write metfiles
+
 	gridpath = Ngrid
 
 	if os.path.exists(gridpath):
@@ -64,3 +69,12 @@ for Ngrid in grid_dirs:
 
 	else:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
+
+#====================================================================
+#	Calling MAIN
+#====================================================================
+if __name__ == '__main__':
+	import sys
+	Ngrid      = sys.argv[1]
+	config      = sys.argv[2]
+	main(Ngrid, config)
