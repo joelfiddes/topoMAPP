@@ -9,7 +9,7 @@ INI file should be configured named and supplied as argument of fullpathtofile o
 		
 		$ python writeConfig.py
 
-		$ python code_da.py yala.ini &> yala.log
+		$ python topomapp_main.py test.ini &> test.log
 
 """
 
@@ -97,54 +97,51 @@ fname = wd + "predictors/asp.tif"
 if os.path.isfile(fname) == False:		
 
 	# Dop this only for bbox runs
-	if config["main"]["runtype"] == "bbox":
+	#if config["main"]["runtype"] == "bbox":
 
 		# copy preexisting dem
-		if config["main"]["demexists"] == "TRUE":
+	if config["main"]["demexists"] == "TRUE":
 
-			cmd = "mkdir " + wd + "/predictors/"
-			os.system(cmd)
-			src = config["main"]["dempath"]
-			dst = wd +"/predictors/dem.tif"
-			cmd = "cp -r %s %s"%(src,dst)
-			os.system(cmd) 
+		cmd = "mkdir " + wd + "/predictors/"
+		os.system(cmd)
+		src = config["main"]["dempath"]
+		dst = wd +"/predictors/dem.tif"
+		cmd = "cp -r %s %s"%(src,dst)
+		os.system(cmd) 
 
 		# fetch new srtm dem from nasa
-		elif config["main"]["demexists"] == "FALSE":
+		#elif config["main"]["demexists"] == "FALSE":
 
-			from domain_setup import getDEM as gdem
-			gdem.main(wd ,config["main"]["demDir"] ,config["main"]["lonw"],config["main"]["lats"],config["main"]["lone"],config["main"]["latn"])
+			#from domain_setup import getDEM as gdem
+			#gdem.main(wd ,config["main"]["demDir"] ,config["main"]["lonw"],config["main"]["lats"],config["main"]["lone"],config["main"]["latn"])
 
 	# do this only for point runs		
-	if config["main"]["runtype"] == "points":
+	#if config["main"]["runtype"] == "points":
 
-		from domain_setup import getDEM_points as gdem
-		gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["grid"], config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
+	from domain_setup import getDEM2 as gdem
+	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["domain"], config["main"]["shp"])
 
-		from domain_setup import makeShape as shp
-		shp.main(wd , config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
+		#from domain_setup import makeShape as shp
+		#shp.main(wd , config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
 
-	from domain_setup import clipToEra as era
-	era.main(wd ,config["era-interim"]["grid"])
+	#from domain_setup import clipToEra as era
+	#era.main(wd ,config["era-interim"]["grid"])
 
 	# clip to points here
+	#if config["main"]["runtype"] == "bbox":
+		#from domain_setup import domainPlot as dplot
+		#dplot.main(wd , "FALSE") # shp = TRUE for points  run
 
-	if config["main"]["runtype"] == "bbox":
-		from domain_setup import domainPlot as dplot
-		dplot.main(wd , "FALSE") # shp = TRUE for points  run
+		#cmd = "Rscript ./rsrc/makePoly.R " +config['main']['latn']+" "+config['main']['lats']+" " +config['main']['lone']+" "+config['main']['lonw']+" "+wd+"/spatial/extentRequest.shp"
+		#os.system(cmd)
 
-		cmd = "Rscript ./rsrc/makePoly.R " +config['main']['latn']+" "+config['main']['lats']+" " +config['main']['lone']+" "+config['main']['lonw']+" "+wd+"/spatial/extentRequest.shp"
-		os.system(cmd)
-
-	if config["main"]["runtype"] == "points":
-		from domain_setup import domainPlot as dplot
-		dplot.main(wd , "TRUE") # shp = TRUE for points  run
+	#if config["main"]["runtype"] == "points":
+		#from domain_setup import domainPlot as dplot
+		#dplot.main(wd , "TRUE") # shp = TRUE for points  run
 
 	from domain_setup import makeKML as kml
-	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")
-	        
+	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")	      
 	kml.main(wd, wd + "/spatial/eraExtent.tif", "raster", wd + "/spatial/eraExtent")
-
 	#kml.main(wd, wd + "/spatial/extentRequest.shp", "raster", wd + "/spatial/extentRequest")
 
 	from domain_setup import computeTopo as topo
@@ -166,26 +163,35 @@ fname2 = wd + "eraDat/PLEVEL.nc"
 if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROBUST
 
 	# set ccords to those of downloaded dem extent
-	if config["main"]["runtype"] == "points":
-		from getERA import getExtent as ext
-		latN = ext.main(wd + "/predictors/ele.tif" , "latN")
-		latS = ext.main(wd + "/predictors/ele.tif" , "latS")
-		lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
-		lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
+	#if config["main"]["runtype"] == "points":
+	from getERA import getExtent as ext
+	latN = ext.main(wd + "/predictors/ele.tif" , "latN")
+	latS = ext.main(wd + "/predictors/ele.tif" , "latS")
+	lonW = ext.main(wd + "/predictors/ele.tif" , "lonW")
+	lonE = ext.main(wd + "/predictors/ele.tif" , "lonE")
 
-		config["main"]["latn"]  = latN
-		config["main"]["lats"]  = latS
-		config["main"]["lonw"]  = lonW
-		config["main"]["lone"]  = lonE
+	config["main"]["latn"]  = latN
+	config["main"]["lats"]  = latS
+	config["main"]["lonw"]  = lonW
+	config["main"]["lone"]  = lonE
 
-	from getERA import extractEraBbox as ext
-	latN = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif" , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	print latN
+	print latS
+	print lonW
+	print lonE
 
-	latS = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif", "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	# from getERA import extractEraBbox as ext
 
-	lonW = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif", "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+	# #gridfile="/dat/eraigrid75.tif"
+	# gridfile="/dat/era5grid30.tif"
 
-	lonE = ext.main(config['main']['srcdir']+"/dat/eraigrid75.tif" ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
+	# latN = ext.main(config['main']['srcdir']+gridfile , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+
+	# latS = ext.main(config['main']['srcdir']+gridfile, "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+
+	# lonW = ext.main(config['main']['srcdir']+gridfile, "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
+
+	# lonE = ext.main(config['main']['srcdir']+gridfile ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
 
 	eraDir = wd + "/eraDat"
 	if not os.path.exists(eraDir):
@@ -224,12 +230,19 @@ else:
 	print "[INFO]: SURF.nc and PLEVEL.nc precomputed"
 
 	#os.chdir(config["main"]["srcdir"])
-from getERA import era_prep as prep
-prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 
+if config["era-interim"]["dataset"] == "interim":
+	from getERA import era_prep as prep
+	prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
+
+if config["era-interim"]["dataset"] == "era5":
+	from getERA import era_prep2 as prep
+	prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 #====================================================================
 #	Prepare simulation directories - grid
 #====================================================================
+
+# check if sim directories already exist
 grid_dirs = glob.glob(wd +"/grid*")
 if len(grid_dirs) < 1:
 
@@ -317,6 +330,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 	if config["main"]["runtype"] == "bbox":
 		import TMgrid
+		TMgrid.main(wd, Ngrid, config)
 
 #====================================================================
 #	Run points script

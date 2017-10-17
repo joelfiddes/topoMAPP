@@ -23,7 +23,7 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
        https://software.ecmwf.int/wiki/pages/viewpage.action?pageId=56658233
     """
     grd =   str(grd)
-    tol = float(grd)/2 # this tol adjust extent based on out perimeter (ele.tif) to one based on grid centers (ERA).
+    tol = 0 #float(grd)/2 # this tol adjust extent based on out perimeter (ele.tif) to one based on grid centers (ERA).
     strtDate = str(strtDate)
     endDate = str(endDate) 
     latNorth = str(float(latNorth) - tol)
@@ -57,14 +57,15 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
     bbox=(str(latNorth) + "/" + str(lonWest) + "/" + str(latSouth) + "/" + str(lonEast)) 
 
     # prescribe non-varying dataset specific settings here
-    if dataset == "interim"
+    if dataset == "interim":
         time = "00/12"
         step = "3/6/9/12"
         eraClass = "ei"
         
-    if dataset == "era5"
+    if dataset == "era5":
         time = "06/18"
         step = "1/2/3/4/5/6/7/8/9/10/11/12"
+        eraClass = "ea"
 
     # download buffer of +/- 1 month to ensure all necessary timestamps are there for interpolations and consistency between plevel and surf
     dates = [str(strtDate), str(endDate)]
@@ -74,7 +75,7 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
     end = end+relativedelta(months=+1)
     dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y-%m"), None) for _ in xrange((end - start).days)).keys()
 
-    print("Retrieving ERA-Interim data")
+    print("Retrieving"+dataset+" dataset")
     print("Bbox = " + bbox)
     print("Grid = " + grd)
     print("Start date = " , dateList[0])
@@ -103,10 +104,11 @@ def interim_request(requestDates, target, grid, bbox, dataset, time, step, eraCl
     server.retrieve({
         "dataset": dataset,
         "date": requestDates,
+        "class" : eraClass,
         "stream" : "oper",
         "levtype": "sfc",
         "param": "129.128/168.128/175.128/169.128/228.128/167.128/212.128",
-        "dataset": "interim",
+        "dataset": dataset,
         "step": step,
         "grid": grid,
         "time": time,

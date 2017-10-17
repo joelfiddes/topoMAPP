@@ -23,22 +23,23 @@ config.filename = 'test.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test_era/'
+config['main']['wd'] = '/home/joel/sim/test_era5/'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
-config['main']['runtype'] = 'points' #bbox or points add toposcale only option here
+config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2015-09-01'
-config['main']['endDate'] = '2015-09-02'
+config['main']['endDate'] = '2015-09-03'
 
-config['main']['lonw'] = 8
-config['main']['lats'] = 46
-config['main']['lone'] = 9
-config['main']['latn'] = 47
+#config['main']['lonw'] = 8
+#config['main']['lats'] = 46
+#config['main']['lone'] = 9
+#config['main']['latn'] = 47
 
-config['main']['pointsFile'] = '/home/joel/data/GCOS/pointsTEST.txt' # only for points
-config['main']['pkCol'] = 1
-config['main']['lonCol'] = 2
-config['main']['latCol'] = 3
+#config['main']['pointsFile'] = '/home/joel/data/GCOS/pointsTEST.txt' # only for points
+#config['main']['pkCol'] = 1
+#config['main']['lonCol'] = 2
+#config['main']['latCol'] = 3
+config['main']['shp'] = "/home/joel/data/GCOS/wfj_poly.shp"
 config['main']['tz'] = -1
 #config['main']['googleEarthPlots'] = 'FALSE'
 #config['main']['informSample'] = 'FALSE'
@@ -55,8 +56,12 @@ config['main']['dempath'] = '/home/joel/Downloads/20170904031934_280341969.tif'
 # ERA-Interim
 #=================================================================
 config['era-interim'] = {}
-config['era-interim']['grid'] = 0.75
-config['era-interim']['dataset'] = "interim" #"era"
+
+# These configs are not independent
+config['era-interim']['grid'] = 0.3 #0.75, 0.3
+config['era-interim']['dataset'] = "era5" #"era5" "interim"
+config['era-interim']['domain'] = "/home/joel/src/topoMAPP/dat/era5grid30.tif" #"/home/joel/src/topoMAPP/dat/eraigrid75.tif"
+
 # https://software.ecmwf.int/wiki/display/CKB/Does+downloading+data+at+higher+resolution+improve+the+output
 #=================================================================
 # TopoSUb

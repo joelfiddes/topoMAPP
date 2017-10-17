@@ -19,7 +19,7 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
        In the example below the data are organised in files per month. (eg "interim_daily_201510.grb")
     """
     grd =   str(grd)
-    tol = float(grd)/2 # this tol adjust extent based on out perimeter (ele.tif) to one based on grid centers (ERA).
+    tol = 0 #float(grd)/2 # this tol adjust extent based on out perimeter (ele.tif) to one based on grid centers (ERA).
     strtDate = str(strtDate)
     endDate = str(endDate) 
     latNorth = str(float(latNorth) - tol)
@@ -32,15 +32,15 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
     bbox=(str(latNorth) + "/" + str(lonWest) + "/" + str(latSouth) + "/" + str(lonEast)) 
 
    # prescribe non-varying dataset specific settings here
-    if dataset == "interim"
+    if dataset == "interim":
         time = "00/06/12/18"
         step = "0"
         eraClass = "ei"
 
-    if dataset == "era5"
-        time =
-        step = 
-
+    if dataset == "era5":
+        time ="00/01/02/03/04/05/06/07/08/09/10/11/12/13/14/15/16/17/18/19/20/21/22/23"
+        step = "0"
+        eraClass = "ea"
 
     # download buffer of +/- 1 month to ensure all necessary timestamps are there for interpolations and consistency between plevel and surf
     dates = [str(strtDate), str(endDate)]
@@ -50,7 +50,7 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
     end = end+relativedelta(months=+1)
     dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y-%m"), None) for _ in xrange((end - start).days)).keys()
 
-    print("Retrieving ERA-Interim data")
+    print("Retrieving "+dataset+" dataset")
     print("Bbox = " + bbox)
     print("Grid = " + grd)
     print("Start date = " , dateList[0])
@@ -84,7 +84,6 @@ def interim_request(requestDates, target, grid, bbox, dataset,time, step, eraCla
         "stream" : "oper",
         "levtype": "pl",
         "param": "129.128/130.128/157.128/131.128/132.128",
-        "dataset": "interim",
         "step": step,
         "grid": grid,
         "time": time,
@@ -92,7 +91,7 @@ def interim_request(requestDates, target, grid, bbox, dataset,time, step, eraCla
         "target": target,
         "type": "an",
         "area": bbox,
-        "levelist": "500/650/775/850/925/1000",
+        "levelist": "1000/975/950/925/900/875/850/825/800/775/750/700/650/600/550/500", #"500/650/775/850/925/1000", #set this according to max height of domain based on dem
         'RESOL' : "AV",
     })
 if __name__ == "__main__":

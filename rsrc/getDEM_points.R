@@ -100,9 +100,12 @@ setwd(demDir)
 		}
 	}
 
-names(newgrid) <-names(df)[loncol:latcol]
-df=rbind (df[loncol:latcol], newgrid)
-
+# if points are not within this buffer boundary then newgrid is null and can just download 
+# original coords
+if ( !is.null(newgrid)){
+	names(newgrid) <-names(df)[loncol:latcol]
+	df=rbind (df[loncol:latcol], newgrid)
+}
 	#find unique llcorner coords
 	df2=unique(floor(df))
 

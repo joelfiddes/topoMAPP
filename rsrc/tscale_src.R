@@ -674,6 +674,7 @@ return(t)
 ################################################################################################################
 #					ERA accumulated -> instant values ONLY
 #accepts accumulated values vector and date vector.
+# https://software.ecmwf.int/wiki/pages/viewpage.action?pageId=56658233
 ################################################################################################################
 
 accumToInstERA_simple<-function(inDat, step){
@@ -1103,4 +1104,35 @@ demc=crop(d,poly)
 
 boxEle=extract(demc, poly,mean)
 return(boxEle)
+}
+
+
+
+################################################################################################################
+#					ERA accumulated -> instant values ONLY
+#accepts accumulated values vector and date vector.
+# https://software.ecmwf.int/wiki/pages/viewpage.action?pageId=78310153
+# In ERA5, accumulated and mean rate parameters in the short forecasts from 06:00 and 18:00 are accumulated or averaged since the previous post-processing, even though this is not indicated in the parameter names. See the ERA5 data documentation, section 'Mean rates and accumulations'.
+
+# they are hourly sums if timstep of 1 hour taken - so just divide by step * 3600
+################################################################################################################
+
+#=====================================================================================================================
+#					adjust accumulated timestep point USINFG 'APPROX' TO FILL GAPS
+#=====================================================================================================================
+#accepts vector
+#accum vals are converted to step averages - but need to shift back to original timepoint.
+# era5 are accumulated over the step ie 1h.
+
+# values computed at 8 h therefore is actually mean value for 0730 h so need to interpolate between '8 h' and '9 h' which actually represent means at 0730 h and 0830 h to obtain true 8h value
+
+
+adjAccum_era5<-function(dat){
+
+#NEED TO DEFINE
+# tpoint<-1:length(dat)
+# inbetweenpoint<-seq(1.5,length(tpoint-1),1)
+# interp<-approx(tpoint,dat,xout=inbetweenpoint )
+# point<-interp$y
+# return(point)
 }

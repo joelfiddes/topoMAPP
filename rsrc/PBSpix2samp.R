@@ -13,9 +13,9 @@ wd = "/home/joel/sim/ensembler_scale_sml/"
 priorwd = "/home/joel/sim/scale_test_sml/"
 grid=9
 # IO files
-plotout=(paste0(wd,"/daplot.pdf"))
+plotout=(paste0(wd,"/daplot_median.pdf"))
 load( paste0(wd,"wmat_2.rd"))
-rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+rstack = rstack_save #brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
 # variables
@@ -31,7 +31,7 @@ R=0.016
 Nclust=150
 
 # threshold for converting swe --> sca
-sdThresh <- 0
+sdThresh <- 13
 
 # cores used in parallel jobs
 cores=4
@@ -44,7 +44,7 @@ priorwd = "/home/joel/sim/da_test2/"
 
 grid=1
 # IO files
-plotout=("~/plot_fscacorrect_allcloud2.pdf")
+plotout=(paste0(wd,"/daplot_median.pdf"))
 load( paste0(wd,"wmat_2.rd"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
@@ -63,7 +63,7 @@ R=0.016
 Nclust=150
 
 # threshold for converting swe --> sca
-sdThresh <- 0
+sdThresh <- 13
 
 # cores used in parallel jobs
 cores=4
@@ -75,8 +75,6 @@ landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
 
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 rstack = crop(rstack, landform)
-
-# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 
 # total number of MODIS pixels
 npix = ncell( rstack)
@@ -166,8 +164,29 @@ myarray[myarray>sdThresh]<-1
 #			compute weight ensemble per sample - posterior SWE
 #===============================================================================
  
- we_mat=c()
- for ( i in 1:Nclust ){
+# we_mat=c()
+# for ( i in 1:Nclust ){
+#	# vector of ensemble IDs
+#	ids = as.numeric(names(mylist[[i]]))
+#	
+#	# vector of ensemble weights 
+#	weights = as.numeric((mylist[[i]]))
+#	 #weights[ which.max(weights) ]<-1
+#	# weights[weights<1]<-0
+#	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+#	we <-  myarray_swe[,i,ids] %*%weights
+#	#if(!is.null(dim(we))){we = rowSums(we)}
+#	we_mat=cbind(we_mat, we) # time * samples weighted 
+# 
+# }
+	
+
+#===============================================================================
+#			compute median swe
+#===============================================================================
+
+	we_mat=c()
+ 	for ( i in 1:Nclust ){
 	# vector of ensemble IDs
 	ids = as.numeric(names(mylist[[i]]))
 	
@@ -176,32 +195,65 @@ myarray[myarray>sdThresh]<-1
 	 #weights[ which.max(weights) ]<-1
 	# weights[weights<1]<-0
 	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
-	we <-  myarray_swe[,i,ids] %*%weights
+
+	medn <- ids[which.max(weights)]
+
+	we <-  myarray_swe[,i,medn] 
+
+
+
 	#if(!is.null(dim(we))){we = rowSums(we)}
 	we_mat=cbind(we_mat, we) # time * samples weighted 
  
  }
-	
+
+
 #===============================================================================
 #			compute weight ensemble per sample - posterior sca
 #===============================================================================
  
- we_mat_sca=c()
- for ( i in 1:Nclust ){
+# we_mat_sca=c()
+# for ( i in 1:Nclust ){
+#	# vector of ensemble IDs
+#	ids = as.numeric(names(mylist[[i]]))
+#	
+#	# vector of ensemble weights 
+#	weights = as.numeric((mylist[[i]]))
+#	 
+#	
+#	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+#	we <-  myarray[,i,ids] %*%weights
+#	#if(!is.null(dim(we))){we = rowSums(we)}
+#	we_mat_sca=cbind(we_mat_sca, we) # time * samples weighted 
+# 
+# }
+
+#===============================================================================
+#			compute median sca
+#===============================================================================
+
+	we_mat_sca=c()
+ 	for ( i in 1:Nclust ){
 	# vector of ensemble IDs
 	ids = as.numeric(names(mylist[[i]]))
 	
 	# vector of ensemble weights 
 	weights = as.numeric((mylist[[i]]))
-	 
-	
+	 #weights[ which.max(weights) ]<-1
+	# weights[weights<1]<-0
 	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
-	we <-  myarray[,i,ids] %*%weights
+
+	medn <- ids[which.max(weights)]
+
+	we <-  myarray[,i,medn] 
+
+
+
 	#if(!is.null(dim(we))){we = rowSums(we)}
 	we_mat_sca=cbind(we_mat_sca, we) # time * samples weighted 
  
  }
-
+ 
 #===============================================================================
 #	construct sample observed SCA
 #===============================================================================
@@ -273,7 +325,7 @@ lwd=3
 pdf(plotout,width=7, height=12 )
 
 par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
-
+par(mfrow=c(3,1))
 for ( j in 1:Nval ) {
 
 
@@ -327,8 +379,57 @@ legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blu
 
 dev.off()
 
+#===============================================================================
+#			Grid level fsca plots
+#===============================================================================
+priorfsca = apply(myarray, MARGIN=c(1,3), FUN='sum')/Nclust
+
+# reindex to modis obs
+gfsca = priorfsca[obsIndex.MOD,]
+minprior = apply(gfsca, MARGIN=c(1), FUN='min')
+maxprior = apply(gfsca, MARGIN=c(1), FUN='max')
 
 
+plot(gfsca[,1], type='l')
+for (i in 2:nens){lines(gfsca[,i], type='l')}
+ 
+rst = cellStats(rstack, 'mean', na.rm=T)
+lines(rst/100, col='red')
+postfsca = apply(we_mat_sca, MARGIN=c(1), FUN='sum')/Nclust
+lines(postfsca[obsIndex.MOD], col='blue')
+lines(minprior, col='green')
+lines(maxprior, col='green')
+
+# bounday plots
+y=c(maxprior, rev(minprior))
+x=c(1:length(maxprior), length(maxprior):1)
+
+polygon (x,y, col='green')
+lines(postfsca[obsIndex.MOD], col='blue', lwd=3)
+
+
+
+cloudThreshold <-0.2
+cloudinessMOD = cellStats(is.na(rstack),'sum') / ncell(rstack)
+cloudfreeIndex= which(cloudinessMOD < cloudThreshold)
+#rst = cellStats(rstack, 'mean', na.rm=T)
+
+
+pfsca = postfsca[obsIndex.MOD]
+# replot with cloudfree index
+plot(gfsca[cloudfreeIndex,1], type='l', main = paste0("Grid mean fSCA plot, grid=", gridN, "sdThresh=", sdThresh), xlab= 'doy', ylab='fSCA', xaxt='n')
+for (i in 2:nens){lines(gfsca[cloudfreeIndex,i], type='l')} 
+lines(rst[cloudfreeIndex]/100, col='red')
+lines(pfsca[cloudfreeIndex], col='blue')
+# bounday plots
+y=c(maxprior[cloudfreeIndex], rev(minprior[cloudfreeIndex]))
+x=c(1:length(cloudfreeIndex), length(cloudfreeIndex):1)
+polygon (x,y, col='green')
+lines(rst[cloudfreeIndex]/100, col='red', lwd=2)
+points(rst[cloudfreeIndex]/100, col='red', lwd=2,pch=24)
+lines(pfsca[cloudfreeIndex], col='blue', lwd=2)
+legend("topright",c("sca_prior", "sca_post_median", "sca_obs" ),col= c("green", "blue","red"), lty=c(1,1,1),lwd=lwd)
+axis(side = 1, at =1:length(cloudfreeIndex) , labels=obsTS$x[cloudfreeIndex] )
 
 ##===============================================================================
 ##			an

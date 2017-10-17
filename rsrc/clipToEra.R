@@ -34,14 +34,14 @@ s=xtent@ymin-tol
 e=xtent@xmax+tol
 w=xtent@xmin-tol
 ar= paste(n,w,s,e,sep='/')# region of interest N/W/S/E this corresponds to box centres
-t='00'#00/12 gives 3hr data for sfc retrieval ; 00/06/12/18 gives 6hr data for pl retrieval (3hr not possible) ; 00/12 for accumulated
-stp='3'#3/6/9/12 gives 3hr data for sfc ; 0 gives 6hr data for pl retrieval (3hr not possible)
+t='12'#00/12 gives 3hr data for sfc retrieval ; 00/06/12/18 gives 6hr data for pl retrieval (3hr not possible) ; 00/12 for accumulated
+stp='0'#3/6/9/12 gives 3hr data for sfc ; 0 gives 6hr data for pl retrieval (3hr not possible)
 lt='sfc'# sfc=surface or pl=pressure level
 typ='an'#an=analysis or fc=forecast, depends on parameter - check on ERA gui.
-par= 168.128# parameter code - check on ERA gui.
+par= 129 # geopotential height used to compute upper limit of pressure levels
 tar='spatial/eraExtent.nc'
 grd=paste0(grid,'/',grid)
-dd="20121230/to/20121230"
+dd='1989-01-01'
 
 #request to EWMF
 print('Requesting data from ECWMF.....')

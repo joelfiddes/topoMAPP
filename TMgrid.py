@@ -7,135 +7,127 @@ import os.path
 from listpoints_make import getRasterDims as dims
 import glob
 
+def main(wd, Ngrid, config):
+	gridpath = Ngrid
 
-#====================================================================
-#	TOPOSUB: Toposub.R contains hardcoded "normal" parameters 
-#====================================================================
-from utils import fileSearch
-path=wd
-file="landform.tif"
-x=fileSearch.search(path, file)
-if x != 1: #NOT ROBUST
+	#====================================================================
+	#	TOPOSUB: Toposub.R contains hardcoded "normal" parameters 
+	#====================================================================
+	from utils import fileSearch
+	path=wd
+	file="landform.tif"
+	x=fileSearch.search(path, file)
+	if x != 1: #NOT ROBUST
 
-	print "[INFO]: running TopoSUB for grid " + str(Ngrid)
+		print "[INFO]: running TopoSUB for grid " + str(Ngrid)
 
-	from toposub import toposub as tsub
-	tsub.main(gridpath, config["toposub"]["samples"])	
+		from toposub import toposub as tsub
+		tsub.main(gridpath, config["toposub"]["samples"])	
 
-else:
-	print "[INFO]: TopoSUB already run"
+	else:
+		print "[INFO]: TopoSUB already run"
 
+	#====================================================================
+	#	run toposcale
+	#====================================================================
+	print "[INFO]: Running TopoSCALE"
+	import TMtoposcale
+	TMtoposcale.main(wd, Ngrid, config)
 
-#====================================================================
-#	run toposcale
-#====================================================================
-print "[INFO]: Running TopoSCALE"
-import TMtoposcale
+	#====================================================================
+	#	setup and run simulations
+	#====================================================================
+	import TMsim
+	TMsim.main(Ngrid, config)
 
-#====================================================================
-#	setup and run simulations
-#====================================================================
-import TMsim.py
+	#====================================================================
+	# Informed sampling
+	#====================================================================
+	if config["toposub"]["inform"] == "TRUE":
+		print "[INFO]: Running Toposub INFORM!"
 
-#====================================================================
-# Informed sampling
-#====================================================================
-if config["toposub"]["inform"] == "TRUE":
-	print "[INFO]: Running Toposub INFORM!"
+			# set up sim directoroes #and write metfiles
 
-		# set up sim directoroes #and write metfiles
-	for Ngrid in range(1,int(ncells)+1):
-		gridpath = wd +"/grid"+ str(Ngrid)
-		print gridpath
 		from toposub import toposub_post1 as p1
 		p1.main(gridpath ,config['toposub']['samples'] ,config['geotop']['file1'] ,config['geotop']['targV']) #TRUE requires svf as does more computes 
 
 		from toposub import toposub_pre_inform as inform
 		inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
 
-#====================================================================
-#	run toposcale INFORM!!
-#==================================================================
+	#====================================================================
+	#	run toposcale INFORM!!
+	#==================================================================
 
-	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-	print "[INFO]: Running TopoSCALE INFORM!"
-	import TMtoposcale
-	
-
-
-#====================================================================
-#	Setup Geotop simulations INFORM!!
-#====================================================================
-
-	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-	print "[INFO]: Setup Geotop simulations INFORM!" 
-	import TMsim.py
+		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+		print "[INFO]: Running TopoSCALE INFORM!"
+		import TMtoposcale
+		TMtoposcale.main(wd, Ngrid, config)
+		
 
 
-#====================================================================
-#	Spatialise toposub results SIMULATION MEAN
-#====================================================================
+	#====================================================================
+	#	Setup Geotop simulations INFORM!!
+	#====================================================================
 
-print "[INFO]: Spatialising TopoSUB results...."
+		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
+		print "[INFO]: Setup Geotop simulations INFORM!" 
+		import TMsim
+		TMsim.main(Ngrid, config)
 
-for Ngrid in grid_dirs:	
-	gridpath = str(Ngrid)
+
+	#====================================================================
+	#	Spatialise toposub results SIMULATION MEAN
+	#====================================================================
+
+	print "[INFO]: Spatialising TopoSUB results...."
+
+
 	print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
 	from toposub import toposub_post2 as post2
 	post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["main"]["startDate"],config["main"]["endDate"] )	
 
 
-#====================================================================
-#	Spatialise toposub results LATEST
-#====================================================================
+	#====================================================================
+	#	Spatialise toposub results LATEST
+	#====================================================================
 
-print "[INFO]: Spatialising TopoSUB results...."
-
-for Ngrid in grid_dirs:	
-	gridpath = str(Ngrid)
+	print "[INFO]: Spatialising TopoSUB results...."
 
 	print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
 	from toposub import toposub_postInstant as postInst
 	postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
-#====================================================================
-#	Averaged coarse grid timeseries of toposub results 
-#====================================================================
+	#====================================================================
+	#	Averaged coarse grid timeseries of toposub results 
+	#====================================================================
 
-
-print "[INFO]: Making coarse grid timeseries TopoSUB results...."
-
-for Ngrid in grid_dirs:	
-	gridpath = str(Ngrid)
+	print "[INFO]: Making coarse grid timeseries TopoSUB results...."
 
 	print "[INFO]: running timeseries routines for grid " + str(Ngrid)
 	from toposub import toposub_gridTS as gts
 	gts.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
-#====================================================================
-#	Give pdf of toposub results
-#====================================================================
-#if config["main"]["runtype"] == "bbox":	
-# if config["main"]["runtype"] == "bbox":
+	#====================================================================
+	#	Give pdf of toposub results
+	#====================================================================
+	#if config["main"]["runtype"] == "bbox":	
+	# if config["main"]["runtype"] == "bbox":
 
-# 	print "Spatialising toposub results...."
+	# 	print "Spatialising toposub results...."
 
-# 	for Ngrid in range(1,int(ncells)+1):
-# 		gridpath = wd +"/grid"+ Ngrid
+	# 	for Ngrid in range(1,int(ncells)+1):
+	# 		gridpath = wd +"/grid"+ Ngrid
 
 
-# 		print "running spatialisation routines for grid " + Ngrid
-# 		from toposub import toposub_post1 as post1
-# 		post1.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
+	# 		print "running spatialisation routines for grid " + Ngrid
+	# 		from toposub import toposub_post1 as post1
+	# 		post1.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
-#====================================================================
-#	Get MODIS SCA
-#====================================================================
+	#====================================================================
+	#	Get MODIS SCA
+	#====================================================================
 
-if config["modis"]["getMODISSCA"] == "TRUE":
-	for Ngrid in grid_dirs:	
-		gridpath = str(Ngrid)
-
+	if config["modis"]["getMODISSCA"] == "TRUE":
 
 		if os.path.exists(gridpath):
 
@@ -165,9 +157,17 @@ if config["modis"]["getMODISSCA"] == "TRUE":
 
 			# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
-else:
-	print "[INFO]: No MODIS SCA retrieved"
+	else:
+		print "[INFO]: No MODIS SCA retrieved"
 
+
+# calling main
+if __name__ == '__main__':
+	import sys
+	wd          = sys.argv[1]
+	Ngrid      = sys.argv[2]
+	config      = sys.argv[3]
+	main(wd, Ngrid, config)
 
 #====================================================================
 #	Retrive latest sentinel 2
