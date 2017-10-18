@@ -116,19 +116,19 @@ dem<-rast.mosaic
 }else{
 	dem <- raster(demfiles)
 }
-setwd(wd)
+#setwd(wd)
 
 # crop merged raster to eraExtent
 ele <- crop(dem, eraExtent)
 
 #outputs
-writeRaster(ele, 'predictors/ele.tif', overwrite=TRUE)
+writeRaster(ele, paste0(wd, 'predictors/ele.tif'), overwrite=TRUE)
 
 eraExtent2=crop(rst,aoi, snap='out')
-writeRaster(eraExtent2, 'spatial/eraExtent.tif', overwrite=TRUE)
+writeRaster(eraExtent2, paste0(wd, 'spatial/eraExtent.tif'), overwrite=TRUE)
 
 # plot of setup
-pdf('spatial/extentMap.pdf')
+pdf(paste0(wd, 'spatial/extentMap.pdf'))
 plot(dem, main="AOI=red, ERA-grid=green")
 plot(aoi,add=T, border='red', lwd=3)
 plot(eraExtent,add=T, col='green', lwd=3)
