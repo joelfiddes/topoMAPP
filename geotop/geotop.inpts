@@ -1,0 +1,256 @@
+!SCRIPT-GENERATED EXPERIMENT FILE
+!SCRIPT-GENERATED EXPERIMENT FILE
+!SCRIPT-GENERATED EXPERIMENT FILE
+!SCRIPT-GENERATED EXPERIMENT FILE
+!=============================================================================
+!  RUN DEFINITION 
+!=============================================================================
+Latitude               =
+Longitude              =
+TimeStepEnergyAndWater = 3600
+InitDateDDMMYYYYhhmm = 01/10/1995 00:00 ,01/10/2000 00:00
+EndDateDDMMYYYYhhmm =  01/10/2000 00:00  ,01/10/2012 00:00
+NumSimulationTimes     = 1
+DtPlotPoint            =24
+DtPlotDischarge        =24
+
+!=============================================================================
+!  PERMAFROST SPIN-UP
+!=============================================================================
+!TimeStepEnergyAndWater =3600
+!InitDateDDMMYYYYhhmm   = 01/10/1979 00:00, 01/10/1979 00:00, 01/10/1984 00:00
+!EndDateDDMMYYYYhhmm    = 01/10/1984 00:00, 01/10/1984 00:00, 01/10/2011 00:00
+!NumSimulationTimes     = 10,10,1
+!DtPlotPoint            = 0,0,24
+!StandardTimeSimulation =      0
+
+!vector whose i-th component is the numbers of layers (from the top)
+!that are spinned up in the simulation period i
+
+!SpinUpLayerBottom = 5,7,7
+
+
+
+!InitInNewPeriods = 1
+
+!In the non spinned-up layers, temperature is derived according to the thermal 
+!capacity and geothermal heat flux, tot water content is equal to the initial 
+!value is the layer is below the weir, otherwise is equal to the value of the 
+!deepest layer that was spinned up
+!=============================================================================
+
+
+!=============================================================================
+!  RECOVERY
+!=============================================================================
+SuccessfulRunFile 	   = "out/_SUCCESSFUL_RUN"
+FailedRunFile          = "out/_FAILED_RUN"
+
+!=============================================================================
+!  MODEL SETTINGS
+!=============================================================================
+PointSim      = 1
+WaterBalance  = 1
+EnergyBalance = 1
+StandardTimeSimulation = 0
+FlagSkyViewFactor      = 1
+CalculateCastShadow    = 1
+
+
+FreeDrainageAtBottom          = 0
+FreeDrainageAtLateralBorder   = 1
+
+
+!=============================================================================
+!  NUMERICS AND CONVERGENCE
+!=============================================================================
+UpdateHydraulicConductivity = 1
+ExitMinLambdaWater = 0
+RichardTol =1e-04
+RichardMaxIter =1000
+MaxTimesHalvingTimeStepWater =20
+MinLambdaWater =1e-10
+MinRatioKactualToKSat =1e-08
+HeatEqTol=1e-04
+HeatEqMaxIter = 1000
+MinLambdaEnergy = 1e-12
+!=============================================================================
+!  INPUT
+!=============================================================================
+
+!--- METEO SETTINGS -----------------------
+MoninObukhov                 = 1
+Vmin                         = 0.5
+RHmin                        = 10
+
+!--- METEO FILE ---------------------------
+NumberOfMeteoStations        = 1
+MeteoStationElevation        =4670.34392990333
+MeteoStationWindVelocitySensorHeight = 10
+MeteoStationTemperatureSensorHeight  = 2
+MeteoFile                   ="meteo"
+
+HeaderDateDDMMYYYYhhmmMeteo = "Date"							
+HeaderIPrec                 = "Prec"
+!HeaderAirPress              = "Pair"
+HeaderWindVelocity          = "Ws"
+HeaderWindDirection			= "Wd"
+HeaderRH                    = "RH"
+HeaderAirTemp               = "Tair"
+HeaderSWglobal              = "SW"
+HeaderLWin                  = "LW"
+!HeaderSWdirect 		="sdir"
+!HeaderSWdiffuse 	="sdif"
+
+
+!=============================================================================
+!   HORIZON
+!=============================================================================
+!HorizonPointFile  = "/hor/hor_point"
+!HeaderHorizonAngle =  "Angle"
+!HeaderHorizonHeight =  "Height"
+
+!=============================================================================
+!   POINT INPUT
+!=============================================================================
+PointFile = 						"listpoints"
+HeaderPointID								    = "id"
+HeaderPointElevation     						= "ele"
+!HeaderPointLandCoverType 						= "landcover"
+!HeaderPointSoilType 							= "soil"
+HeaderPointSlope         						= "slp"
+HeaderPointAspect        						= "asp"
+HeaderPointSkyViewFactor 						= "svf"
+HeaderPointDrainageLateralDistance 				= "dist"
+HeaderPointDepthFreeSurface 					= "free"
+HeaderPointMaxSWE 								= "maxswe"
+HeaderPointHorizon 								= "hor"
+
+!=============================================================================
+!  SURFACE SETTINGS
+!=============================================================================
+!PointElevation =367
+
+SoilRoughness  = 0.1
+SoilAlbVisDry  = 0.2
+SoilAlbNIRDry  = 0.2
+SoilAlbVisWet  = 0.18
+SoilAlbNIRWet  = 0.18
+SoilEmissiv    = 0.98
+SurFlowResLand = 0.5
+
+!VegHeight      = 400
+!LSAI           = 0.6
+!CanopyFraction = 0.8
+!RootDepth      = 300
+
+!--- DISCRETIZATION AND INIT ------------------
+!--- DISCRETIZATION AND INIT ------------------
+SoilLayerThicknesses   = 20,50,125,312.5,781.25,1953.125,6758.125
+InitWaterTableDepth    = 2000
+InitSoilTemp           = -1
+BottomBoundaryHeatFlux = 0.05
+
+
+!=============================================================================
+!   SNOW SETTINGS
+!=============================================================================
+SnowCorrFactor=1
+RainCorrFactor=1
+
+ThresTempRain=3
+ThresTempSnow=0
+AlbExtParSnow=10
+FreshSnowReflVis=0.9
+FreshSnowReflNIR=0.65
+SnowEmissiv  =0.98
+SnowRoughness=0.1
+ThresSnowSoilRough=1
+
+!DISCRETIZATION
+MaxWaterEqSnowLayerContent=10
+SWEtop   =40
+SWEbottom=20
+MaxSnowLayersMiddle=4
+
+!REMOVAL IN STEEP SLOPES
+SnowSMIN=30
+SnowSMAX=80
+SnowCURV=200
+
+!DENSIFICATION
+IrriducibleWatSatSnow=0.02
+DrySnowDefRate=1
+SnowDensityCutoff=100
+WetSnowDefRate=1
+SnowViscosity=1e+06
+
+!=============================================================================
+!  SOIL SETTINGS
+!=============================================================================
+BottomBoundaryHeatFlux = 0.05
+ThermalCapacitySoilSolids     = 1.8E6
+ThermalConductivitySoilSolids = 2.5
+
+FreeDrainageAtLateralBorder = 1
+PointDepthFreeSurface       = 2000
+
+ThetaSat =0.374
+ThetaRes =0.055
+AlphaVanGenuchten             =0.1
+NVanGenuchten                 =2
+NormalHydrConductivity        =1
+LateralHydrConductivity       =1
+
+
+!=============================================================================
+! POINT OUTPUT: SUBSURFACE
+!=============================================================================
+
+!--- STRUCTURE ------------
+SoilAveragedTempProfileFileWriteend = "out/ground"
+SoilPlotDepths = 100, 200, 500,5000,9999
+
+!--- VARIABLES ------------
+DefaultSoil = 0
+DateSoil    = 1
+PeriodSoil  = 2
+RunSoil     = 3
+IDPointSoil = 4 
+TempSoil    = 5,6,7,8,9
+
+
+!=============================================================================
+! POINT OUTPUT: SURFAEC FLUXES AND PROPERTIES 
+!=============================================================================
+
+!--- STRUCTURE ------------
+PointOutputFileWriteEnd = "out/surface"
+
+!--- VARIABLES ------------
+DefaultPoint                =  0
+DatePoint                   =  1
+PeriodPoint                 =  2
+RunPoint                    =  3
+IDPointPoint                =  4
+AirTempPoint                =  5
+TsurfPoint                  =  6
+PrainPoint                  =  7
+PsnowPoint                  =  8
+SnowDepthPoint              =  9
+SWEPoint                    = 10
+SnowMeltedPoint             = 11
+SWinPoint                   = 12
+SWupPoint                   = 13
+SoilHeatFluxPoint           = 14
+
+!=============================================================================
+!   RUN AVERAGED OUTPUT
+!=============================================================================
+RunSoilAveragedTemperatureFile         = "out/RS_Tmean"
+
+DischargeFile = "out/discharge"
+
+!CONTINUOUS RECOVERY
+!ContinuousRecovery = 50
+!SubfolderRecoveryFiles = "out/rec"

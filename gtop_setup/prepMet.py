@@ -19,9 +19,9 @@ Todo:
 path2script = "./rsrc/setupSim.R"
 
 # main
-def main(wd, svfComp, tscale,pscale):
+def main(wd, svfComp, tscale,pscale, swscale, lwscale):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[wd, svfComp, tscale, pscale])
+    run_rscript_fileout(path2script,[wd, svfComp, tscale, pscale, swscale,lwscale])
 
 # functions
 def run_rscript_stdout(path2script , args):
@@ -48,7 +48,9 @@ if __name__ == '__main__':
     svfComp  = sys.argv[2]
     tscale  = sys.argv[3]
     pscale  = sys.argv[4]
-    main(wd, svfComp, tscale,pscale)
+    swscale  = sys.argv[5]
+    lwscale  = sys.argv[6]
+    main(wd, svfComp, tscale,pscale, swscale, lwscale)
 
 
 

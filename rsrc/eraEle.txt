@@ -1,0 +1,4 @@
+#reprocees existing sca
+
+input dir = 
+lanfrom = 

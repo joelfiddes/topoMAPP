@@ -16,7 +16,7 @@ require(raster)
 args = commandArgs(trailingOnly=TRUE)
 wd=args[1]
 sca_wd=args[2]
-#sptaialsubset=  raster("/home/joel/sim/ensembler_scale_sml/ensemble0/grid9/landform.tifcrop")
+#sptaialsubset=  raster("/home/joel/sim/ensembler_scale_sml/ensemble0/grid9/landform.tif")
 #tempsubset =
 #year = substr(list.files(pattern="MOD*"),13,16)
 #doy = substr(list.files(pattern="MOD*"),18,20)
@@ -29,19 +29,30 @@ cloudThreshold <- 100 # max cloud % to be considered "cloudfree"
 #Set the input paths to raster and shape file
 setwd(sca_wd)
 
+
+if( length(list.files(pattern="MOD*")) >0) {
+
 MOD=stack(list.files(pattern="MOD*"))
 MOD.names = names(MOD) # explicitly capture names to avoid loss
 MOD [MOD >100]<-NA
 names(MOD)<- MOD.names
-
 MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
+}
+
+
+if( length(list.files(pattern="MYD*")) >0) {
 
 MYD=stack(list.files(pattern="MYD*"))
+
 MYD.names = names(MYD)
+
 MYD [MYD >100]<-NA
+
 names(MYD)<- MYD.names
+
 MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 #Npoints=dim(MOD)[1]
+
 
 # Fill missing layers in each stack
 
@@ -91,7 +102,7 @@ MOD.na <- length(which(is.na(values(MOD))) )
 MOD.fill.na <- length(which(is.na(values(MOD.fill))) )
 
 print(paste0("orig NAs in MOD=",MOD.na," New NAs in filled MOD=",MOD.fill.na,""))
-
+}else {MOD.fill <- MOD}
 
 #compute cloudiness / NA
 cloudinessMOD = cellStats(is.na(MOD.fill),'sum') / ncell(MOD.fill)

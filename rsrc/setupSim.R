@@ -19,6 +19,8 @@ wd=args[1] #'/home/joel/sim/topomap_test/grid1' #
 svfComp=args[2]
 tscale=as.numeric(args[3])
 pscale=as.numeric(args[4])
+swscale=as.numeric(args[5])
+lwscale=as.numeric(args[6])
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
@@ -79,10 +81,10 @@ tail(Date)
 		RH=round(rPoint[,i],2)
 		Wd=round(wdPoint[,i],2)
 		Ws=round(wsPoint[,i],2)
-		SW=round(sol[,i],2)
+		SW=round(sol[,i],2)+swscale
 		#sdir=round(solDir[,i],2)
 		#sdif=round(solDif[,i],2)
-		LW=round(lwPoint[,i],2)
+		LW=round(lwPoint[,i],2)+lwscale
 		Prec=round(pSurf_lapse[,i],5) *pscale
 		meteo=cbind(Date,Tair,RH,Wd,Ws,SW,LW,Prec)
 		#meteo=cbind(Date,Tair,RH,Wd,Ws,sdif,sdir,LW,Prec)

@@ -67,6 +67,8 @@ for i in range(0,N):
 	print "Running ensemble member:" + str(i)
 	pbias = df['pbias'][i]
 	tbias = df['tbias'][i]
+	lwbias = df['lwbias'][i]
+	swbias = df['swbias'][i]
 
 	print "[INFO]: Config ensemble members"
 	from configobj import ConfigObj

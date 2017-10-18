@@ -130,6 +130,6 @@ writeRaster(eraExtent2, 'spatial/eraExtent.tif', overwrite=TRUE)
 # plot of setup
 pdf('spatial/extentMap.pdf')
 plot(dem, main="AOI=red, ERA-grid=green")
-plot(aoi,add=T, col='red', lwd=3)
+plot(aoi,add=T, border='red', lwd=3)
 plot(eraExtent,add=T, col='green', lwd=3)
 dev.off()

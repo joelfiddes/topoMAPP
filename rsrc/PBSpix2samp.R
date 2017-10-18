@@ -182,7 +182,7 @@ myarray[myarray>sdThresh]<-1
 	
 
 #===============================================================================
-#			compute median swe
+#			compute modal swe
 #===============================================================================
 
 	we_mat=c()
@@ -229,7 +229,7 @@ myarray[myarray>sdThresh]<-1
 # }
 
 #===============================================================================
-#			compute median sca
+#			compute modal sca
 #===============================================================================
 
 	we_mat_sca=c()
@@ -303,7 +303,7 @@ rmse <- function(error)
 #samples = extract(landform,meta[pkvec,2:3])
 
 #===============================================================================
-#	Grid 9
+#	Read locations
 #===============================================================================
 
 # read locations
@@ -320,6 +320,8 @@ myList <- lapply(myfilenames, read.csv)
 #			New plot routine
 #===============================================================================
 
+
+
 # generic plot pars
 lwd=3
 pdf(plotout,width=7, height=12 )
@@ -328,9 +330,157 @@ par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
 par(mfrow=c(3,1))
 for ( j in 1:Nval ) {
 
+## POSTERIOR
+##==========================Compute median=====================================
 
 # sample ID
 id=samples[j]
+
+sample= id
+ndays = length(myarray_swe[ , 1, 1])
+
+median.vec = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = mylist[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(mylist[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:100)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+median.vec = c(median.vec, med$y)
+}
+
+##==========================Compute quantiles=====================================
+
+low.vec = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = mylist[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(mylist[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:100)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
+low.vec = c(low.vec, med$y)
+}
+
+
+high.vec = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = mylist[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(mylist[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:100)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
+high.vec = c(high.vec, med$y)
+}
+
+
+# PRIOR
+
+# MEDIAN
+id=samples[j]
+
+sample= id
+ndays = length(myarray_swe[ , 1, 1])
+
+median.prior = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = rep(0.01,100)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.5)
+median.prior = c(median.prior, med$y)
+}
+
+
+# 5%
+id=samples[j]
+
+sample= id
+ndays = length(myarray_swe[ , 1, 1])
+
+low.prior = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = rep(0.01,100)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.05)
+low.prior = c(low.prior, med$y)
+}
+
+# 95%
+id=samples[j]
+
+sample= id
+ndays = length(myarray_swe[ , 1, 1])
+
+high.prior = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+w = rep(0.01,100)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
+high.prior = c(high.prior, med$y)
+}
+
+
+
+
+
+
+
 simindex=paste0('S',formatC(id, width=5,flag='0'))# samples[1]
 
 #
@@ -363,17 +513,38 @@ rms = rmse(error)
 
 # plot prior,post, obs
 # plot prior,post, obs
-plot(prior_swe, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j],' RMSE=',round(rms,2))) # prior
+plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j],' RMSE=',round(rms,2))) # prior
 for (i in 1:nens){lines(myarray_swe[,id,i], col='grey')}
-lines(post_swe,col='red',lwd=lwd) #post
+
+# 90 percentile and median prior
+y = c(low.prior ,rev(high.prior))
+x = c(1:length(low.prior), rev(1:length(high.prior)) )
+polygon (x,y, col=rgb(1, 0, 0,0.5))
+
+
+
+# 90 percentile and median posterioir
+y = c(low.vec ,rev(high.vec))
+x = c(1:length(low.vec), rev(1:length(high.vec)) )
+polygon (x,y, col=rgb(0, 0, 1,0.5))
+lines(median.vec, col='blue',lwd=3)
+lines(median.prior, col='red',lwd=3)
+# posterior mode
+#lines(post_swe,col='green',lwd=lwd) #post
+
+#obs
 points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
-lines(prior_swe, col='blue',lwd=3)
+
+# modal prior
+#lines(prior_swe, col='red',lwd=3)
+
+
 #lines(ma(post,20), col='green',lwd=3)
 #lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
 #points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
 #lines(post_sca, col='red', lwd=lwd , lty=2)
 axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)
+legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd)
 
 }
 
@@ -430,6 +601,32 @@ points(rst[cloudfreeIndex]/100, col='red', lwd=2,pch=24)
 lines(pfsca[cloudfreeIndex], col='blue', lwd=2)
 legend("topright",c("sca_prior", "sca_post_median", "sca_obs" ),col= c("green", "blue","red"), lty=c(1,1,1),lwd=lwd)
 axis(side = 1, at =1:length(cloudfreeIndex) , labels=obsTS$x[cloudfreeIndex] )
+
+
+#===============================================================================
+#			quantile plots
+#===============================================================================
+
+# - time *ensemble for sample n
+
+sample= 107
+ndays = length(myarray_swe[ , 1, 1])
+
+median.vec = c()
+for ( i in 1: ndays){
+
+mu = myarray_swe[ i, sample, ]
+DF.NEW <- 1:nens
+DF.NEW <- merge(DF.NEW, mu) 
+
+w = mylist[[ sample ]]
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$Freq))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$Freq),dfOrder$mu , xout=0.5)
+median.vec = c(median.vec, med$y)
+}
 
 ##===============================================================================
 ##			an

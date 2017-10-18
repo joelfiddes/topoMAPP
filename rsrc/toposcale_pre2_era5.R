@@ -65,8 +65,8 @@ dir.create(outRootmet,  showWarnings=FALSE)
 #=======================================================================================================
 # All times in UTC + 0
 
-#INTERPOLATE TIME
-nc=nc_open(infilePLEVEL)
+#INTERPOLATE nc
+TIME=nc_open(infilePLEVEL)
 time = ncvar_get( nc,'time')
 time2=time
 z <- time2*60*60 #make seconds

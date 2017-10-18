@@ -42,7 +42,7 @@ config = ConfigObj(sys.argv[1])
 wd = config["main"]["wd"]
 
 #====================================================================
-#	Creat sim dir if doesnt exist
+#	Creat wd dir if doesnt exist
 #====================================================================
 directory = os.path.dirname(wd)
 if not os.path.exists(directory):

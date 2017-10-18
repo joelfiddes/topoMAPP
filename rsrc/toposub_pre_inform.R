@@ -72,7 +72,7 @@ write.table(x, paste(gridpath,"/decompR.txt",sep=""), sep=",",col.names=F, row.n
 meanX=read.table( paste(gridpath, '/meanX_', targV,'.txt', sep=''), sep=',')
 
 # compute coeffs of linear model
-coeffs=linMod2(meanX=meanX,listpoints=listpoints, predNames=predNames2,col=targV, svfCompute=FALSE) #linear model
+coeffs=linMod2(meanX=meanX,listpoints=listpoints, predNames=predNames2,col=targV, svfCompute=svfCompute) #linear model
 
 write(coeffs, paste(gridpath,"/coeffs.txt",sep=""),ncolumns=7, append=TRUE, sep=",") # 6 cols if no svf
 weightsMean<-read.table(paste(gridpath,"/coeffs.txt",sep=""), sep=",",header=T)

@@ -35,16 +35,22 @@ draws <- rlogitnorm(n , mu, sigma)
 
 cv=lognormDraws(N,0.4,0.01)	
 alpha=lognormDraws(N,0.2,0.01)	# SoilAlbVisDry
-pbias=lognormDraws(N,1,0.4)	
-tbias=normDraws(N,0,0.4)
-df=data.frame(cv,alpha,pbias,tbias)
+pbias=lognormDraws(N,1,0.5)	
+tbias=normDraws(N,0,1)
+swbias=normDraws(N,0,20)
+	
+lwbias=normDraws(N,0,20)
+
+df=data.frame(pbias,tbias,swbias,lwbias)
 write.csv(df,'ensemble.csv')
 
-# par(mfrow=c(2,2))
-# plot(density(df$tbias))
-# plot(density(df$pbias))
-# plot(density(df$alpha))
-# plot(density(df$cv))
+pdf("ensembleDistributions.pdf")
+par(mfrow=c(2,2))
+plot(density(tbias))
+plot(density(pbias))
+plot(density(swbias))
+ plot(density(lwbias))
+ dev.off()
 
 
 

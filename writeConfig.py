@@ -11,7 +11,7 @@ The config files that ConfigObj will read and write are based on the 'INI' forma
 
 from configobj import ConfigObj
 config = ConfigObj()
-config.filename = 'test.ini'
+config.filename = 'test_radflux_era5.ini'
 
 
 #=================================================================
@@ -23,12 +23,12 @@ config.filename = 'test.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test_era5/'
+config['main']['wd'] = '/home/joel/sim/test_radflux_era5/'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2015-09-01'
-config['main']['endDate'] = '2015-09-03'
+config['main']['endDate'] = '2016-09-01'
 
 #config['main']['lonw'] = 8
 #config['main']['lats'] = 46
@@ -60,14 +60,14 @@ config['era-interim'] = {}
 # These configs are not independent
 config['era-interim']['grid'] = 0.3 #0.75, 0.3
 config['era-interim']['dataset'] = "era5" #"era5" "interim"
-config['era-interim']['domain'] = "/home/joel/src/topoMAPP/dat/era5grid30.tif" #"/home/joel/src/topoMAPP/dat/eraigrid75.tif"
+config['era-interim']['domain'] = "/home/joel/src/topoMAPP/dat/era5grid30.tif" # "/home/joel/src/topoMAPP/dat/eraigrid75.tif" #"/home/joel/src/topoMAPP/dat/era5grid30.tif" #
 
 # https://software.ecmwf.int/wiki/display/CKB/Does+downloading+data+at+higher+resolution+improve+the+output
 #=================================================================
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 10
+config['toposub']['samples'] = 150
 config['toposub']['inform'] = 'TRUE'
 
 #=================================================================
@@ -75,7 +75,7 @@ config['toposub']['inform'] = 'TRUE'
 #=================================================================
 config['toposcale'] = {}
 config['toposcale']['swTopo'] = 'FALSE'
-config['toposcale']['svfCompute'] = 'FALSE'
+config['toposcale']['svfCompute'] = 'TRUE'
 config['toposcale']['pfactor'] = 0.25
 
 #=================================================================
@@ -84,8 +84,8 @@ config['toposcale']['pfactor'] = 0.25
 config['geotop'] = {}
 
 # Define target variable  (make a list possible here)
-config['geotop']['file1'] = 'ground.txt' #'ground.txt' #'
-config['geotop']['targV'] = 'X100.000000' #'snow_water_equivalent.mm.' # 'X100.000000' # 
+config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
+config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
 #config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
 #config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
 
@@ -129,6 +129,8 @@ config['modis']['options_file_NDVI'] = '/home/joel/src/topoMAPP/DA/optionsNDVI.j
 config['da'] = {}
 config['da']['pscale'] = 1 #factor to multiply precip by
 config['da']['tscale'] = 0 #factor to add to temp
+config['da']['lwscale'] = 0 #factor to add to temp
+config['da']['swscale'] = 0 #factor to add to temp
 
 config.write()
 

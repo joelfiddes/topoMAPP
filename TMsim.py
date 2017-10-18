@@ -24,7 +24,7 @@ def main(Ngrid, config):
 
 	 	print "[INFO]: Creating met files...."
 	 	from gtop_setup import prepMet as met
-		met.main(gridpath, config["toposcale"]["svfCompute"],config["da"]["tscale"],config["da"]["pscale"])
+		met.main(gridpath, config["toposcale"]["svfCompute"],config["da"]["tscale"],config["da"]["pscale"],config["da"]["swscale"],config["da"]["lwscale"])
 
 
 		print "[INFO]: extract surface properties"
