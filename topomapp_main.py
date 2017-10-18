@@ -44,9 +44,9 @@ wd = config["main"]["wd"]
 #====================================================================
 #	Creat wd dir if doesnt exist
 #====================================================================
-directory = os.path.dirname(wd)
-if not os.path.exists(directory):
-	os.makedirs(directory)
+#directory = os.path.dirname(wd)
+if not os.path.exists(wd):
+	os.makedirs(wd)
 print "[INFO]: Simulation directory:" + wd  
 
 #====================================================================
@@ -85,7 +85,7 @@ if config["main"]["initSim"] == "TRUE":
 #==================================================================== 
 configfilename = os.path.basename(sys.argv[1])
 
-config.filename = wd + configfilename
+config.filename = wd +  "/" + configfilename
 config.write()
 
 #====================================================================
