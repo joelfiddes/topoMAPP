@@ -32,10 +32,16 @@ def main(wd, Ngrid, config):
 		box.main(gridpath, str(Ngrid2))
 
 		from toposcale import tscale_plevel as plevel
-		plevel.main(gridpath, str(Ngrid2), "rhumPl")
-		plevel.main(gridpath, str(Ngrid2), "tairPl")
-		plevel.main(gridpath, str(Ngrid2), "uPl")
-		plevel.main(gridpath, str(Ngrid2), "vPl")
+		
+		from joblib import Parallel, delayed 
+		import multiprocessing 
+		jobs=["rhumPl","tairPl","uPl","vPl"]
+		Parallel(n_jobs=4)(delayed(plevel.main)(gridpath, str(Ngrid2), i) for i in jobs)
+
+		# plevel.main(gridpath, str(Ngrid2), "rhumPl")
+		# plevel.main(gridpath, str(Ngrid2), "tairPl")
+		# plevel.main(gridpath, str(Ngrid2), "uPl")
+		# plevel.main(gridpath, str(Ngrid2), "vPl")
 
 		from toposcale import tscale_sw as sw
 		sw.main( gridpath, str(Ngrid2), config["toposcale"]["swTopo"], config["main"]["tz"]) #TRUE requires svf as does more computes 

@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 
-# DEBUG lines
-# import ipdb
-# ipdb.set_trace
-
 """
 INI file should be configured named and supplied as argument of fullpathtofile or just filename if in curent wd eg: 
 		
 		$ python writeConfig.py
 
 		$ python topomapp_main.py test.ini &> test.log
-
 """
 
 import sys
@@ -21,12 +16,6 @@ import os.path
 from listpoints_make import getRasterDims as dims
 import glob
 import joblib
-
-#Are these needed?
-#sys.path.append("/home/joel/src/topoMAPP/")
-#print sys.path
-#print sys.argv[0]
-
 
 #====================================================================
 #	Timer
@@ -152,7 +141,7 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 		os.mkdir(eraDir)
 
 
-	from getERA import eraRetrievePLEVEL as plevel
+	from getERA import eraRetrievePLEVEL_pl as plevel
 	print "Retrieving ECWMF pressure-level data"
 	plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
 
@@ -317,22 +306,3 @@ print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
 
 
 
-	# from joblib import Parallel, delayed 
-		# import multiprocessing 
-
-		# def processInput(Ngrid): 
-		# 			gridpath = wd +"/grid"+ str(Ngrid)
-
-		# 			print "[INFO]: preparing surface layer " + str(Ngrid)
-		# 			from domain_setup import makeSurface as surf 
-		# 			surf.main(gridpath, config["modis"]["MODISdir"] )
-
-		# 			print "[INFO]: running TopoSUB for grid " + str(Ngrid)
-		# 			from toposub import toposub as tsub
-		# 			tsub.main(gridpath, config["toposub"]["samples"])	 	
-
-		# #if __name__ == '__main__': 
-		# # what are your inputs, and what operation do you want to # perform on each input. For example... 
-		# inputs = range(1,int(ncells)+1) 
-		# num_cores = multiprocessing.cpu_count() 
-		# results = Parallel(n_jobs=4)(delayed(processInput)(Ngrid) for Ngrid in inputs) 

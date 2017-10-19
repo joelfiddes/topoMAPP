@@ -51,21 +51,30 @@ def main(Ngrid, config):
 	if os.path.exists(gridpath):
 
 	 	print "[INFO]: Simulations grid " + str(Ngrid) + " running (parallel model runs)"
-		batchfile="batch.sh"
+		# batchfile="batch.sh"
 
-		sim_entries=gridpath +"/S*"
+		# sim_entries=gridpath +"/S*"
 
-		f = open(batchfile, "w+")
-		f.write("#!/bin/bash"+ "\n")
-		f.write("cd " + config["geotop"]["lsmPath"] + "\n")
-		f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
-		f.close()
+		# f = open(batchfile, "w+")
+		# f.write("#!/bin/bash"+ "\n")
+		# f.write("cd " + config["geotop"]["lsmPath"] + "\n")
+		# f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
+		# f.close()
 
-		import os, sys, stat
-		os.chmod(batchfile, stat.S_IRWXU)
+		# import os, sys, stat
+		# os.chmod(batchfile, stat.S_IRWXU)
 
-		cmd     = ["./" + batchfile]
-		subprocess.check_output( "./" + batchfile )
+		# cmd     = ["./" + batchfile]
+		# subprocess.check_output( "./" + batchfile )
+
+		# = =
+		import subprocess
+		#FNULL = open(os.devnull, 'w')    #use this if you want to suppress output to stdout from the subprocess
+		from joblib import Parallel, delayed 
+		import multiprocessing 
+		jobs = glob.glob(gridpath +"/S*")
+		num_cores = 4 #multiprocessing.cpu_count()
+		Parallel(n_jobs=num_cores)(delayed(subprocess.Popen)(["./geotop1.226", i ]) for i in jobs)
 
 	else:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
