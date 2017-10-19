@@ -14,7 +14,7 @@ gridN = 2
 #wd = "/home/joel/sim/ensembler3/"
 #priorwd = "/home/joel/sim/da_test2/" 
 wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim
-priorwd = "/home/joel/sim/test_radflux/
+priorwd = "/home/joel/sim/test_radflux/"
 grid=2
 # IO files
 plotout=(paste0(wd,"/daplot_median.pdf"))
