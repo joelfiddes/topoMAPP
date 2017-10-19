@@ -75,37 +75,39 @@ def main(wd, Ngrid, config):
 		TMsim.main(Ngrid, config)
 
 
-	#====================================================================
-	#	Spatialise toposub results SIMULATION MEAN
-	#====================================================================
 
-	print "[INFO]: Spatialising TopoSUB results...."
+	if spatialResults == "TRUE":
+		#====================================================================
+		#	Spatialise toposub results SIMULATION MEAN
+		#====================================================================
 
-
-	print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
-	from toposub import toposub_post2 as post2
-	post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["main"]["startDate"],config["main"]["endDate"] )	
+		print "[INFO]: Spatialising TopoSUB results...."
 
 
-	#====================================================================
-	#	Spatialise toposub results LATEST
-	#====================================================================
+		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
+		from toposub import toposub_post2 as post2
+		post2.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"],config["main"]["startDate"],config["main"]["endDate"] )	
 
-	print "[INFO]: Spatialising TopoSUB results...."
 
-	print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
-	from toposub import toposub_postInstant as postInst
-	postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
+		#====================================================================
+		#	Spatialise toposub results LATEST
+		#====================================================================
 
-	#====================================================================
-	#	Averaged coarse grid timeseries of toposub results 
-	#====================================================================
+		print "[INFO]: Spatialising TopoSUB results...."
 
-	print "[INFO]: Making coarse grid timeseries TopoSUB results...."
+		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
+		from toposub import toposub_postInstant as postInst
+		postInst.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
-	print "[INFO]: running timeseries routines for grid " + str(Ngrid)
-	from toposub import toposub_gridTS as gts
-	gts.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
+		#====================================================================
+		#	Averaged coarse grid timeseries of toposub results 
+		#====================================================================
+
+		print "[INFO]: Making coarse grid timeseries TopoSUB results...."
+
+		print "[INFO]: running timeseries routines for grid " + str(Ngrid)
+		from toposub import toposub_gridTS as gts
+		gts.main(gridpath, config["toposub"]["samples"],config["geotop"]["file1"],config["geotop"]["targV"] )	
 
 	#====================================================================
 	#	Give pdf of toposub results

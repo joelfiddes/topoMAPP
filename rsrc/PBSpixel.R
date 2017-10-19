@@ -3,9 +3,9 @@
 # ======== code ===================
 
 # env
-wd = "/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
-priorwd = "/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
-grid=9
+wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
+priorwd = "/home/joel/sim/test_radflux/" #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
+grid=2 #9
 # output
 outfile = "wmat_2.rd" #"wmat_trunc20.rd"
 
@@ -27,7 +27,7 @@ rstack = crop(rstack, landform)
 # variables
 
 # number of ensembles
-nens <- 50 #50
+nens <- 100 #50 #50
 
 # R value for PBS algorithm
 R <- 0.016

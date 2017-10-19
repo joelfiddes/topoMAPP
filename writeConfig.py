@@ -52,6 +52,7 @@ config['main']['initGrid'] = 1 # optional subset of grids to init sim with, can 
 # option to supply own dem - doesnt work yet
 config['main']['demexists'] = 'FALSE'
 config['main']['dempath'] = '/home/joel/Downloads/20170904031934_280341969.tif'
+config['main']['spatialResults'] = 'FALSE'
 #=================================================================
 # ERA-Interim
 #=================================================================

@@ -20,6 +20,7 @@ import logging
 import os.path
 from listpoints_make import getRasterDims as dims
 import glob
+import joblib
 
 #Are these needed?
 #sys.path.append("/home/joel/src/topoMAPP/")
@@ -93,11 +94,8 @@ config.write()
 #====================================================================
 
 # control statement to skip if "asp.tif" exist - indicator fileNOT ROBUST
-fname = wd + "predictors/asp.tif"
+fname = wd + "/predictors/asp.tif"
 if os.path.isfile(fname) == False:		
-
-	# Dop this only for bbox runs
-	#if config["main"]["runtype"] == "bbox":
 
 		# copy preexisting dem
 	if config["main"]["demexists"] == "TRUE":
@@ -109,35 +107,8 @@ if os.path.isfile(fname) == False:
 		cmd = "cp -r %s %s"%(src,dst)
 		os.system(cmd) 
 
-		# fetch new srtm dem from nasa
-		#elif config["main"]["demexists"] == "FALSE":
-
-			#from domain_setup import getDEM as gdem
-			#gdem.main(wd ,config["main"]["demDir"] ,config["main"]["lonw"],config["main"]["lats"],config["main"]["lone"],config["main"]["latn"])
-
-	# do this only for point runs		
-	#if config["main"]["runtype"] == "points":
-
 	from domain_setup import getDEM2 as gdem
 	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["domain"], config["main"]["shp"])
-
-		#from domain_setup import makeShape as shp
-		#shp.main(wd , config["main"]["pointsFile"], config["main"]["lonCol"], config["main"]["latCol"])
-
-	#from domain_setup import clipToEra as era
-	#era.main(wd ,config["era-interim"]["grid"])
-
-	# clip to points here
-	#if config["main"]["runtype"] == "bbox":
-		#from domain_setup import domainPlot as dplot
-		#dplot.main(wd , "FALSE") # shp = TRUE for points  run
-
-		#cmd = "Rscript ./rsrc/makePoly.R " +config['main']['latn']+" "+config['main']['lats']+" " +config['main']['lone']+" "+config['main']['lonw']+" "+wd+"/spatial/extentRequest.shp"
-		#os.system(cmd)
-
-	#if config["main"]["runtype"] == "points":
-		#from domain_setup import domainPlot as dplot
-		#dplot.main(wd , "TRUE") # shp = TRUE for points  run
 
 	from domain_setup import makeKML as kml
 	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")	      
@@ -147,10 +118,6 @@ if os.path.isfile(fname) == False:
 	from domain_setup import computeTopo as topo
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
-	#from domain_setup import makeSurface as surf # WARNING huge memory use (10GB)
-	#surf.main(wd, config["modis"]["MODISdir"] )
-	#MOVED: to toposub or listpoints to ensiure is run on only one grid at a time, reduce memory load.
-
 else:
 	print "[INFO]: topo predictors precomputed"
 
@@ -158,8 +125,8 @@ else:
 #	GET ERA
 #====================================================================
 
-fname1 = wd + "eraDat/SURF.nc"
-fname2 = wd + "eraDat/PLEVEL.nc"
+fname1 = wd + "/eraDat/SURF.nc"
+fname2 = wd + "/eraDat/PLEVEL.nc"
 if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROBUST
 
 	# set ccords to those of downloaded dem extent
@@ -180,22 +147,10 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	print lonW
 	print lonE
 
-	# from getERA import extractEraBbox as ext
-
-	# #gridfile="/dat/eraigrid75.tif"
-	# gridfile="/dat/era5grid30.tif"
-
-	# latN = ext.main(config['main']['srcdir']+gridfile , "latN",config["main"]["lonw"],config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
-
-	# latS = ext.main(config['main']['srcdir']+gridfile, "latS", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
-
-	# lonW = ext.main(config['main']['srcdir']+gridfile, "lonW", config["main"]["lonw"] ,config["main"]["lone"],config["main"]["lats"],  config["main"]["latn"])
-
-	# lonE = ext.main(config['main']['srcdir']+gridfile ,"lonE",	config["main"]["lonw"],	config["main"]["lone"],	config["main"]["lats"],  config["main"]["latn"] )
-
 	eraDir = wd + "/eraDat"
 	if not os.path.exists(eraDir):
 		os.mkdir(eraDir)
+
 
 	from getERA import eraRetrievePLEVEL as plevel
 	print "Retrieving ECWMF pressure-level data"

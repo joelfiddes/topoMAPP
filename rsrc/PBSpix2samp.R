@@ -3,8 +3,46 @@ library("foreach")
 library("doParallel")
 require(raster) 
 
+
+
+ 
+#  ================ GRID 2 (same as 9 but with svf)=================================
+
+gridN = 2
+ if( gridN == 2){
+ print (gridN)
+#wd = "/home/joel/sim/ensembler3/"
+#priorwd = "/home/joel/sim/da_test2/" 
+wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim
+priorwd = "/home/joel/sim/test_radflux/
+grid=2
+# IO files
+plotout=(paste0(wd,"/daplot_median.pdf"))
+load( paste0(wd,"wmat_2.rd"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+
+# variables
+start=180
+end=300
+# number of ensembles
+nens=50
+
+# R value for PBS algorithm
+R=0.016
+
+# number of tsub clusters
+Nclust=150
+
+# threshold for converting swe --> sca
+sdThresh <- 13
+
+# cores used in parallel jobs
+cores=4
+ }
+ 
 #  ================ GRID 9 =================================
-gridN = 9
+
  if( gridN == 9){
  print (gridN)
 #wd = "/home/joel/sim/ensembler3/"
@@ -15,7 +53,7 @@ grid=9
 # IO files
 plotout=(paste0(wd,"/daplot_median.pdf"))
 load( paste0(wd,"wmat_2.rd"))
-rstack = rstack_save #brick(paste0(priorwd,"fsca_stack.tif"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
 # variables
