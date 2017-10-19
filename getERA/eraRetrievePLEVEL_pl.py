@@ -6,6 +6,7 @@ import sys
 from ecmwfapi import ECMWFDataServer
 import time as tme
 from dateutil.relativedelta import *
+import retrying
 
 server = ECMWFDataServer()
  
@@ -71,7 +72,7 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     print("--- %s seconds ---" % (tme.time() - start_time))
 
 
-@backoff.on_predicate(backoff.constant, interval=10)  
+@retry(wait_random_min=10000, wait_random_max=20000)
 def interim_request(requestDates, target, grid, bbox, dataset,timeVec, step, eraClass):
     """      
         An ERA interim request for analysis pressure level data.
