@@ -6,7 +6,7 @@ import sys
 from ecmwfapi import ECMWFDataServer
 import time
 from dateutil.relativedelta import *
-import retrying
+from retrying import retry
 start_time = time.time()
 server = ECMWFDataServer()
  
