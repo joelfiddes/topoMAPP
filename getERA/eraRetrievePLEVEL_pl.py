@@ -65,18 +65,13 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     from joblib import Parallel, delayed 
     import multiprocessing 
     
-    @backoff.on_predicate(backoff.constant, interval=10)   
-      
+     
+
     Parallel(n_jobs=cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
     print("--- %s seconds ---" % (tme.time() - start_time))
 
 
-
-
-
-
-
-
+@backoff.on_predicate(backoff.constant, interval=10)  
 def interim_request(requestDates, target, grid, bbox, dataset,timeVec, step, eraClass):
     """      
         An ERA interim request for analysis pressure level data.

@@ -71,15 +71,10 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
-         
-    @backoff.on_predicate(backoff.constant, interval=10) 
-    
+  
     Parallel(n_jobs=cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
-
-
-
-
-
+       
+@backoff.on_predicate(backoff.constant, interval=10) 
 def interim_request(requestDates, target, grid, bbox, dataset, time, step, eraClass):
     """      
         An ERA interim request for analysis pressure level data.
