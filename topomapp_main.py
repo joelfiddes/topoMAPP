@@ -121,7 +121,8 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 
 	from getERA import eraRetrievePLEVEL_pl as plevel
 	print "Retrieving ECWMF pressure-level data"
-	plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
+	#plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
+	plevel.retrieve_interim( config, eraDir  , latN, latS, lonE, lonW)	
 
 	from getERA import eraRetrieveSURFACE_pl as surf
 	print "Retrieving ECWMF surface data"

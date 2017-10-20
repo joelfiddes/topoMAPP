@@ -12,7 +12,7 @@ server = ECMWFDataServer()
  
 
 
-def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset):
+def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset, num_cores):
     
 
     start_time = tme.time()
@@ -43,7 +43,7 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     print("Grid = " + grd)
     print("Start date = " , dateList[0])
     print("End date = " , dateList[len(dateList)-1])
-    print("cores used = " + str(cores))
+    print("cores used = " + str(num_cores))
 
     # make vector here generate datelist variable
     requestDatesVec = []
@@ -64,7 +64,6 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
-    num_cores= config['geotop']['num_cores']
     Parallel(n_jobs=num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
     print("--- %s seconds ---" % (tme.time() - start_time))
 
@@ -96,16 +95,23 @@ def interim_request(requestDates, target, grid, bbox, dataset,timeVec, step, era
     })
 if __name__ == "__main__":
     
-    startDate = str(sys.argv[1])
-    endDate = str(sys.argv[2]) 
+    config = sys.argv[1]
+    eraDir =  sys.argv[2]
     latNorth = str(float(sys.argv[3]))
     latSouth =  str(float(sys.argv[4]))
     lonEast = str(float(sys.argv[5]))
     lonWest = str(float(sys.argv[6]))
-    grd =   str(sys.argv[7])
-    eraDir =  sys.argv[8]
-    dataset = sys.argv[9]
-    retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset)
+
+    startDate = config["main"]["startDate"]
+    endDate = config["main"]["endDate"]
+    grd =   config["era-interim"]["grid"]
+    dataset = config["era-interim"]["dataset"]
+    num_cores = config['geotop']['num_cores']
+
+
+    retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset, num_cores)
+
+
 
 
 
