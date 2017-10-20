@@ -4,7 +4,6 @@ from collections import OrderedDict
 import calendar
 import sys
 from ecmwfapi import ECMWFDataServer
-import time as tme
 from dateutil.relativedelta import *
 from retrying import retry
 
@@ -19,7 +18,6 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     grd =   config["era-interim"]["grid"]
     dataset = config["era-interim"]["dataset"]
     num_cores = config['geotop']['num_cores']
-    start_time = tme.time()
     grid=str(grd) + "/" + str(grd)
     bbox=(str(latNorth) + "/" + str(lonWest) + "/" + str(latSouth) + "/" + str(lonEast)) 
 
@@ -69,7 +67,6 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     from joblib import Parallel, delayed 
     import multiprocessing 
     Parallel(n_jobs=int(num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
-    print("--- %s seconds ---" % (tme.time() - start_time))
 
 
 @retry(wait_random_min=10000, wait_random_max=20000)
