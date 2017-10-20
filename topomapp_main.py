@@ -126,7 +126,8 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 
 	from getERA import eraRetrieveSURFACE_pl as surf
 	print "Retrieving ECWMF surface data"
-	surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
+	#surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
+	surf.retrieve_interim( config, eraDir  , latN, latS, lonE, lonW)	
 
 	# Merge NC timeseries (requires linux package cdo)
 	import subprocess

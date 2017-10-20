@@ -47,7 +47,7 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     print("Grid = " + grd)
     print("Start date = " , dateList[0])
     print("End date = " , dateList[len(dateList)-1])
-    print("cores used = " + str(num_cores))
+    print("cores used = " + num_cores)
 
     # make vector here generate datelist variable
     requestDatesVec = []
@@ -68,7 +68,7 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
-    Parallel(n_jobs=num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+    Parallel(n_jobs=int(num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
     print("--- %s seconds ---" % (tme.time() - start_time))
 
 
@@ -105,9 +105,6 @@ if __name__ == "__main__":
     latSouth =  str(float(sys.argv[4]))
     lonEast = str(float(sys.argv[5]))
     lonWest = str(float(sys.argv[6]))
-
-
-
 
     retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest)
 

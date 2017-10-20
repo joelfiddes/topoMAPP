@@ -7,10 +7,10 @@ from ecmwfapi import ECMWFDataServer
 import time
 from dateutil.relativedelta import *
 from retrying import retry
-start_time = time.time()
+
 server = ECMWFDataServer()
  
-def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir, dataset):
+def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     """      
        A function to demonstrate how to iterate efficiently over several years and months etc    
        for a particular interim_request.     
@@ -23,7 +23,12 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
        Step and time
        https://software.ecmwf.int/wiki/pages/viewpage.action?pageId=56658233
     """
-
+    start_time = time.time()
+    startDate = config["main"]["startDate"]
+    endDate = config["main"]["endDate"]
+    grd =   config["era-interim"]["grid"]
+    dataset = config["era-interim"]["dataset"]
+    num_cores = config['geotop']['num_cores']
     grid=str(grd) + "/" + str(grd)
     bbox=(str(latNorth) + "/" + str(lonWest) + "/" + str(latSouth) + "/" + str(lonEast)) 
 
@@ -51,7 +56,7 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     print("Grid = " + grd)
     print("Start date = " , dateList[0])
     print("End date = " , dateList[len(dateList)-1])
-    print("cores used = " + str(cores))
+    print("cores used = " + num_cores)
 
     requestDatesVec = []
     targetVec=[]
@@ -72,8 +77,9 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     from joblib import Parallel, delayed 
     import multiprocessing 
     num_cores= config['geotop']['num_cores'] 
-    Parallel(n_jobs=num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
-       
+    Parallel(n_jobs=int(num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+    print("--- %s seconds ---" % (time.time() - start_time))
+
 @retry(wait_random_min=10000, wait_random_max=20000)
 def interim_request(requestDates, target, grid, bbox, dataset, time, step, eraClass):
     """      
@@ -100,18 +106,17 @@ def interim_request(requestDates, target, grid, bbox, dataset, time, step, eraCl
         'RESOL' : "AV",
     })
 if __name__ == "__main__":
-    startDate    = str(sys.argv[1])
-    endDate     = str(sys.argv[2]) 
+
+    config    = sys.argv[1]
+    eraDir     = sys.argv[2]
     latNorth    = str(float(sys.argv[3]))
     latSouth    =  str(float(sys.argv[4]))
     lonEast     = str(float(sys.argv[5]))
     lonWest     = str(float(sys.argv[6]))
-    grd         =   str(sys.argv[7])
-    eraDir      =  sys.argv[8]
-    dataset     = sys.argv[9]
-    retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir, dataset)
 
-print("--- %s seconds ---" % (time.time() - start_time))
+    retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest)
+
+
 
 
 
