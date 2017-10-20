@@ -41,7 +41,7 @@ nc<-nc_open(fileName)
 z = ncvar_get(nc, timeVar)
 if(step=='seconds'){z <- z*60*60} #make seconds
 time<-ISOdatetime(origin,1,1,0,0,0) + z  
-dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# tz correct?
+dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")
 
 return(dayTS)
 }
@@ -498,8 +498,8 @@ lat = ncvar_get( u, "lat")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin="1900-01-01")                # local
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+date<-as.POSIXct(q, origin="1900-01-01", tz="GMT")                # local
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 dayvec=day[k1:k2]
 #function calc wind speed [liston elder 2006]
 #windDir<-function(u,v){
@@ -573,8 +573,8 @@ lat = ncvar_get( u, "lat")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin="1996-01-01")                # local
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+date<-as.POSIXct(q, origin="1996-01-01",tz="GMT")                # local
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 dayvec=day[k1:k2]
 #function calc wind speed [liston elder 2006]
 windSpd<-function(u,v){
@@ -637,8 +637,8 @@ time = ncvar_get( u, "time")#get times hr since "1900-01-01 00:00:00"
 long = ncvar_get( u, "lon")
 lat = ncvar_get( u, "lat")
 q <- time*60*60 #make seconds
-date<-as.POSIXct(q, origin="1996-01-01")                # local
-day1=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"))# for aggegation
+date<-as.POSIXct(q, origin="1996-01-01",tz="GMT")                # local
+day1=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 day=day1[k1:k2]
 
 #extract box u and v
@@ -908,7 +908,7 @@ nc<-nc_open(fileName)
 z = ncvar_get( nc, timeVar)
 if(step=='seconds'){z <- z*60*60} #make seconds
 time<-ISOdatetime(origin,1,1,0,0,0) + z  
-dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# tz correct?
+dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# tz correct?
 
 c=as.factor(dayTS)
 dates=levels(c)
@@ -923,7 +923,7 @@ nc<-nc_open(fileName)
 z = ncvar_get( nc, timeVar)
 if(step=='seconds'){z <- z*60*60} #make seconds
 time<-ISOdatetime(origin,1,1,0,0,0) + z  
-dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# tz correct?
+dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# tz correct?
 
 c=as.factor(dayTS)
 dates=levels(c)
@@ -939,7 +939,7 @@ nc<-nc_open(fileName)
 z = ncvar_get( nc, timeVar)
 if(step=='seconds'){z <- z*60*60} #make seconds
 time<-ISOdatetime(origin,1,1,0,0,0) + z  
-dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# tz correct?
+dayTS=as.POSIXct(strptime(format(time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# tz correct?
 
 c=as.factor(dayTS)
 dates=levels(c)

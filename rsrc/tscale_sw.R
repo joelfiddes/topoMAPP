@@ -47,7 +47,7 @@ sw=swSurf_cut[,nbox]
 swm=matrix(rep(sw,npoints),ncol=npoints) #make matrix with ncol =points, repeats of each nbox vector
 toa=toaSurf_cut[,nbox]
 toam=matrix(rep(toa,npoints),ncol=npoints)
-dd=as.POSIXct(datesSurf_cut)
+dd=as.POSIXct(datesSurf_cut, tz="GMT")
 
 if(swTopo==TRUE){
 #START

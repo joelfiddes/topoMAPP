@@ -44,31 +44,9 @@ print "[INFO]: Simulation directory:" + wd
 # 	Main application is in ensemble runs
 #====================================================================
 if config["main"]["initSim"] == "TRUE":
+	import TMinit
+	TMinit.main(config, ensembRun=False)
 
-	# notifications
-	print "[INFO]: initialising " + wd + " from " + config["main"]["initDir"]
-	print "[INFO]: copying only Grid" + config["main"]["initGrid"]
-
-	# copy directory "eraDat"
-	src = config["main"]["initDir"] + "/eraDat"
-	dst = wd
-	cmd = "cp -r %s %s"%(src,dst)
-	os.system(cmd)
-
-	# copy directory "predictors"
-	src = config["main"]["initDir"] + "/predictors"
-	cmd = "cp -r %s %s"%(src,dst)
-	os.system(cmd)
-
-	# copy directory "spatial"
-	src = config["main"]["initDir"] + "/spatial"
-	cmd = "cp -r %s %s"%(src,dst)
-	os.system(cmd)
-
-	# copies grids can be one or all
-	src = config["main"]["initDir"] + "/grid" + config["main"]["initGrid"]
-	cmd = "cp -r  %s %s"%(src,dst)
-	os.system(cmd)
   
 #====================================================================
 # Copy config to simulation directory

@@ -22,8 +22,7 @@ def main(Ngrid, config):
 
 	 	print "[INFO]: Creating met files...."
 	 	from gtop_setup import prepMet as met
-		met.main(gridpath, config["toposcale"]["svfCompute"],config["da"]["tscale"],config["da"]["pscale"],config["da"]["swscale"],config["da"]["lwscale"])
-
+		met.main(gridpath, config["toposcale"]["svfCompute"],str(config["da"]["tscale"]),str(config["da"]["pscale"]),str(config["da"]["swscale"]),str(config["da"]["lwscale"]))
 
 		print "[INFO]: extract surface properties"
 		from gtop_setup import pointsSurface as psurf
@@ -49,31 +48,32 @@ def main(Ngrid, config):
 	if os.path.exists(gridpath):
 
 	 	print "[INFO]: Simulations grid " + str(Ngrid) + " running (parallel model runs)"
-		# batchfile="batch.sh"
+		batchfile="batch.sh"
 
-		# sim_entries=gridpath +"/S*"
+		sim_entries=gridpath +"/S*"
 
-		# f = open(batchfile, "w+")
-		# f.write("#!/bin/bash"+ "\n")
-		# f.write("cd " + config["geotop"]["lsmPath"] + "\n")
-		# f.write("parallel " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
-		# f.close()
+		f = open(batchfile, "w+")
+		f.write("#!/bin/bash"+ "\n")
+		f.write("cd " + config["geotop"]["lsmPath"] + "\n")
 
-		# import os, sys, stat
-		# os.chmod(batchfile, stat.S_IRWXU)
+		# max 8 jobs set here
+		f.write("parallel -j 8 " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
+		f.close()
 
-		# cmd     = ["./" + batchfile]
-		# subprocess.check_output( "./" + batchfile )
+		import os, sys, stat
+		os.chmod(batchfile, stat.S_IRWXU)
 
-		# = =
-		import subprocess
-		#FNULL = open(os.devnull, 'w')    #use this if you want to suppress output to stdout from the subprocess
-		from joblib import Parallel, delayed 
-		import multiprocessing 
-		jobs = glob.glob(gridpath +"/S*")
-		num_cores = 4 #multiprocessing.cpu_count()
-		Parallel(n_jobs=num_cores)(delayed(subprocess.Popen)(["./geotop1.226", i ]) for i in jobs)
+		cmd     = ["./" + batchfile]
+		subprocess.check_output( "./" + batchfile )
 
+		# ====== joblib spawning too many processes =====
+		# import subprocess
+		# from joblib import Parallel, delayed 
+		# import multiprocessing 
+		# jobs = glob.glob(gridpath +"/S*")
+		# num_cores = 4 #multiprocessing.cpu_count()
+		# Parallel(n_jobs=num_cores)(delayed(subprocess.Popen)(["./geotop1.226", i ]) for i in jobs)
+		# ===============================================
 	else:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 

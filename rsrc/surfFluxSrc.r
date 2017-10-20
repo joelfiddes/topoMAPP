@@ -206,9 +206,9 @@ lat = get.var.ncdf( pl, "latitude")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin=origin)                # local
+date<-as.POSIXct(q, origin=origin,tz="GMT")                # local
 
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 
 gph<-z/9.80665 # geopotential height = geopotential/9.80665 [gravity at sea level]
 
@@ -295,7 +295,7 @@ surfT<-met$AirT
 
 #aggreate to daily
 if(aggregate==T){
-day=as.POSIXct(strptime(format(met$Date,format="%d/%m/%Y %H"),format="%d/%m/%Y"),tz="UTC")
+day=as.POSIXct(strptime(format(met$Date,format="%d/%m/%Y %H"),format="%d/%m/%Y"),tz="GMT")
 surfDatDaily<-aggregate(surfT,by=list(day),FUN=mean,na.rm=TRUE)
 surfDatDaily<-surfDatDaily$x}else{surfDatDaily<-surfT}
 
@@ -313,7 +313,7 @@ surfT<-met$Iprec
 
 #aggreate to daily
 if(aggregate==T){
-day=as.POSIXct(strptime(format(met$Date,format="%d/%m/%Y %H"),format="%d/%m/%Y"),tz="UTC")
+day=as.POSIXct(strptime(format(met$Date,format="%d/%m/%Y %H"),format="%d/%m/%Y"),tz="GMT")
 surfDatDaily<-aggregate(surfT,by=list(day),FUN=mean,na.rm=TRUE)
 surfDatDaily<-surfDatDaily$x}else{surfDatDaily<-surfT}
 
@@ -332,7 +332,7 @@ imisDat=get.ncdf.data  (stationNr=station,varName=imisVar,startTime=startDate, e
 
 #imisDat<-aggregate.ts(imisDat$data, nfrequency=(1/6), FUN=mean)
 if(daily==T){
-day=as.POSIXct(strptime(format(imisDat$time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")
+day=as.POSIXct(strptime(format(imisDat$time,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")
 imisDat<-aggregate(imisDat$dat,by=list(day),FUN=fun,na.rm=TRUE)
 imisDat=imisDat$x
 }
@@ -372,9 +372,9 @@ lat = get.var.ncdf( pl, "latitude")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin=origin)                # local
+date<-as.POSIXct(q, origin=origin,tz="GMT")                # local
 
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 
 
 i<-xgrid_vec[nbox] # long cell
@@ -459,9 +459,9 @@ lat = get.var.ncdf( pl, "latitude")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin=origin)                # local
+date<-as.POSIXct(q, origin=origin,tz="GMT")                # local
 
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 
 gph<-z/9.80665 # geopotential height = geopotential/9.80665 [gravity at sea level]
 
@@ -568,9 +568,9 @@ lat = get.var.ncdf( pl, "latitude")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin=origin)                # local
+date<-as.POSIXct(q, origin=origin,tz="GMT")                # local
 
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 
 
 i<-xgrid_vec[nbox] # long cell
@@ -650,9 +650,9 @@ lat = get.var.ncdf( pl, "latitude")
 ### (the origin used by SAS)
 q <- time*60*60 #make seconds
 ## ways to convert this
-date<-as.POSIXct(q, origin=origin)                # local
+date<-as.POSIXct(q, origin=origin,tz="GMT")                # local
 
-day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="UTC")# for aggegation
+day=as.POSIXct(strptime(format(date,format="%Y/%m/%d %H"),format="%Y/%m/%d"),tz="GMT")# for aggegation
 
 
 i<-xgrid_vec[nbox] # long cell
