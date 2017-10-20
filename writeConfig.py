@@ -89,7 +89,7 @@ config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
 #config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
 #config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
-
+config['geotop']['num_cores'] =8
 
 #=================================================================
 # MODIS

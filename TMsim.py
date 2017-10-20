@@ -48,31 +48,27 @@ def main(Ngrid, config):
 	if os.path.exists(gridpath):
 
 	 	print "[INFO]: Simulations grid " + str(Ngrid) + " running (parallel model runs)"
-		batchfile="batch.sh"
-
-		sim_entries=gridpath +"/S*"
-
-		f = open(batchfile, "w+")
-		f.write("#!/bin/bash"+ "\n")
-		f.write("cd " + config["geotop"]["lsmPath"] + "\n")
-
-		# max 8 jobs set here
-		f.write("parallel -j 8 " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
-		f.close()
-
-		import os, sys, stat
-		os.chmod(batchfile, stat.S_IRWXU)
-
-		cmd     = ["./" + batchfile]
-		subprocess.check_output( "./" + batchfile )
+		
+		# batchfile="batch.sh"
+		# sim_entries=gridpath +"/S*"
+		# f = open(batchfile, "w+")
+		# f.write("#!/bin/bash"+ "\n")
+		# f.write("cd " + config["geotop"]["lsmPath"] + "\n")
+		# # max 8 jobs set here
+		# f.write("parallel -j 8 " + "./" + config["geotop"]["lsmExe"] + " ::: " + sim_entries + "\n")
+		# f.close()
+		# import os, sys, stat
+		# os.chmod(batchfile, stat.S_IRWXU)
+		# cmd     = ["./" + batchfile]
+		# subprocess.check_output( "./" + batchfile )
 
 		# ====== joblib spawning too many processes =====
-		# import subprocess
-		# from joblib import Parallel, delayed 
-		# import multiprocessing 
-		# jobs = glob.glob(gridpath +"/S*")
-		# num_cores = 4 #multiprocessing.cpu_count()
-		# Parallel(n_jobs=num_cores)(delayed(subprocess.Popen)(["./geotop1.226", i ]) for i in jobs)
+		import subprocess
+		from joblib import Parallel, delayed 
+		import multiprocessing 
+		jobs = glob.glob(gridpath +"/S*")
+		num_cores= config['geotop']['num_cores'] #multiprocessing.cpu_count()
+		Parallel(n_jobs=num_cores)(delayed(subprocess.call)(["./geotop1.226", i ]) for i in jobs)
 		# ===============================================
 	else:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"

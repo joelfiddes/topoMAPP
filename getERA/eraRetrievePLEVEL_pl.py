@@ -14,7 +14,6 @@ server = ECMWFDataServer()
 
 def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset):
     
-    cores=5
 
     start_time = tme.time()
     grid=str(grd) + "/" + str(grd)
@@ -65,10 +64,8 @@ def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,era
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
-    
-     
-
-    Parallel(n_jobs=cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+    num_cores= config['geotop']['num_cores']
+    Parallel(n_jobs=num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
     print("--- %s seconds ---" % (tme.time() - start_time))
 
 
