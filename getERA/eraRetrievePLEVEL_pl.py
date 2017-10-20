@@ -12,9 +12,13 @@ server = ECMWFDataServer()
  
 
 
-def retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset, num_cores):
+def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     
-
+    startDate = config["main"]["startDate"]
+    endDate = config["main"]["endDate"]
+    grd =   config["era-interim"]["grid"]
+    dataset = config["era-interim"]["dataset"]
+    num_cores = config['geotop']['num_cores']
     start_time = tme.time()
     grid=str(grd) + "/" + str(grd)
     bbox=(str(latNorth) + "/" + str(lonWest) + "/" + str(latSouth) + "/" + str(lonEast)) 
@@ -102,14 +106,10 @@ if __name__ == "__main__":
     lonEast = str(float(sys.argv[5]))
     lonWest = str(float(sys.argv[6]))
 
-    startDate = config["main"]["startDate"]
-    endDate = config["main"]["endDate"]
-    grd =   config["era-interim"]["grid"]
-    dataset = config["era-interim"]["dataset"]
-    num_cores = config['geotop']['num_cores']
 
 
-    retrieve_interim(startDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraDir,dataset, num_cores)
+
+    retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest)
 
 
 
