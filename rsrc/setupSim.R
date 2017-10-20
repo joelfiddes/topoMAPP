@@ -61,7 +61,7 @@ wsPoint=windSpd(u,v)
 #========================================================================
 load("../eraDat/all/datesSurf")
 Date<-datesSurf_cut
-Date<-format(as.POSIXct(Date), format="%d/%m/%Y %H:%M") #GEOtop format date
+Date<-format(as.POSIXct(Date, tz="GMT"), format="%d/%m/%Y %H:%M") #GEOtop format date
 
 print("Generating the following meteo timeseries:")
 print("*** HEAD ***")
