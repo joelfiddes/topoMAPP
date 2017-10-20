@@ -75,7 +75,7 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     from joblib import Parallel, delayed 
     import multiprocessing 
     num_cores= config['geotop']['num_cores'] 
-    Parallel(n_jobs=int(num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+    Parallel(n_jobs=int(num_cores))(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
 
 @retry(wait_random_min=10000, wait_random_max=20000)
 def interim_request(requestDates, target, grid, bbox, dataset, time, step, eraClass):

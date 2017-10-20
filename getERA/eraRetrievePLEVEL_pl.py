@@ -66,7 +66,8 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
-    Parallel(n_jobs=int(num_cores)(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+
+    Parallel(n_jobs=int(num_cores))(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
 
 
 @retry(wait_random_min=10000, wait_random_max=20000)
