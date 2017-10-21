@@ -37,7 +37,7 @@ def main(wd, Ngrid, config):
 		import multiprocessing 
 		jobs=["rhumPl","tairPl","uPl","vPl"]
 		num_cores = config['geotop']['num_cores']
-		Parallel(n_jobs=int(num_cores)(delayed(plevel.main)(gridpath, str(Ngrid2), i) for i in jobs)
+		Parallel(n_jobs=int(num_cores))(delayed(plevel.main)(gridpath, str(Ngrid2), i) for i in jobs)
 
 		# plevel.main(gridpath, str(Ngrid2), "rhumPl")
 		# plevel.main(gridpath, str(Ngrid2), "tairPl")
