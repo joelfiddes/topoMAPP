@@ -216,7 +216,9 @@ if not os.path.exists(ndvi_wd):
 #====================================================================
 
 # start main grid loop here - make parallel here
-print("Grids to loop over = " + grid_dirs)
+print("Grids to loop over = ")
+print( grid_dirs )
+
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 
