@@ -76,7 +76,7 @@ def main(wd, Ngrid, config):
 
 
 
-	if spatialResults == "TRUE":
+	if config['main']['spatialResults'] == "TRUE":
 		#====================================================================
 		#	Spatialise toposub results SIMULATION MEAN
 		#====================================================================
