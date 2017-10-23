@@ -1,7 +1,7 @@
 args = commandArgs(trailingOnly=TRUE)
 gridpath = args[1]
-angles = args[2]
-dist = args[3]
+angles = as.numeric(args[2])
+dist = as.numeric(args[3])
 
 require(horizon)
 

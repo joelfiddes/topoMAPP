@@ -228,7 +228,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 	if config['toposcale']['svfCompute'] == 'TRUE':
 		from domain_setup import computeSVF
-		computeSVF.main(gridpath, angles=6, dist=500)
+		computeSVF.main(gridpath, angles=str(6), dist=str(500))
 #====================================================================
 #	Download MODIS NDVI here
 #====================================================================
