@@ -11,7 +11,7 @@ The config files that ConfigObj will read and write are based on the 'INI' forma
 
 from configobj import ConfigObj
 config = ConfigObj()
-config.filename = 'test_mkdir.ini'
+config.filename = 'test_ensemble.ini'
 
 
 #=================================================================
@@ -23,12 +23,12 @@ config.filename = 'test_mkdir.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test_mkdir'
+config['main']['wd'] = '/home/joel/sim/test_ensemb'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
 config['main']['startDate'] = '2015-09-01'
-config['main']['endDate'] = '2016-09-01'
+config['main']['endDate'] = '2015-09-02'
 
 #config['main']['lonw'] = 8
 #config['main']['lats'] = 46
@@ -103,8 +103,12 @@ config['modis']['tileX_start'] = 18 # this is interim measure used as bbox doesn
 config['modis']['tileX_end'] = 18# this is interim measure used as bbox doesnt work if outside specified tile
 config['modis']['tileY_start'] = 4
 config['modis']['tileY_end'] = 4
-
-
+#=================================================================
+# ENSEMBLE
+#=================================================================
+config['ensemble'] = {}
+config['ensemble']['run'] = "FALSE"
+conig['ensemble']['members'] = 100
 
 #=================================================================
 #

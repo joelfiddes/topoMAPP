@@ -223,6 +223,10 @@ for Ngrid in grid_dirs:
 	gridpath = Ngrid
 
 #====================================================================
+#	Compute svf here
+#====================================================================
+
+#====================================================================
 #	Download MODIS NDVI here
 #====================================================================
 	# only run if surface tif doesnt exist
@@ -270,10 +274,17 @@ for Ngrid in grid_dirs:
 		TMpoints.main(wd, Ngrid, config)
 
 #====================================================================
+#	Aggregate results and clean up
+#====================================================================
+	from topoResults import resultsCube
+	resultsCube.main(Ngrid)
+
+#====================================================================
 #	Run ensemble
 #====================================================================
-	#if config["main"]["mode"] == "ensemble":
-		#import TMensemble.py
+	# if config["ensemble"]["run"] == "TRUE":
+	# 	import ensembleRun
+	# 	ensembleRun.main(config)
 
 #====================================================================
 #	Run DA

@@ -8,6 +8,7 @@ require(raster)
 require(horizon)
 #SOURCE
 
+
 #====================================================================
 # PARAMETERS/ARGS
 #====================================================================
@@ -17,7 +18,7 @@ svfComp=args[2]
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
-
+rasterOptions(tmpdir=wd)
 #**********************  SCRIPT BEGIN *******************************
 setwd(wd)
 dem=raster('predictors/ele.tif')
@@ -41,8 +42,8 @@ writeRaster(round(s,2), "svf.tif", overwrite=TRUE) #write and reduce precision
 #====================================================================
 # EXTRACT SLP/ASP
 #================================================================= ==
-slp=terrain(dem, opt="slope", unit="degrees", neighbors=8)
-asp=terrain(dem, opt="aspect", unit="degrees", neighbors=8)
+slp=terrain(dem, opt="slope", unit="degrees", neighbors=8, filename='')
+asp=terrain(dem, opt="aspect", unit="degrees", neighbors=8, filename='')
 
 #====================================================================
 # WRITE OUTPUTS

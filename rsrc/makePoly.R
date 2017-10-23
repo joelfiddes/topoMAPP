@@ -20,7 +20,7 @@ out=args[5]
 
 e <- as(raster::extent(e, w, s, n), "SpatialPolygons")
 proj4string(e) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-shapefile(e, out)
+shapefile(e, out, overwrite=TRUE)
 
 
 # library(raster)

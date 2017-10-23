@@ -30,13 +30,20 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	run toposcale
 	#====================================================================
-	print "[INFO]: Running TopoSCALE"
-	import TMtoposcale
-	TMtoposcale.main(wd, Ngrid, config)
+	fname1 = gridpath + "/tPoint.txt"
+	if os.path.isfile(fname1) == False: #NOT ROBUST
 
+		print "[INFO]: Running TopoSCALE"
+		import TMtoposcale
+		TMtoposcale.main(wd, Ngrid, config)
+
+	else:
+		print "[INFO]: TopoSCALE already run for " + Ngrid
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
+	jobs = glob.glob(gridpath +"/S*")
+
 	import TMsim
 	TMsim.main(Ngrid, config)
 
@@ -76,7 +83,7 @@ def main(wd, Ngrid, config):
 
 
 
-	if config['main']['spatialResults'] == "TRUE":
+	if config['main']['spatialResults'] == "TRUE": # can remove all this
 		#====================================================================
 		#	Spatialise toposub results SIMULATION MEAN
 		#====================================================================

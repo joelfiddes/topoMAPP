@@ -6,7 +6,23 @@
 wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
 priorwd = "/home/joel/sim/test_radflux/" #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
 grid=2 #9
+# output
+outfile = "wmat_2.rd" #"wmat_trunc20.rd"
 
+
+# dependency
+source("./rsrc/PBS.R") 
+require(foreach)
+require(doParallel)
+require(raster) 
+
+# readin
+landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+
+# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
+rstack = crop(rstack, landform)
 
 # variables
 
@@ -24,24 +40,6 @@ sdThresh <- 13
 
 # cores used in parallel jobs
 cores=6 # take this arg from config
-
-
-# dependency
-source("./rsrc/PBS.R") 
-require(foreach)
-require(doParallel)
-require(raster) 
-
-# readin
-landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
-rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
-
-# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
-rstack = crop(rstack, landform)
-
-# output
-outfile = "wmat_2.rd" #"wmat_trunc20.rd"
  
 # identify melt season 
 
