@@ -216,6 +216,7 @@ if not os.path.exists(ndvi_wd):
 #====================================================================
 
 # start main grid loop here - make parallel here
+# need config to prioritise grids here
 print("Grids to loop over = ")
 print( grid_dirs )
 
@@ -225,7 +226,9 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Compute svf here
 #====================================================================
-
+	if config['toposcale']['svfCompute'] == 'TRUE':
+		from domain_setup import computeSVF
+		computeSVF.main(gridpath, angles=6, dist=500)
 #====================================================================
 #	Download MODIS NDVI here
 #====================================================================
