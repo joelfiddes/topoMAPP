@@ -40,6 +40,17 @@ load('../eraDat/all/rhSurf')
 t_mod=read.table('tPoint.txt', header=T, sep=',')
 r_mod=read.table('rPoint.txt', header=T, sep=',')
 
+#=======================================================================================================
+#			Get correct NBOX
+#=======================================================================================================
+ex = raster('../spatial/eraExtent.tif')
+rst = raster(coordmapfile)
+values(rst) <- 1:ncell(rst)
+n = crop(rst,ex)
+vec = getValues(n)
+
+# convert nbox from eraExtent eg 2 to nbox from ERA download
+nbox = vec[nbox]
 #========================================================================
 #		COMPUTE SCALED FLUXES - T,Rh,Ws,Wd,LW
 #========================================================================

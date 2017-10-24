@@ -16,7 +16,7 @@ def main(wd, Ngrid, config):
 	#x=fileSearch.search(path, file)
 	#if x != 1: #NOT ROBUST
 
-	# retrieve era grid index from Ngrid string
+	# retrieve era grid index number (eg '2') from Ngrid string
 	import re
 	s = os.path.basename(Ngrid)
 	Ngrid2 = re.split('(\d+)', s)[1]

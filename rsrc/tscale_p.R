@@ -40,6 +40,18 @@ npoints=dim(mf)[1]
 
 load('../eraDat/all/pSurf') #VAR
 
+#=======================================================================================================
+#			Get coorect NBOX
+#=======================================================================================================
+ex = raster('../spatial/eraExtent.tif')
+rst = raster(coordmapfile)
+values(rst) <- 1:ncell(rst)
+n = crop(rst,ex)
+vec = getValues(n)
+
+# convert nbox from eraExtent eg 2 to nbox from ERA download
+nbox = vec[nbox]
+
 #========================================================================
 #		COMPUTE P
 #========================================================================

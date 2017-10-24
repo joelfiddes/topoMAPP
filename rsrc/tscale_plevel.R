@@ -35,6 +35,18 @@ npoints=dim(mf)[1]
 gPl=get(load('../eraDat/all/gPl'))
 dat=get(load(paste0('../eraDat/all/', var))) #VAR
 
+
+#=======================================================================================================
+#			Get coorect NBOX
+#=======================================================================================================
+ex = raster('../spatial/eraExtent.tif')
+rst = raster(coordmapfile)
+values(rst) <- 1:ncell(rst)
+n = crop(rst,ex)
+vec = getValues(n)
+
+# convert nbox from eraExtent eg 2 to nbox from ERA download
+nbox = vec[nbox]
 #========================================================================
 #		COMPUTE SCALED FLUXES - T,Rh,Ws,Wd,LW
 #========================================================================
