@@ -1,6 +1,6 @@
 args = commandArgs(trailingOnly=TRUE)
 gridpath=args[1] #'/home/joel/sim/topomap_test/grid1' #
-gridpath = "/home/joel/sim/da_test2/grid1/"
+#gridpath = "/home/joel/sim/da_test2/grid1/"
 
 ### Function to convert a list of dataframes to a 3D array
 ## All objects in the list will be dataframes with identical column headings.
