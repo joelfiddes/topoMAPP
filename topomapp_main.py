@@ -227,6 +227,7 @@ for Ngrid in grid_dirs:
 	fname1 = gridpath + "/groundResults"
 	fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
+		print "[INFO]: Results already exist for " + Ngrid +" skipping to next grid"
 		continue
 
 	print "[INFO]: COMPUTING GRID: " + Ngrid
