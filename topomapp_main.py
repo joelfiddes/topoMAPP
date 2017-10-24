@@ -223,6 +223,13 @@ print( grid_dirs )
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 
+	# skip to next iteratyion if results exist
+	fname1 = gridpath + "/groundResults"
+	fname2 = gridpath + "/surfaceResults"
+	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
+		continue
+
+	print "[INFO]: COMPUTING GRID: " + Ngrid
 #====================================================================
 #	Compute svf here
 #====================================================================
