@@ -44,7 +44,7 @@ r_mod=read.table('rPoint.txt', header=T, sep=',')
 #			Get correct NBOX
 #=======================================================================================================
 ex = raster('../spatial/eraExtent.tif')
-rst = raster(coordmapfile)
+rst = raster('../eraDat/SURF.nc')
 values(rst) <- 1:ncell(rst)
 n = crop(rst,ex)
 vec = getValues(n)
