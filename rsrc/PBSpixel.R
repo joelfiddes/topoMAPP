@@ -3,15 +3,15 @@
 # ======== code ===================
 
 # env
-wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #
-priorwd = "/home/joel/sim/test_radflux/" #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #
-grid=2 #9
+wd = "/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler_testRadflux/" #
+priorwd = "/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/test_radflux/" #
+grid=9 #2
 
 
 # variables
 
 # number of ensembles
-nens <- 100 #50 #50
+nens <- 50 #50 #50
 
 # R value for PBS algorithm
 R <- 0.016
@@ -41,19 +41,18 @@ obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 rstack = crop(rstack, landform)
 
 # output
-outfile = "wmat_2.rd" #"wmat_trunc20.rd"
+outfile = "wmat_mp.rd" #"wmat_trunc20.rd"
  
 # identify melt season 
 
 # using a curve to find max
-require(lattice)
-mean_sca=cellStats(rstack, "mean")
-x=1:length(mean_sca)
-y=mean_sca
-xyplot(y ~ x, type=c("smooth", "p"))
+#require(lattice)
+#mean_sca=cellStats(rstack, "mean")
+#x=1:length(mean_sca)
+#y=mean_sca
+#xyplot(y ~ x, type=c("smooth", "p"))
 
-start=200
-end=280
+
 
 
 # pixel based timeseries 
@@ -62,6 +61,27 @@ pixTS = extract( rstack , 1:ncell(rstack) )
 # total number of MODIS pixels
 npix = ncell( rstack)
 
+
+#======= objective search
+#for (i in (1:ncell(rstack))){
+
+#vec=pixTS[i,]
+#rvec=rev(vec)
+#lastdata = which(rvec>0)[1] # last non-zero value
+#lastdataindex = length(vec) - lastdata+1
+#firstnodata = lastdataindex+1
+##lastdateover90 = length(vec) - which(rvec>90)[1] -2
+#lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=T)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+
+##meltperiod=c(vec[lastdateover90], vec[firstnodata])
+##plot(vec)
+##lines(c(lastdateover90, firstnodata), meltperiod, col='red',lwd=3)
+##}
+
+#start=lastdateover95 
+#end=firstnodata
+
+# add dummy check that this lies
 #===============================================================================
 #	Construct results matrix
 #===============================================================================
@@ -114,22 +134,53 @@ wmat = foreach(i = 1:npix,
 	# Extract pixel based timesries of MODIS obs and scale
 	obs = pixTS[i,] /100
 	
+	# get melt period
+	vec=pixTS[i,]
+	rvec=rev(vec)
+	lastdata = which(rvec>0)[1] # last non-zero value
+	lastdataindex = length(vec) - lastdata+1
+	firstnodata = lastdataindex+1
+	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=T)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	start=lastdateover95 
+	end=firstnodata
+	
+	if(start >= end){
+	start=200#lastdateover95 
+	end=280#firstnodata
+	}
 	# identify missing dates and reset start end index
 	obsind = which(!is.na(obs)==T)
 	
 	# cut to start end points (melt season )
 	obsind <- obsind[obsind >= start & obsind <= end]
 	
-	# if less than two obs are present then PBS fails, this function steps back though pixels already processed until at least 2 obs are found
+	# if less than two obs are present then PBS fails, this function steps forward though pixels already processed until at least 2 obs are found
 	n=1
 	while(length(obsind)<2){
 
-	obs <- pixTS[i-n,] /100
+	obs <- pixTS[i+n,] /100
 	obsind <- which(!is.na(obs)==T)
 	obsind <- obsind[obsind >= start & obsind <= end]
 	n<-n+1
 	print(n)
-	print(i-n)
+	print(i+n)
+	if(n > 20){break}
+	
+	# if algorithm, reaches last pixel search then goes backwards
+		if ((i+n) == npix){
+	
+			n=1
+			while(length(obsind)<2){
+
+			obs <- pixTS[i-n,] /100
+			obsind <- which(!is.na(obs)==T)
+			obsind <- obsind[obsind >= start & obsind <= end]
+			n<-n+1
+			print(n)
+			print(i-n)
+	
+			}
+		}
 	}
 
 	# MODIS pixel,i mask

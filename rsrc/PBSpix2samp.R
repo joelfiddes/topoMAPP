@@ -4,16 +4,16 @@ library("doParallel")
 require(raster) 
 
 
-
+gridN = 9
  
 #  ================ GRID 2 (same as 9 but with svf)=================================
 
-gridN = 2
+
  if( gridN == 2){
  print (gridN)
 #wd = "/home/joel/sim/ensembler3/"
 #priorwd = "/home/joel/sim/da_test2/" 
-wd = "/home/joel/sim/ensembler_testRadflux/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim
+wd = "/home/joel/sim/ensembler_testRadflux/" ##"/home/joel/sim/ensembler3/" #"/home/joel/sim
 priorwd = "/home/joel/sim/test_radflux/"
 grid=2
 # IO files
@@ -386,7 +386,7 @@ w = mylist[[ sample ]]
 # fill missing ensemble weights with 0
 index = as.numeric(names(mylist[[ sample ]]))
 df=data.frame(index,w)
-df.new = data.frame(index = 1:100)
+df.new = data.frame(index = 1:nens)
 df.fill = merge(df.new,df, all.x = TRUE)
 wfill=df.fill$Freq
 wfill[which(is.na(wfill))]<-0
@@ -411,7 +411,7 @@ w = mylist[[ sample ]]
 # fill missing ensemble weights with 0
 index = as.numeric(names(mylist[[ sample ]]))
 df=data.frame(index,w)
-df.new = data.frame(index = 1:100)
+df.new = data.frame(index = 1:nens)
 df.fill = merge(df.new,df, all.x = TRUE)
 wfill=df.fill$Freq
 wfill[which(is.na(wfill))]<-0
@@ -435,7 +435,7 @@ w = mylist[[ sample ]]
 # fill missing ensemble weights with 0
 index = as.numeric(names(mylist[[ sample ]]))
 df=data.frame(index,w)
-df.new = data.frame(index = 1:100)
+df.new = data.frame(index = 1:nens)
 df.fill = merge(df.new,df, all.x = TRUE)
 wfill=df.fill$Freq
 wfill[which(is.na(wfill))]<-0
@@ -462,7 +462,7 @@ median.prior = c()
 for ( i in 1: ndays){
 
 mu = myarray_swe[ i, sample, ]
-w = rep(0.01,100)
+w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -483,7 +483,7 @@ low.prior = c()
 for ( i in 1: ndays){
 
 mu = myarray_swe[ i, sample, ]
-w = rep(0.01,100)
+w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -503,7 +503,7 @@ high.prior = c()
 for ( i in 1: ndays){
 
 mu = myarray_swe[ i, sample, ]
-w = rep(0.01,100)
+w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -512,8 +512,6 @@ dfOrder =  df[ with(df, order(mu)), ]
 med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
 high.prior = c(high.prior, med$y)
 }
-
-
 
 
 
@@ -665,6 +663,13 @@ dfOrder =  df[ with(df, order(mu)), ]
 med = approx( cumsum(dfOrder$Freq),dfOrder$mu , xout=0.5)
 median.vec = c(median.vec, med$y)
 }
+
+#===============================================================================
+#			Snow depth plots
+#===============================================================================
+
+
+
 
 ##===============================================================================
 ##			an

@@ -304,7 +304,13 @@ for Ngrid in grid_dirs:
 		#import TMensemble.py
 		#import TMda.py
 
-
+#====================================================================
+#	Polat plot
+#====================================================================
+	src = "./rsrc/polarPlot.R"
+	dst = gridpath
+	cmd = "Rscript %s %s"%(src,dst)
+	os.system(cmd) 
 print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
 
 
