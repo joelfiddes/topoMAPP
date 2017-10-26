@@ -135,9 +135,9 @@ writeRaster(rst, paste0(gridpath,"/landform.tif"),NAflag=-9999,overwrite=T)
 pdf(paste0(gridpath,'/landformsInform.pdf'))
 plot(rst)
 dev.off()
-samp_mean <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='mean')
-samp_sd <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='sd')
-samp_sum <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='sum')
+samp_mean <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='mean',na.rm=TRUE)
+samp_sd <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='sd',na.rm=TRUE)
+samp_sum <- aggregate(gridmaps@data[predNames2], by=list(gridmaps$landform), FUN='sum',na.rm=TRUE)
 
 #replace asp with correct mmean asp
 asp=meanAspect(dat=gridmaps@data, agg=gridmaps$landform)
