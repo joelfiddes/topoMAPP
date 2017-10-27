@@ -40,7 +40,8 @@ nstart1=10 	# nstart for sample kmeans [find centers]
 nstart2=1 	# nstart for entire data kmeans [apply centers]
 thresh_per=0.001 # needs experimenting with
 samp_reduce=FALSE
-algo="Hartigan-Wong"
+algo="Hartigan-Wong" #"MacQueen" # ("Hartigan-Wong", "Lloyd", "Forgy",
+ 
 #**********************  SCRIPT BEGIN *******************************
 print(paste0('Running TOPOSUB on ',Nclust,' samples'))
 
