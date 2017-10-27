@@ -25,7 +25,7 @@ def main(wd, Ngrid, config):
 		tsub.main(gridpath, config["toposub"]["samples"])	
 		
 		# sample dist plots
-		src = "./rsrc/polarPlot.R"
+		src = "./rsrc/sampleDistributions.R"
 		arg1 = gridpath
 		arg2 = config['toposcale']['svfCompute']
 		arg3 = "sampDist.pdf"
@@ -70,7 +70,7 @@ def main(wd, Ngrid, config):
 		inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
 
 		# sample dist plots
-		src = "./rsrc/polarPlot.R"
+		src = "./rsrc/sampleDistributions.R"
 		arg1 = gridpath
 		arg2 = config['toposcale']['svfCompute']
 		arg3 = "sampDistInfm.pdf"
