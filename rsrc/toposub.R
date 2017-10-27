@@ -179,13 +179,14 @@ lsp$lon <-rep(lonbox,dim(lsp)[1])
 
 write.csv(round(lsp,2),paste0(gridpath, '/listpoints.txt'), row.names=FALSE)
 
-pdf(paste0(gridpath, '/sampleDistributions.pdf'), width=6, height =12)
-par(mfrow=c(3,1))
-hist(lsp$ele)
-hist(lsp$slp)
-hist(lsp$asp)
-hist(lsp$members)
-dev.off()
+# moved to sepatae fn sampleDistributions.R
+# pdf(paste0(gridpath, '/sampleDistributions.pdf'), width=6, height =12)
+# par(mfrow=c(3,1))
+# hist(lsp$ele)
+# hist(lsp$slp)
+# hist(lsp$asp)
+# hist(lsp$members)
+# dev.off()
 
 #make horizon files MOVED TO SEPERATE SCRISPT
 #hor(listPath='.')

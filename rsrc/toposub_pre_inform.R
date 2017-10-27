@@ -168,13 +168,6 @@ lsp$lon <-rep(lonbox,dim(lsp)[1])
 
 write.csv(round(lsp,2),paste0(gridpath, '/listpoints.txt'), row.names=FALSE)
 
-pdf(paste0(gridpath, '/sampleDistributionsInform.pdf'), width=6, height =12)
-par(mfrow=c(3,1))
-hist(lsp$ele)
-hist(lsp$slp)
-hist(lsp$asp)
-hist(lsp$members)
-dev.off()
 
 
 

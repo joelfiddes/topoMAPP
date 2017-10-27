@@ -23,6 +23,14 @@ def main(wd, Ngrid, config):
 
 		from toposub import toposub as tsub
 		tsub.main(gridpath, config["toposub"]["samples"])	
+		
+		# sample dist plots
+		src = "./rsrc/polarPlot.R"
+		arg1 = gridpath
+		arg2 = config['toposcale']['svfCompute']
+		arg3 = "sampDist.pdf"
+		cmd = "Rscript %s %s %s %s"%(src,arg1,arg2,arg3)
+		os.system(cmd)
 
 	else:
 		print "[INFO]: TopoSUB already run"
@@ -60,6 +68,15 @@ def main(wd, Ngrid, config):
 
 		from toposub import toposub_pre_inform as inform
 		inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
+
+		# sample dist plots
+		src = "./rsrc/polarPlot.R"
+		arg1 = gridpath
+		arg2 = config['toposcale']['svfCompute']
+		arg3 = "sampDistInfm.pdf"
+		cmd = "Rscript %s %s %s %s"%(src,arg1,arg2,arg3)
+		os.system(cmd)
+
 
 	#====================================================================
 	#	run toposcale INFORM!!

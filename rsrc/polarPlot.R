@@ -1,5 +1,5 @@
 args = commandArgs(trailingOnly=TRUE)
-file=args[1]
+gridpath=args[1]
 #polarplot=function( ele=NULL){
 library(colorRamps)
 
@@ -13,10 +13,10 @@ pch=16
 #file = "/home/joel/sim/compare_ERA/listpoints_test_era_new.txt"
 #file = "/home/joel/sim/compare_ERA/listpoints_era5.txt"
 #file = "/home/joel/sim/compare_ERA/listpoints_interim.txt"
-lp = read.csv(file)
+lp = read.csv(paste0(gridpath, "/listpoints.txt"))
 
 
-#pdf('polar_single.pdf',width=7,height=7)
+pdf(paste0(gridpath,'/polar_single.pdf',width=7,height=7)
 
 
 
