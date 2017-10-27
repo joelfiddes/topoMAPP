@@ -40,7 +40,7 @@ nstart1=10 	# nstart for sample kmeans [find centers]
 nstart2=1 	# nstart for entire data kmeans [apply centers]
 thresh_per=0.001 # needs experimenting with
 samp_reduce=FALSE
-
+algo="Hartigan-Wong"
 #**********************  SCRIPT BEGIN *******************************
 print(paste0('Running TOPOSUB on ',Nclust,' samples'))
 
@@ -50,7 +50,9 @@ print(paste0('Running TOPOSUB on ',Nclust,' samples'))
 setwd(paste0(gridpath,'/predictors'))
 predictors=list.files( pattern='*.tif$')
 
+print('All predictors found:')
 print(predictors)
+
 rstack=stack(predictors)
 
 gridmaps<- as(rstack, 'SpatialGridDataFrame')
@@ -63,6 +65,9 @@ gridmaps$aspS<-res$aspS
 #define new predNames (aspC, aspS)
 allNames<-names(gridmaps@data)
 predNames2 <- allNames[which(allNames!='surface'&allNames!='asp')]
+
+print('Will Toposub these:')
+print(predNames2)
 
 #sample inputs
 #need to generalise to accept 'data' argument
@@ -83,7 +88,7 @@ scaleDat_samp2=na.omit(scaleDat_samp)
 #kmeans on sample
 
 #clust1=Kmeans(scaleDat=scaleDat_samp2,iter.max=iter.max,centers=Nclust, nstart=nstart1)
-clust1 <- kmeans(x=scaleDat_samp2, centers=Nclust, iter.max = iter.max, nstart = nstart1, trace=FALSE)
+clust1 <- kmeans(x=scaleDat_samp2, centers=Nclust, iter.max = iter.max, nstart = nstart1, trace=FALSE, algorithm = algo)
 #http://stackoverflow.com/questions/21382681/kmeans-quick-transfer-stage-steps-exceeded-maximum
 
 
@@ -104,7 +109,7 @@ scaleDat_all2=na.omit(scaleDat_all)
 #kmeans whole dataset
 
 #clust2=Kmeans(scaleDat=scaleDat_all2,iter.max=iter.max,centers=clust1$centers, nstart=nstart2)
-clust2 <- kmeans(x=scaleDat_all2, centers=clust1$centers, iter.max = iter.max, nstart = nstart2, trace=FALSE)
+clust2 <- kmeans(x=scaleDat_all2, centers=clust1$centers, iter.max = iter.max, nstart = nstart2, trace=FALSE,algorithm = algo)
 #http://stackoverflow.com/questions/21382681/kmeans-quick-transfer-stage-steps-exceeded-maximum
 
 #**CLEANUP**
@@ -126,9 +131,10 @@ gc()
 
 #make map of clusters 
 
-# new method to deal with NA values 
+# new method to deal with NA values - generalise to accept all possibl pars
 #index of non NA index
-n2=which(is.na(scaleDat_all$aspC)==FALSE)
+n2=which(is.na(scaleDat_all$aspC)==FALSE & is.na(scaleDat_all$svf)==FALSE)
+
 #make NA vector
 vec=rep(NA, dim(scaleDat_all)[1])
 #replace values
