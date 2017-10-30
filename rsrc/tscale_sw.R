@@ -22,7 +22,7 @@ args = commandArgs(trailingOnly=TRUE)
 wd=args[1] #'/home/joel/sim/topomap_test/grid1' #
 nbox=as.numeric(args[2])
 swTopo=args[3]
-tz=as.numeric(args[4])
+TZ=as.numeric(args[4])
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
@@ -74,7 +74,7 @@ sdirScale=sdirEleScale(sdirm=sdir,toaPoint=toam,dates=dd, mf=mf)
 sdifcor=sdifSvf(sdifm=sdif, mf=mf)
 
 #corrects direct beam component for solar geometry, cast shadows and self shading
-sdirTopo=solarGeom(mf=mf,dates=dd, sdirm=sdirScale, tz=tz)
+sdirTopo=solarGeom(mf=mf,dates=dd, sdirm=sdirScale, tz=TZ)
 
 #add both components
 sglobal=sdirTopo+sdifcor
@@ -87,6 +87,6 @@ write.table(sdifcor,'solDif.txt', row.names=F, sep=',')
 
 if(swTopo==FALSE){
 #old combined function replaced by functions between START and FINISH
-sol=solarCompute(swin=swm,toa=toam, dates=dd,mf=mf, tz=tz)
+sol=solarCompute(swin=swm,toa=toam, dates=dd,mf=mf, tz=TZ)
 write.table(round(sol,2),  'sol.txt', row.names=F, sep=',')
 }

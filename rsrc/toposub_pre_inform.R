@@ -116,7 +116,7 @@ clust3=sample_redist(pix= length(clust2$cluster),samples=Nclust,thresh_per=thres
 
 # new method to deal with NA values 
 #vector of non NA index
-n2=which(is.na(scaleDat_all$aspC)==FALSE & is.na(scaleDat_all$svf)==FALSE)
+n2=which(is.na(informScaleDat2$aspC)==FALSE & is.na(informScaleDat2$svf)==FALSE)
 #make NA vector
 vec=rep(NA, dim(informScaleDat2)[1])
 #replace values
