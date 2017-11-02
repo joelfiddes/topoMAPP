@@ -17,6 +17,9 @@ from listpoints_make import getRasterDims as dims
 import glob
 import joblib
 
+
+
+
 #====================================================================
 #	Timer
 #====================================================================
@@ -37,7 +40,19 @@ wd = config["main"]["wd"]
 #directory = os.path.dirname(wd)
 if not os.path.exists(wd):
 	os.makedirs(wd)
-print "[INFO]: Simulation directory:" + wd  
+
+
+#====================================================================
+#	Logging
+#====================================================================
+
+logging.basicConfig(level=logging.DEBUG, filename=wd+"/logfile", filemode="a+",
+                        format="%(asctime)-15s %(levelname)-8s %(message)s")
+
+#====================================================================
+#	Announce wd
+#====================================================================
+logging.info("[INFO]: Simulation directory:" + wd  )
 
 #====================================================================
 #	Initialise run: this can be used to copy meteo and surfaces to a new sim directory. 
@@ -86,8 +101,7 @@ if os.path.isfile(fname) == False:
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
 else:
-	print "[INFO]: topo predictors precomputed"
-
+	logging.info("[INFO]: topo predictors precomputed")
 #====================================================================
 #	GET ERA
 #====================================================================
@@ -109,23 +123,18 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	config["main"]["lonw"]  = lonW
 	config["main"]["lone"]  = lonE
 
-	print latN
-	print latS
-	print lonW
-	print lonE
-
 	eraDir = wd + "/eraDat"
 	if not os.path.exists(eraDir):
 		os.mkdir(eraDir)
 
 
 	from getERA import eraRetrievePLEVEL_pl as plevel
-	print "Retrieving ECWMF pressure-level data"
+	logging.info( "Retrieving ECWMF pressure-level data")
 	#plevel.retrieve_interim( config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
 	plevel.retrieve_interim( config, eraDir  , latN, latS, lonE, lonW)	
 
 	from getERA import eraRetrieveSURFACE_pl as surf
-	print "Retrieving ECWMF surface data"
+	logging.info( "Retrieving ECWMF surface data")
 	#surf.retrieve_interim(config["main"]["startDate"], config["main"]["endDate"], latN, latS, lonE, lonW, config["era-interim"]["grid"],eraDir, config["era-interim"]["dataset"] )
 	surf.retrieve_interim( config, eraDir  , latN, latS, lonE, lonW)	
 
@@ -136,22 +145,22 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 
 	if os.path.exists(wd + "eraDat/PLEVEL.nc"):
 	    os.remove(wd + "eraDat/PLEVEL.nc")
-	    print "removed original PLEVEL.nc"
+	    logging.info( "removed original PLEVEL.nc")
 
-	print("Running:" + str(cmd))
+	logging.info("Running:" + str(cmd))
 	subprocess.check_output(cmd, shell = "TRUE")
 
 	cmd     = "cdo -b F64 -f nc2 mergetime " + wd +  "/eraDat/interim_daily_SURF* " + wd +"/eraDat/SURF.nc"
 
 	if os.path.exists(wd + "eraDat/SURF.nc"):
 	    os.remove(wd + "eraDat/SURF.nc")
-	    print "removed original SURF.nc"
+	    logging.info( "removed original SURF.nc" )
 
-	print("[INFO]: Running:" + str(cmd))
+	logging.info("[INFO]: Running:" + str(cmd))
 	subprocess.check_output(cmd, shell = "TRUE")
 
 else:
-	print "[INFO]: SURF.nc and PLEVEL.nc precomputed"
+	logging.info( "[INFO]: SURF.nc and PLEVEL.nc precomputed" )
 
 	#os.chdir(config["main"]["srcdir"])
 
@@ -177,8 +186,8 @@ if len(grid_dirs) < 1:
 	# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
 	grid_dirs = glob.glob(wd +"/grid*")
 	ncells = len(grid_dirs)
-	print "[INFO]: This simulation contains ", ncells, " grids"
-	print "[INFO]: grids to be computed " + str(grid_dirs)
+	logging.info( "[INFO]: This simulation contains ", ncells, " grids" )
+	logging.info( "[INFO]: grids to be computed " + str(grid_dirs) )
 
 	#====================================================================
 	#	Loop through grids - prepare sims and remove grids not containing 
@@ -190,7 +199,7 @@ if len(grid_dirs) < 1:
 			
 			gridpath = wd +"/grid"+ str(Ngrid)
 
-			print "[INFO]: creating listpoints for grid " + str(Ngrid)
+			logging.info( "[INFO]: creating listpoints for grid " + str(Ngrid) )
 
 			from listpoints_make import makeListpoints as list
 			list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
@@ -198,8 +207,8 @@ if len(grid_dirs) < 1:
 		# re define ncells here based on occurances of grid* directoriers after removals
 		grid_dirs = glob.glob(wd +"/grid*")
 		ncells = len(grid_dirs)
-		print "[INFO]: This simulation now contains ", ncells, " grids"
-		print "[INFO]: grids to be computed " + str(grid_dirs)
+		logging.info( "[INFO]: This simulation now contains ", ncells, " grids" )
+		logging.info( "[INFO]: grids to be computed " + str(grid_dirs) )
 
 #====================================================================
 #	Create MODIS dir for NDVI at wd level
@@ -217,8 +226,8 @@ if not os.path.exists(ndvi_wd):
 
 # start main grid loop here - make parallel here
 # need config to prioritise grids here
-print("Grids to loop over = ")
-print( grid_dirs )
+logging.info("Grids to loop over = ")
+logging.info( grid_dirs )
 
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
@@ -227,10 +236,10 @@ for Ngrid in grid_dirs:
 	fname1 = gridpath + "/groundResults"
 	fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
-		print "[INFO]: Results already exist for " + Ngrid +" skipping to next grid"
+		logging.info( "[INFO]: Results already exist for " + Ngrid +" skipping to next grid" )
 		continue
 
-	print "[INFO]: COMPUTING GRID: " + Ngrid
+	logging.info( "[INFO]: COMPUTING GRID: " + Ngrid )
 #====================================================================
 #	Compute svf here
 #====================================================================
@@ -244,7 +253,7 @@ for Ngrid in grid_dirs:
 	fname = gridpath + "/predictors/surface.tif"
 	if os.path.isfile(fname) == False:
 
-		print "[INFO]: preparing surface layer " + Ngrid
+		logging.info( "[INFO]: preparing surface layer " + Ngrid )
 		
 		# compute from dem of small grid
 		from getERA import getExtent as ext
@@ -307,11 +316,15 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Polat plot
 #====================================================================
-	src = "./rsrc/polarPlot.R"
-	dst = gridpath
-	cmd = "Rscript %s %s"%(src,dst)
-	os.system(cmd) 
-print("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2))
+	# src = "./rsrc/polarPlot.R"
+	# dst = gridpath
+	# cmd = "Rscript %s %s"%(src,dst)
+	# os.system(cmd)
+
+
+
+
+logging.info("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2) )
 
 
 

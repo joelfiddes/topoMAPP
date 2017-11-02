@@ -37,7 +37,7 @@ def run_rscript_stdout(path2script , args):
     """ Function to define comands to run an Rscript. Returns an object. """
     import subprocess
     command = 'Rscript'
-    cmd     = [command, path2script] + args
+    cmd     = [command, path2script] + args + " >a.Rout 2>a.Rerr"
     print("Running:" + str(cmd))
     x = subprocess.check_output(cmd, universal_newlines=True)
     return(x)
@@ -46,7 +46,7 @@ def run_rscript_fileout(path2script , args):
     """ Function to define comands to run an Rscript. Outputs a file. """
     import subprocess
     command = 'Rscript'
-    cmd     = [command, path2script] + args
+    cmd     = [command, path2script] + args + " >a.Rout 2>a.Rerr"
     print("Running:" + str(cmd))
     subprocess.check_output(cmd)
  

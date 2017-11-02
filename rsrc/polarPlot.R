@@ -21,7 +21,7 @@ pdf(paste0(gridpath,'/polar_single.pdf',width=7,height=7)
 
 
 
-ele<-c(lp$ele)
+ele <- c(lp$ele)
 slp=c(lp$slp)
 asp=c(lp$asp)
 lp<-data.frame(ele,slp,asp)

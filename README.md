@@ -17,7 +17,11 @@ and at 2 scales:
 - python writeConfig.py
 
 2. create wd manually
-3. ./run.sh
+3. ./run_topomap.sh fullpathToInifile
+
+## Logging
+- meaningful messages (set by logging module) in workdir "logfile"
+- stdout redirected to file stdout.log in ./topomapp src code directory
 
 ## Dependencies
 - GDAL > 2 MODIS R package

@@ -11,7 +11,7 @@ The config files that ConfigObj will read and write are based on the 'INI' forma
 
 from configobj import ConfigObj
 config = ConfigObj()
-config.filename = 'test_ensemble.ini'
+config.filename = 'ini/test_code.ini'
 
 
 #=================================================================
@@ -23,7 +23,7 @@ config.filename = 'test_ensemble.ini'
 # Main
 #=================================================================
 config['main'] = {}
-config['main']['wd'] = '/home/joel/sim/test_ensemb'
+config['main']['wd'] = '/home/joel/sim/test_code'
 config['main']['srcdir'] = '/home/joel/src/topoMAPP'
 config['main']['demDir'] = '/home/joel/data/DEM/srtm'
 config['main']['runtype'] = 'bbox' #bbox or points add toposcale only option here
@@ -68,7 +68,7 @@ config['era-interim']['domain'] = "/home/joel/src/topoMAPP/dat/era5grid30.tif" #
 # TopoSUb
 #=================================================================
 config['toposub'] = {}
-config['toposub']['samples'] = 150
+config['toposub']['samples'] = 10
 config['toposub']['inform'] = 'TRUE'
 
 #=================================================================
@@ -89,7 +89,7 @@ config['geotop']['file1'] = 'surface.txt' #'ground.txt' #'
 config['geotop']['targV'] = 'snow_water_equivalent.mm.' # 'X100.000000' # 
 #config['geotop']['beg'] = "01/09/2015 00:00:00" # fix this to accept main time parameters
 #config['geotop']['end'] =	"01/09/2016 00:00:00" # fix this to accept main time parameters
-config['geotop']['num_cores'] =8
+config['geotop']['num_cores'] =2
 
 #=================================================================
 # MODIS
@@ -108,7 +108,7 @@ config['modis']['tileY_end'] = 4
 #=================================================================
 config['ensemble'] = {}
 config['ensemble']['run'] = "FALSE"
-conig['ensemble']['members'] = 100
+config['ensemble']['members'] = 100
 
 #=================================================================
 #

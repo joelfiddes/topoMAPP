@@ -53,7 +53,7 @@ PointSim      = 1
 WaterBalance  = 1
 EnergyBalance = 1
 StandardTimeSimulation = 0
-FlagSkyViewFactor      = 1
+FlagSkyViewFactor      = 0 !this is important as ensures we dont decrease longwave twice, cannot be declared in listpoints
 CalculateCastShadow    = 1
 
 
@@ -164,7 +164,7 @@ AlbExtParSnow=10
 FreshSnowReflVis=0.9
 FreshSnowReflNIR=0.65
 SnowEmissiv  =0.98
-SnowRoughness=0.1
+SnowRoughness=0.001
 ThresSnowSoilRough=1
 
 !DISCRETIZATION
@@ -188,7 +188,7 @@ SnowViscosity=1e+06
 !=============================================================================
 !  SOIL SETTINGS
 !=============================================================================
-BottomBoundaryHeatFlux = 0.05
+BottomBoundaryHeatFlux = 0.06
 ThermalCapacitySoilSolids     = 1.8E6
 ThermalConductivitySoilSolids = 2.5
 
