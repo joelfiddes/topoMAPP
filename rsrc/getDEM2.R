@@ -129,7 +129,17 @@ writeRaster(eraExtent2, paste0(wd, '/spatial/eraExtent.tif'), overwrite=TRUE)
 
 # plot of setup
 pdf(paste0(wd, '/spatial/extentMap.pdf'))
+
+if(class(aoi)=="SpatialPolygons"  | class(aoi)=="SpatialPolygonsDataFrame"){
 plot(dem, main="AOI=red, ERA-grid=green")
 plot(aoi,add=T, border='red', lwd=3)
-plot(eraExtent,add=T, col='green', lwd=3)
+}
+
+if ( class(aoi)=="SpatialPointsDataFrame"){
+plot(dem, main="Points=red, ERA-grid=green")
+plot(aoi,add=T, col='red', lwd=3)
+}
+
+r3 <- rasterToPolygons(r2, dissolve=TRUE)
+plot(r3,add=T, col='green', lwd=3)
 dev.off()
