@@ -6,20 +6,17 @@ Example:
 
     as import: 
 
-        from getERA import prepSims as sim
-        sim.main(wd)
-
 Attributes:
 
 Todo:
 
 """
-path2script = "./rsrc/makeListpoints.R"
+path2script = "./rsrc/makeListpoints2.R"
 
 # main
-def main(gridpath, pointsFile, pkCol, lonCol, latCol):
+def main(gridpath,shp):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[gridpath, pointsFile, pkCol, lonCol, latCol])
+    run_rscript_fileout(path2script,[gridpath, shp])
     
 # functions
 def run_rscript_stdout(path2script , args):
@@ -43,8 +40,6 @@ def run_rscript_fileout(path2script , args):
 if __name__ == '__main__':
     import sys
     gridpath    = sys.argv[1]
-    pointsFile  = sys.argv[2]
-    pkCol       = sys.argv[3]
-    lonCol      = sys.argv[4]
-    latCol      = sys.argv[5]
-    main(gridpath, pointsFile, pkCol, lonCol, latCol)
+    shp  = sys.argv[2]
+
+    main(gridpath, shp)

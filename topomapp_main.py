@@ -202,7 +202,7 @@ if len(grid_dirs) < 1:
 			logging.info( "[INFO]: creating listpoints for grid " + str(Ngrid) )
 
 			from listpoints_make import makeListpoints as list
-			list.main(gridpath, config["main"]["pointsFile"],config["main"]["pkCol"], config["main"]["lonCol"], config["main"]["latCol"])
+			list.main(gridpath, config["main"]["shp"])
 
 		# re define ncells here based on occurances of grid* directoriers after removals
 		grid_dirs = glob.glob(wd +"/grid*")
