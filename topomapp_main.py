@@ -52,8 +52,8 @@ logging.basicConfig(level=logging.DEBUG, filename=wd+"/logfile", filemode="a+",
 #====================================================================
 #	Announce wd
 #====================================================================
-logging.info("[INFO]: Simulation directory:" + wd  )
-
+logging.info("----------------------- START RUN -----------------------")
+logging.info(" Simulation directory: " + wd  )
 #====================================================================
 #	Initialise run: this can be used to copy meteo and surfaces to a new sim directory. 
 # 	Main application is in ensemble runs
@@ -101,7 +101,7 @@ if os.path.isfile(fname) == False:
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
 else:
-	logging.info("[INFO]: topo predictors precomputed")
+	logging.info(" topo predictors precomputed")
 #====================================================================
 #	GET ERA
 #====================================================================
@@ -156,11 +156,11 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	    os.remove(wd + "eraDat/SURF.nc")
 	    logging.info( "removed original SURF.nc" )
 
-	logging.info("[INFO]: Running:" + str(cmd))
+	logging.info(" Running:" + str(cmd))
 	subprocess.check_output(cmd, shell = "TRUE")
 
 else:
-	logging.info( "[INFO]: SURF.nc and PLEVEL.nc precomputed" )
+	logging.info( " SURF.nc and PLEVEL.nc precomputed" )
 
 	#os.chdir(config["main"]["srcdir"])
 
@@ -186,8 +186,8 @@ if len(grid_dirs) < 1:
 	# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
 	grid_dirs = glob.glob(wd +"/grid*")
 	ncells = len(grid_dirs)
-	logging.info( "[INFO]: This simulation contains ", ncells, " grids" )
-	logging.info( "[INFO]: grids to be computed " + str(grid_dirs) )
+	logging.info( " This simulation contains ", ncells, " grids" )
+	logging.info( " grids to be computed " + str(grid_dirs) )
 
 	#====================================================================
 	#	Loop through grids - prepare sims and remove grids not containing 
@@ -199,7 +199,7 @@ if len(grid_dirs) < 1:
 			
 			gridpath = wd +"/grid"+ str(Ngrid)
 
-			logging.info( "[INFO]: creating listpoints for grid " + str(Ngrid) )
+			logging.info( " creating listpoints for grid " + str(Ngrid) )
 
 			from listpoints_make import makeListpoints as list
 			list.main(gridpath, config["main"]["shp"])
@@ -207,8 +207,8 @@ if len(grid_dirs) < 1:
 		# re define ncells here based on occurances of grid* directoriers after removals
 		grid_dirs = glob.glob(wd +"/grid*")
 		ncells = len(grid_dirs)
-		logging.info( "[INFO]: This simulation now contains ", ncells, " grids" )
-		logging.info( "[INFO]: grids to be computed " + str(grid_dirs) )
+		logging.info( " This simulation now contains ", ncells, " grids" )
+		logging.info( " grids to be computed " + str(grid_dirs) )
 
 #====================================================================
 #	Create MODIS dir for NDVI at wd level
@@ -236,10 +236,10 @@ for Ngrid in grid_dirs:
 	fname1 = gridpath + "/groundResults"
 	fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
-		logging.info( "[INFO]: Results already exist for " + Ngrid +" skipping to next grid" )
+		logging.info( " Results already exist for " + Ngrid +" skipping to next grid" )
 		continue
 
-	logging.info( "[INFO]: COMPUTING GRID: " + Ngrid )
+	logging.info( " COMPUTING GRID: " + Ngrid )
 #====================================================================
 #	Compute svf here
 #====================================================================
@@ -253,7 +253,7 @@ for Ngrid in grid_dirs:
 	fname = gridpath + "/predictors/surface.tif"
 	if os.path.isfile(fname) == False:
 
-		logging.info( "[INFO]: preparing surface layer " + Ngrid )
+		logging.info( " preparing surface layer " + Ngrid )
 		
 		# compute from dem of small grid
 		from getERA import getExtent as ext
@@ -263,7 +263,7 @@ for Ngrid in grid_dirs:
 		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
 
 		#need to run loop of five requests at set dates (can be fixed for now)
-		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12","2016-08-12"]
+		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12"]#,"2016-08-12"]
 		for date in mydates:
 			# call bash script that does grep type stuff to update values in options file
 			cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , date , date, config["modis"]["options_file_NDVI"], ndvi_wd,config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
@@ -324,7 +324,7 @@ for Ngrid in grid_dirs:
 
 
 
-logging.info("[INFO]: %f minutes for run" % round((time.time()/60 - start_time/60),2) )
+logging.info(" %f minutes for run" % round((time.time()/60 - start_time/60),2) )
 
 
 
