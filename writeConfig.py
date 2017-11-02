@@ -119,8 +119,8 @@ config['ensemble']['members'] = 100
 #=================================================================
 # GEOTOP
 #=================================================================
-config['geotop']['geotopInputsPath'] = '/home/joel/src/geotop/inputsfile/geotop.inpts'
-config['geotop']['lsmPath'] = '/home/joel/src/geotop/geotop1.226'
+config['geotop']['geotopInputsPath'] = '/home/joel/src/topoMAPP/geotop/geotop.inpts'
+config['geotop']['lsmPath'] = '/home/joel/src/topoMAPP/geotop/'
 config['geotop']['lsmExe'] = 'geotop1.226'
 #=================================================================
 # MODIS
