@@ -180,6 +180,8 @@ if os.path.isfile(fname2) == False:
 	if config["era-interim"]["dataset"] == "era5":
 		from getERA import era_prep2 as prep
 		prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
+else:
+	logging.info( "ERA data already processed")
 #====================================================================
 #	Prepare simulation directories - grid
 #====================================================================
@@ -249,7 +251,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 	if config['toposcale']['svfCompute'] == 'TRUE':
 
-		logging.info( "Calculating SVF layer" + os.path.basename(os.path.normpath(Ngrid)) )
+		logging.info( "Calculating SVF layer: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 		from domain_setup import computeSVF
 		computeSVF.main(gridpath, angles=str(6), dist=str(500))
@@ -260,7 +262,7 @@ for Ngrid in grid_dirs:
 	fname = gridpath + "/predictors/surface.tif"
 	if os.path.isfile(fname) == False:
 
-		logging.info( "Preparing land surface layer from MODIS " + os.path.basename(os.path.normpath(Ngrid)) )
+		logging.info( "Preparing land surface layer from MODIS: " + os.path.basename(os.path.normpath(Ngrid)) )
 		
 		# compute from dem of small grid
 		from getERA import getExtent as ext
