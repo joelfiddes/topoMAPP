@@ -43,7 +43,7 @@ nbox=as.numeric(args[2])
 # source(setup) #give tFile outRootmet
 
 #===========================================================================
-#				COMPUTE POINTS META DATA - eleDiff, gridEle, Lat, Lon
+#				COMPUTE POINTS META DATA - eleDiff, gridEle, Lat, Lon 
 #===========================================================================
 setwd(wd)
 file='../eraDat/SURF.nc'

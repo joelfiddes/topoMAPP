@@ -26,6 +26,9 @@ print(predictors)
 rstack=stack(predictors)
 shp <- shapefile(shp.in)
 lp = extract(rstack,shp)
+lon = shp@coords[,1]
+lat = shp@coords[,2]
+pk= 1:length(lat)
 lp = data.frame(pk,lp, lon,lat)
 lp = na.omit(lp)
 write.csv(lp, '../listpoints.txt', row.names=FALSE)
