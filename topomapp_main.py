@@ -164,13 +164,22 @@ else:
 
 	#os.chdir(config["main"]["srcdir"])
 
-if config["era-interim"]["dataset"] == "interim":
-	from getERA import era_prep as prep
-	prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
+#====================================================================
+#	Preprocess ERA
+#====================================================================
+fname1 = wd + "/eraDat/all/tSurf" # check for last file gerenrated by era_prep script
 
-if config["era-interim"]["dataset"] == "era5":
-	from getERA import era_prep2 as prep
-	prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
+if os.path.isfile(fname2) == False: 
+
+	logging.info("Preprocessing ERA data")
+
+	if config["era-interim"]["dataset"] == "interim":
+		from getERA import era_prep as prep
+		prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
+
+	if config["era-interim"]["dataset"] == "era5":
+		from getERA import era_prep2 as prep
+		prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 #====================================================================
 #	Prepare simulation directories - grid
 #====================================================================
