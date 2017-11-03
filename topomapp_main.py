@@ -90,14 +90,17 @@ if os.path.isfile(fname) == False:
 		os.system(cmd) 
 
 	from domain_setup import getDEM2 as gdem
+	logging.info("Retrive DEM")
 	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["domain"], config["main"]["shp"])
 
 	from domain_setup import makeKML as kml
+	logging.info("Generate extent files")
 	kml.main(wd, wd + "/predictors/ele.tif", "shape", wd + "/spatial/extent")	      
 	kml.main(wd, wd + "/spatial/eraExtent.tif", "raster", wd + "/spatial/eraExtent")
 	#kml.main(wd, wd + "/spatial/extentRequest.shp", "raster", wd + "/spatial/extentRequest")
 
 	from domain_setup import computeTopo as topo
+	logging.info("Compute topo predictors")
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
 else:
@@ -191,14 +194,15 @@ grid_dirs = glob.glob(wd +"/grid*")
 if len(grid_dirs) < 1:
 
 	if config["main"]["initSim"] != "TRUE":
+		logging.info( "initialising simulation directories")
 		from getERA import prepSims as sim
 		sim.main(wd)
 
 	# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
 	grid_dirs = glob.glob(wd +"/grid*")
 	ncells = len(grid_dirs)
-	logging.info( "This simulation contains ", ncells, " grids" )
-	logging.info( "Grids to be computed " + str(grid_dirs) )
+
+	
 
 
 else:

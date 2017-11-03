@@ -33,17 +33,5 @@ lp = data.frame(pk,lp, lon,lat)
 lp = na.omit(lp)
 write.csv(lp, '../listpoints.txt', row.names=FALSE)
 
-## Test if grid contains points and remove if not this needs toHAPPEN AT BEGINNING OF NGRID LOOP
-# library(rgeos)
-# raster <- rstack
-# poly  = shp
-#   ei <- as(extent(raster), "SpatialPolygons")
-#   if (gContainsProperly(poly, ei)) {
-#     print ("Grid contains points")
-#   } else if (gIntersects(poly, ei)) {
-#     print ("intersects")
-#   } else {
-#     print ("Grid contains no points, removing grid directory")
-#     system(paste0('rm -r ', wd))
-#   }
+
 

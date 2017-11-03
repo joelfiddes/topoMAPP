@@ -141,5 +141,5 @@ plot(aoi,add=T, col='red', lwd=3)
 }
 
 r3 <- rasterToPolygons(r2, dissolve=TRUE)
-plot(r3,add=T, col='green', lwd=3)
+plot(r3,add=T, border='green', lwd=3)
 dev.off()
