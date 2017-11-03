@@ -13,7 +13,7 @@ def main(wd, Ngrid, config):
 	#	ompute listpoints and remove grids not containing 
 	# 	points (buffer)
 	#====================================================================		
-	logging.info( " creating listpoints for grid " + str(Ngrid) )
+	logging.info( "Making listpoints" + os.path.basename(os.path.normpath(Ngrid)) )
 	from listpoints_make import makeListpoints as list
 	list.main(str(Ngrid), config["main"]["shp"])
 
@@ -21,12 +21,14 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	run toposcale
 	#====================================================================
+	logging.info( "TopoSCALE" + os.path.basename(os.path.normpath(Ngrid)) )
 	import TMtoposcale
 	TMtoposcale.main(wd, Ngrid, config)
 
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
+	logging.info( "GeoTOP setup and run" + os.path.basename(os.path.normpath(Ngrid)) )
 	import TMsim
 	TMsim.main(Ngrid, config)
 
@@ -37,8 +39,6 @@ def main(wd, Ngrid, config):
 	if config["modis"]["getMODISSCA"] == "TRUE":
 			
 		gridpath = str(Ngrid)
-
-
 		if os.path.exists(gridpath):
 
 			# set up directory
@@ -58,10 +58,12 @@ def main(wd, Ngrid, config):
 			subprocess.check_output( cmd)
 
 			# run MODIStsp tool
+			logging.info( "Fetch MODIS SCA " + os.path.basename(os.path.normpath(Ngrid)) )	
 			from DA import getMODIS as gmod
 			gmod.main("FALSE" , config["modis"]["options_file_SCA"]) #  able to run non-interactively now
 
 			# extract timersies per point
+			logging.info( "Process MODIS SCA " + os.path.basename(os.path.normpath(Ngrid)) )	
 			from DA import scaTS
 			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 

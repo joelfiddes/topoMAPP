@@ -233,11 +233,15 @@ for Ngrid in grid_dirs:
 		logging.info( " Results already exist for " + Ngrid +" skipping to next grid" )
 		continue
 
-	logging.info( " COMPUTING GRID: " + Ngrid )
+	logging.info( " ----- NOW COMPUTING GRID: " + os.path.basename(os.path.normpath(Ngrid)) + "-----")
+
 #====================================================================
 #	Compute svf here
 #====================================================================
 	if config['toposcale']['svfCompute'] == 'TRUE':
+
+		logging.info( "Calculating SVF layer" + os.path.basename(os.path.normpath(Ngrid)) )
+
 		from domain_setup import computeSVF
 		computeSVF.main(gridpath, angles=str(6), dist=str(500))
 #====================================================================
@@ -247,7 +251,7 @@ for Ngrid in grid_dirs:
 	fname = gridpath + "/predictors/surface.tif"
 	if os.path.isfile(fname) == False:
 
-		logging.info( " preparing surface layer " + Ngrid )
+		logging.info( "Preparing land surface layer from MODIS " + os.path.basename(os.path.normpath(Ngrid)) )
 		
 		# compute from dem of small grid
 		from getERA import getExtent as ext
