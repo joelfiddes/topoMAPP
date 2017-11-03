@@ -15,9 +15,7 @@ and at 2 scales:
 1. set config by:
 - edit writeConfig.py
 - python writeConfig.py
-
-2. create wd manually
-3. ./run_topomap.sh fullpathToInifile
+2. ./run_topomap.sh fullpathToInifile
 
 ## Logging
 - meaningful messages (set by logging module) in workdir "logfile"
@@ -31,15 +29,11 @@ and at 2 scales:
 - Geotop (packaged)
 
 ## Structure
-Describe python/ R setup here
+Main code-base is R code,  Python is used as a wrapper and to give the project some architecture. Plus a dash of bash.
 
 ## Config  
+There are three types of config
+- main INI: this controls the modelling scheme and is edited every time a run is setup.
+- Geotop INPTS: model parameters and all thing GeoTOP are defined here. This does not need to be edited regularly. Set and forget.
+- MODIS JSON: these 2 configuration files setup the MODIS download of NDVI and SCA. They usually don't need to be edited manually
 
-## Todo
-- check files exist and skip module if so
-
-## Notes
-- lon and lat written to lsp in toposub.R as mean values of grid - this is required by toposcale_sw in FALSE mode
-- makeSurface.R requires massive matrix calc (10+GB) and crashes frequently SOLVED
-- need to reconcile shifts in domain when clip to ERA-grids
-- automate optional cleaning (command libne arg 'clean') and config run at start 

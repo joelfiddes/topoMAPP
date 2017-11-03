@@ -14,7 +14,7 @@ require(raster)
 #====================================================================
 args = commandArgs(trailingOnly=TRUE)
 wd=args[1] 
-shp=args[2]
+shp.in=args[2]
 
 #====================================================================
 # PARAMETERS FIXED
@@ -24,7 +24,7 @@ setwd(paste0(wd,'/predictors'))
 predictors=list.files( pattern='*.tif$')
 print(predictors)
 rstack=stack(predictors)
-
+shp <- shapefile(shp.in)
 lp = extract(rstack,shp)
 lp = data.frame(pk,lp, lon,lat)
 lp = na.omit(lp)
