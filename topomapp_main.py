@@ -189,27 +189,9 @@ if len(grid_dirs) < 1:
 	logging.info( " This simulation contains ", ncells, " grids" )
 	logging.info( " grids to be computed " + str(grid_dirs) )
 
-	#====================================================================
-	#	Loop through grids - prepare sims and remove grids not containing 
-	# 	points (buffer)
-	#====================================================================
-	if config["main"]["runtype"] == "points":
-		
-		for Ngrid in range(1,int(ncells)+1):
-			
-			gridpath = wd +"/grid"+ str(Ngrid)
 
-			logging.info( " creating listpoints for grid " + str(Ngrid) )
-
-			from listpoints_make import makeListpoints as list
-			list.main(gridpath, config["main"]["shp"])
-
-		# re define ncells here based on occurances of grid* directoriers after removals
-		grid_dirs = glob.glob(wd +"/grid*")
-		ncells = len(grid_dirs)
-		logging.info( " This simulation now contains ", ncells, " grids" )
-		logging.info( " grids to be computed " + str(grid_dirs) )
-
+else:
+	logging.info( "Simulation directories already initialised: " + str(grid_dirs) )
 #====================================================================
 #	Create MODIS dir for NDVI at wd level
 #====================================================================
@@ -219,6 +201,18 @@ if len(grid_dirs) < 1:
 ndvi_wd=wd + "/MODIS/NDVI"
 if not os.path.exists(ndvi_wd):
 	os.makedirs(ndvi_wd)
+
+#====================================================================
+#	dEFINE WHICH GRIDS CONTAIN POINTS: POINTS ONLY is this still required?
+#====================================================================
+
+# # re define ncells here based on occurances of grid* directoriers after removals
+# grid_dirs = glob.glob(wd +"/grid*")
+# ncells = len(grid_dirs)
+# logging.info( " This simulation now contains ", ncells, " grids" )
+# logging.info( " grids to be computed " + str(grid_dirs) )
+
+# + LAST SECTION OF MAKELISPOINTS2.R
 
 #====================================================================
 #	Start main Ngrid loop

@@ -10,6 +10,15 @@ import glob
 
 def main(wd, Ngrid, config):
 	#====================================================================
+	#	ompute listpoints and remove grids not containing 
+	# 	points (buffer)
+	#====================================================================		
+	logging.info( " creating listpoints for grid " + str(Ngrid) )
+	from listpoints_make import makeListpoints as list
+	list.main(str(Ngrid), config["main"]["shp"])
+
+
+	#====================================================================
 	#	run toposcale
 	#====================================================================
 	import TMtoposcale
