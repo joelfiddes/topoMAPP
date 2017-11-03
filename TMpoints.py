@@ -13,7 +13,7 @@ def main(wd, Ngrid, config):
 	#	ompute listpoints and remove grids not containing 
 	# 	points (buffer)
 	#====================================================================		
-	logging.info( "Making listpoints" + os.path.basename(os.path.normpath(Ngrid)) )
+	logging.info( "Making listpoints: " + os.path.basename(os.path.normpath(Ngrid)) )
 	from listpoints_make import makeListpoints as list
 	list.main(str(Ngrid), config["main"]["shp"])
 
@@ -21,14 +21,14 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	run toposcale
 	#====================================================================
-	logging.info( "TopoSCALE" + os.path.basename(os.path.normpath(Ngrid)) )
+	logging.info( "TopoSCALE: " + os.path.basename(os.path.normpath(Ngrid)) )
 	import TMtoposcale
 	TMtoposcale.main(wd, Ngrid, config)
 
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
-	logging.info( "GeoTOP setup and run" + os.path.basename(os.path.normpath(Ngrid)) )
+	logging.info( "GeoTOP setup and run: " + os.path.basename(os.path.normpath(Ngrid)) )
 	import TMsim
 	TMsim.main(Ngrid, config)
 
@@ -58,19 +58,19 @@ def main(wd, Ngrid, config):
 			subprocess.check_output( cmd)
 
 			# run MODIStsp tool
-			logging.info( "Fetch MODIS SCA " + os.path.basename(os.path.normpath(Ngrid)) )	
+			logging.info( "Fetch MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
 			from DA import getMODIS as gmod
 			gmod.main("FALSE" , config["modis"]["options_file_SCA"]) #  able to run non-interactively now
 
 			# extract timersies per point
-			logging.info( "Process MODIS SCA " + os.path.basename(os.path.normpath(Ngrid)) )	
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
 			from DA import scaTS
 			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 
 			# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
 	else:
-		print "[INFO]: No MODIS SCA retrieved"
+		logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 
 # calling main
