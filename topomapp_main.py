@@ -101,7 +101,7 @@ if os.path.isfile(fname) == False:
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
 else:
-	logging.info("Topo predictors precomputed")
+	logging.info("Topo predictors computed")
 #====================================================================
 #	GET ERA
 #====================================================================
@@ -160,7 +160,7 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	subprocess.check_output(cmd, shell = "TRUE")
 
 else:
-	logging.info( "SURF.nc and PLEVEL.nc precomputed" )
+	logging.info( "ERA data retrieved" )
 
 	#os.chdir(config["main"]["srcdir"])
 
@@ -181,7 +181,7 @@ if os.path.isfile(fname2) == False:
 		from getERA import era_prep2 as prep
 		prep.main(wd, config["main"]["startDate"], config["main"]["endDate"])
 else:
-	logging.info( "ERA data already processed")
+	logging.info( "ERA data processed")
 #====================================================================
 #	Prepare simulation directories - grid
 #====================================================================
@@ -202,7 +202,7 @@ if len(grid_dirs) < 1:
 
 
 else:
-	logging.info( "Simulation directories already initialised: " + str(grid_dirs) )
+	logging.info( "Simulation directories initialised")
 #====================================================================
 #	Create MODIS dir for NDVI at wd level
 #====================================================================
@@ -232,7 +232,7 @@ if not os.path.exists(ndvi_wd):
 # start main grid loop here - make parallel here
 # need config to prioritise grids here
 logging.info("Grids to loop over = ")
-logging.info( grid_dirs )
+logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
 
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
