@@ -53,7 +53,7 @@ logging.basicConfig(level=logging.DEBUG, filename=wd+"/logfile", filemode="a+",
 #	Announce wd
 #====================================================================
 logging.info("----------------------- START RUN -----------------------")
-logging.info(" Simulation directory: " + wd  )
+logging.info("Simulation directory: " + wd  )
 #====================================================================
 #	Initialise run: this can be used to copy meteo and surfaces to a new sim directory. 
 # 	Main application is in ensemble runs
@@ -101,7 +101,7 @@ if os.path.isfile(fname) == False:
 	topo.main(wd, config["toposcale"]["svfCompute"])
 
 else:
-	logging.info(" topo predictors precomputed")
+	logging.info("Topo predictors precomputed")
 #====================================================================
 #	GET ERA
 #====================================================================
@@ -160,7 +160,7 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	subprocess.check_output(cmd, shell = "TRUE")
 
 else:
-	logging.info( " SURF.nc and PLEVEL.nc precomputed" )
+	logging.info( "SURF.nc and PLEVEL.nc precomputed" )
 
 	#os.chdir(config["main"]["srcdir"])
 
@@ -197,8 +197,8 @@ if len(grid_dirs) < 1:
 	# define ncells here based on occurances of grid* directoriers created by prepSims or copied if initSim == True
 	grid_dirs = glob.glob(wd +"/grid*")
 	ncells = len(grid_dirs)
-	logging.info( " This simulation contains ", ncells, " grids" )
-	logging.info( " grids to be computed " + str(grid_dirs) )
+	logging.info( "This simulation contains ", ncells, " grids" )
+	logging.info( "Grids to be computed " + str(grid_dirs) )
 
 
 else:
@@ -241,10 +241,10 @@ for Ngrid in grid_dirs:
 	fname1 = gridpath + "/groundResults"
 	fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
-		logging.info( " Results already exist for " + Ngrid +" skipping to next grid" )
+		logging.info( "Results already exist for " + Ngrid +" skipping to next grid" )
 		continue
 
-	logging.info( " ----- NOW COMPUTING GRID: " + os.path.basename(os.path.normpath(Ngrid)) + "-----")
+	logging.info( "----- NOW COMPUTING GRID: " + os.path.basename(os.path.normpath(Ngrid)) + "-----")
 
 #====================================================================
 #	Compute svf here
