@@ -7,7 +7,7 @@
 # + LAST SECTION OF MAKELISPOINTS2.R
 
 # Test if grid contains points and remove if not this needs toHAPPEN AT BEGINNING OF NGRID LOOP
-
+require(raster)
 rst <- raster("/home/joel/sim/test_points/spatial/eraExtent.tif")
 shp  = shapefile("/home/joel/data/imis/gis/IMIS_GR.shp")
 
