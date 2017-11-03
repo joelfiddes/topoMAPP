@@ -19,7 +19,7 @@ def main(wd, Ngrid, config):
 	x=fileSearch.search(path, file)
 	if x != 1: #NOT ROBUST
 
-		print "[INFO]: running TopoSUB for grid " + str(Ngrid)
+		logging.info( "TopoSUB run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 		from toposub import toposub as tsub
 		tsub.main(gridpath, config["toposub"]["samples"])	
@@ -33,7 +33,7 @@ def main(wd, Ngrid, config):
 		os.system(cmd)
 
 	else:
-		print "[INFO]: TopoSUB already run"
+		logging.info( "TopoSUB already run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 	#====================================================================
 	#	run toposcale
@@ -41,17 +41,17 @@ def main(wd, Ngrid, config):
 	fname1 = gridpath + "/tPoint.txt"
 	if os.path.isfile(fname1) == False: #NOT ROBUST
 
-		print "[INFO]: Running TopoSCALE"
+		logging.info( "TopoSCALE run: " + os.path.basename(os.path.normpath(Ngrid)) )
 		import TMtoposcale
 		TMtoposcale.main(wd, Ngrid, config)
 
 	else:
-		print "[INFO]: TopoSCALE already run for " + Ngrid
+		logging.info( "TopoSCALE already run: " + os.path.basename(os.path.normpath(Ngrid)) )
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
+	logging.info( "GeoTOP setup+run : " + os.path.basename(os.path.normpath(Ngrid)) )
 	jobs = glob.glob(gridpath +"/S*")
-
 	import TMsim
 	TMsim.main(Ngrid, config)
 
@@ -59,7 +59,7 @@ def main(wd, Ngrid, config):
 	# Informed sampling
 	#====================================================================
 	if config["toposub"]["inform"] == "TRUE":
-		print "[INFO]: Running Toposub INFORM!"
+		logging.info( "TopoSUB **INFORM** run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 			# set up sim directoroes #and write metfiles
 
@@ -83,7 +83,7 @@ def main(wd, Ngrid, config):
 	#==================================================================
 
 		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-		print "[INFO]: Running TopoSCALE INFORM!"
+		logging.info( "TopoSCALE **INFORM** run: " + os.path.basename(os.path.normpath(Ngrid)) )
 		import TMtoposcale
 		TMtoposcale.main(wd, Ngrid, config)
 		
@@ -94,18 +94,19 @@ def main(wd, Ngrid, config):
 	#====================================================================
 
 		#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-		print "[INFO]: Setup Geotop simulations INFORM!" 
+		logging.info( "GeoTOP **INFORM** setup+run : " + os.path.basename(os.path.normpath(Ngrid)) )
 		import TMsim
 		TMsim.main(Ngrid, config)
 
 
 
-	if config['main']['spatialResults'] == "TRUE": # can remove all this
+
 		#====================================================================
 		#	Spatialise toposub results SIMULATION MEAN
 		#====================================================================
+	if config['main']['spatialResults'] == "TRUE": # can remove all this
 
-		print "[INFO]: Spatialising TopoSUB results...."
+		logging.info( "Spatial results : " + os.path.basename(os.path.normpath(Ngrid)) )
 
 
 		print "[INFO]: running spatialisation routines for grid " + str(Ngrid)
@@ -154,6 +155,7 @@ def main(wd, Ngrid, config):
 	#====================================================================
 
 	if config["modis"]["getMODISSCA"] == "TRUE":
+		logging.info( "Retrieva MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 		if os.path.exists(gridpath):
 
@@ -174,17 +176,20 @@ def main(wd, Ngrid, config):
 			subprocess.check_output( cmd)
 
 			# run MODIStsp tool
+			logging.info( "Retrieva MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
 			from DA import getMODIS as gmod
 			gmod.main("FALSE" , config["modis"]["options_file_SCA"]) #  able to run non-interactively now
 
 			# extract timersies per point
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
 			from DA import scaTS_GRID
 			scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
 
 			# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
 	else:
-		print "[INFO]: No MODIS SCA retrieved"
+		logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
+
 
 
 # calling main
