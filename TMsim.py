@@ -2,6 +2,7 @@
 import subprocess
 import glob
 import logging
+import os
 
 def main(Ngrid, config):
 #====================================================================

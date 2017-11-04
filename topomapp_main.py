@@ -202,9 +202,6 @@ if len(grid_dirs) < 1:
 	grid_dirs = glob.glob(wd +"/grid*")
 	ncells = len(grid_dirs)
 
-	
-
-
 else:
 	logging.info( "Simulation directories initialised")
 #====================================================================
@@ -217,24 +214,6 @@ ndvi_wd=wd + "/MODIS/NDVI"
 if not os.path.exists(ndvi_wd):
 	os.makedirs(ndvi_wd)
 
-#====================================================================
-#	dEFINE WHICH GRIDS CONTAIN POINTS: POINTS ONLY is this still required?
-#====================================================================
-
-# # re define ncells here based on occurances of grid* directoriers after removals
-# grid_dirs = glob.glob(wd +"/grid*")
-# ncells = len(grid_dirs)
-# logging.info( " This simulation now contains ", ncells, " grids" )
-# logging.info( " grids to be computed " + str(grid_dirs) )
-
-# + LAST SECTION OF MAKELISPOINTS2.R
-# from listpoints_make import findGridsWithPoints
-# grid_dirs = findGridsWithPoints.main(wd, wd +"/spatial/eraExtent.tif" , config["main"]["shp"])
-
-# logging.info( grid_dirs)
-# ncells = len(grid_dirs)
-# logging.info( " This simulation now contains ", str(ncells), " grids" )
-# logging.info( " grids to be computed " + str(grid_dirs) )
 #====================================================================
 #	Start main Ngrid loop
 #====================================================================
@@ -260,52 +239,12 @@ for Ngrid in grid_dirs:
 #====================================================================
  	if config['main']['runtype'] == "points":
 		from listpoints_make import findGridsWithPoints
-		grid_dirs = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
-		if(len(grid_dirs) == 0):
+		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+		if(len(numPoints) == 0):
 			logging.info( "Grid box contains no points, skip to next grid")
 			continue
 
-
-
-#) == 0:
- 		# read in points
-# 		import shapefile
-# 		point = shapefile.Reader(config['main']['shp'])
-# 		points = point.shapes()
-
-# 		# get grid extent
-# 		from getERA import getExtent as ext
-# 		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
-# 		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
-# 		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
-# 		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
-
-# 		from shapely.geometry import Point
-# 		from shapely.geometry.polygon import Polygon
-
-# 		import numpy as np
-# 		mylist= [(lonW,latS), (lonW, latN), (lonE, latN), (lonE, latS)]
-# 		x = np.array(mylist)
-# 		coords = x.astype(np.float)
-# poly = Polygon(coords)
-# #logging.info(polygon.contains(points)) 
-
-
-
-# #=========================================
-# import geopandas
-# point = geopandas.GeoDataFrame.from_file(config['main']['shp']) 
-# poly  = geopandas.GeoDataFrame.from_file('/home/joel/data/GCOS/wjf_poly.shp')
-# result =poly.intersects(point)
-
-# from geopandas.tools import sjoin
-# pointInPolys = sjoin(point, poly, how='left')
-# grouped = pointInPolys.groupby('index_right')
-# list(grouped)
-	
-# 		print grouped.groups
-	
-
+# more elegant to define new grid_dirs based on this analysis but hard to pass output of Rscript in python. len9nuPoints) counts characters so while ==0 tells us no point is present > 0 does not tell us how many points there are.
 #====================================================================
 #	Compute svf here
 #====================================================================
