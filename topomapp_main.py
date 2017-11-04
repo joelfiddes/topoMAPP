@@ -258,25 +258,53 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Does grid contain points?
 #====================================================================
-	if config['main']['runtype'] == "points":
-
-		# read in points
-		import shapefile
-		point = shapefile.Reader(config['main']['shp'])
-
-		# get grid extent
-		from getERA import getExtent as ext
-		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
-		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
-		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
-		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
-
-		from shapely.geometry import Point
-		from shapely.geometry.polygon import Polygon
+ 	if config['main']['runtype'] == "points":
+		from listpoints_make import findGridsWithPoints
+		grid_dirs = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+		if(len(grid_dirs) == 0):
+			logging.info( "Grid box contains no points, skip to next grid")
+			continue
 
 
-		polygon = Polygon([(lonW,latS), (lonW, latN), (lonE, latN), (lonE, latS)])
-		logging.info(polygon.contains(point)) 
+
+#) == 0:
+ 		# read in points
+# 		import shapefile
+# 		point = shapefile.Reader(config['main']['shp'])
+# 		points = point.shapes()
+
+# 		# get grid extent
+# 		from getERA import getExtent as ext
+# 		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
+# 		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
+# 		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
+# 		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
+
+# 		from shapely.geometry import Point
+# 		from shapely.geometry.polygon import Polygon
+
+# 		import numpy as np
+# 		mylist= [(lonW,latS), (lonW, latN), (lonE, latN), (lonE, latS)]
+# 		x = np.array(mylist)
+# 		coords = x.astype(np.float)
+# poly = Polygon(coords)
+# #logging.info(polygon.contains(points)) 
+
+
+
+# #=========================================
+# import geopandas
+# point = geopandas.GeoDataFrame.from_file(config['main']['shp']) 
+# poly  = geopandas.GeoDataFrame.from_file('/home/joel/data/GCOS/wjf_poly.shp')
+# result =poly.intersects(point)
+
+# from geopandas.tools import sjoin
+# pointInPolys = sjoin(point, poly, how='left')
+# grouped = pointInPolys.groupby('index_right')
+# list(grouped)
+	
+# 		print grouped.groups
+	
 
 #====================================================================
 #	Compute svf here

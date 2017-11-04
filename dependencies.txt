@@ -19,7 +19,9 @@ require(doParallel)
 
 #python
 pip install retrying
-pip install jobli
+pip install joblib
+pip install PyShp
+pip install shapely
 
 #Linux
 
