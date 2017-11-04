@@ -20,9 +20,9 @@ Todo:
 path2script = "./rsrc/findGridsWithPoints.R"
 
 # main
-def main(rst, shp):
+def main(wd,rst, shp):
     """Main entry point for the script."""
-    x = run_rscript_stdout(path2script,[rst, shp])
+    x = run_rscript_stdout(path2script,[wd,rst, shp])
     return(x)
 
 # functions
@@ -46,7 +46,8 @@ def run_rscript_fileout(path2script , args):
 # calling main
 if __name__ == '__main__':
     import sys
-    rst         = sys.argv[1]
-    shp = sys.argv[2]
+    wd= sys.argv[1]
+    rst         = sys.argv[2]
+    shp = sys.argv[3]
    
-    main(rst, shp)
+    main(wd, rst, shp)

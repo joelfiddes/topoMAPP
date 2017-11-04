@@ -229,11 +229,11 @@ if not os.path.exists(ndvi_wd):
 
 # + LAST SECTION OF MAKELISPOINTS2.R
 from listpoints_make import findGridsWithPoints
-mydirs = findGridsWithPoints.main(wd +"/spatial/eraExtent.tif" , config["main"]["shp"])
-grid_dirs = [wd + mydir for mydir in mydirs]
+grid_dirs = findGridsWithPoints.main(wd +"/spatial/eraExtent.tif" , config["main"]["shp"])
+
 logging.info( grid_dirs)
 ncells = len(grid_dirs)
-logging.info( " This simulation now contains ", ncells, " grids" )
+logging.info( " This simulation now contains ", str(ncells), " grids" )
 logging.info( " grids to be computed " + str(grid_dirs) )
 #====================================================================
 #	Start main Ngrid loop
