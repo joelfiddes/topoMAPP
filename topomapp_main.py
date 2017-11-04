@@ -233,6 +233,7 @@ for Ngrid in grid_dirs:
 		logging.info( "Results already exist for " + Ngrid +" skipping to next grid" )
 		continue
 
+	logging.info( "")
 	logging.info( "----- NOW COMPUTING GRID: " + os.path.basename(os.path.normpath(Ngrid)) + "-----")
 #====================================================================
 #	Does grid contain points?
