@@ -13,6 +13,6 @@ shp <- shapefile(shpin)
 # replace values 1: ncell this is the grids index
 values(rst)<- 1:ncell(rst)
 ids = sort(unique(extract(rst,shp)))
-gridsout <- paste0(wd,"/grid", ids)
+gridsout <- paste0(ids)
 cat(gridsout)
 
