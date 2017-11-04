@@ -255,6 +255,28 @@ for Ngrid in grid_dirs:
 		continue
 
 	logging.info( "----- NOW COMPUTING GRID: " + os.path.basename(os.path.normpath(Ngrid)) + "-----")
+#====================================================================
+#	Does grid contain points?
+#====================================================================
+if config['main']['runtype'] == points:
+
+	# read in points
+	import fiona
+	point = fiona.open(config['main']['shp'])
+
+	# get grid extent
+	from getERA import getExtent as ext
+	latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
+	latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
+	lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
+	lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
+
+	from shapely.geometry import Point
+ 	from shapely.geometry.polygon import Polygon
+
+
+	polygon = Polygon([(lonW,latS), (lonW, latN), (lonE, latN), (lonE, latS)])
+    logging.info(polygon.contains(point)) 
 
 #====================================================================
 #	Compute svf here

@@ -33,5 +33,12 @@ lp = data.frame(pk,lp, lon,lat)
 lp = na.omit(lp)
 write.csv(lp, '../listpoints.txt', row.names=FALSE)
 
+# if there is no point in gridbox, remove it
+if (length(lon) < 1){
+
+	print ("[makelistpoints2.R] Grid contains no points, removing grid directory")
+    system(paste0('rm -r ', wd))
+}
+
 
 
