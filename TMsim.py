@@ -69,8 +69,7 @@ def main(Ngrid, config):
 		from joblib import Parallel, delayed 
 		import multiprocessing 
 		jobs = glob.glob(gridpath +"/S*")
-		logging.info( "Running jobs:" )
-		logging.info( os.path.basename(os.path.normpath(jobs)) )
+		logging.info( "Running "+str(len(jobs))+ " jobs" )
 		num_cores= config['geotop']['num_cores'] #multiprocessing.cpu_count()
 		Parallel(n_jobs=int(num_cores))(delayed(subprocess.call)(["./geotop1.226", i ]) for i in jobs)
 		# ===============================================
