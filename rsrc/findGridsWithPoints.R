@@ -3,8 +3,8 @@
 require(raster)
 
 args = commandArgs(trailingOnly=TRUE)
-
-wd<- args[1] 
+ 
+wd <- args[1] 
 rstin <- args[2] # raster("/home/joel/sim/test_points/spatial/eraExtent.tif")
 shpin  <- args[3] # shapefile("/home/joel/data/imis/gis/IMIS_GR.shp")
 
