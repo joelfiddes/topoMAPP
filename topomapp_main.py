@@ -261,8 +261,8 @@ for Ngrid in grid_dirs:
 	if config['main']['runtype'] == "points":
 
 		# read in points
-		import fiona
-		point = fiona.open(config['main']['shp'])
+		import shapefile
+		point = shapefile.Reader(config['main']['shp'])
 
 		# get grid extent
 		from getERA import getExtent as ext
