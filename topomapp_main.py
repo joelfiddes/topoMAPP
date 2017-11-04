@@ -258,7 +258,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Does grid contain points?
 #====================================================================
-	if config['main']['runtype'] == points:
+	if config['main']['runtype'] == "points":
 
 		# read in points
 		import fiona
