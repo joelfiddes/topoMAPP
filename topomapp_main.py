@@ -272,11 +272,11 @@ for Ngrid in grid_dirs:
 		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
 
 		from shapely.geometry import Point
-	 	from shapely.geometry.polygon import Polygon
+		from shapely.geometry.polygon import Polygon
 
 
 		polygon = Polygon([(lonW,latS), (lonW, latN), (lonE, latN), (lonE, latS)])
-	    logging.info(polygon.contains(point)) 
+		logging.info(polygon.contains(point)) 
 
 #====================================================================
 #	Compute svf here
