@@ -332,7 +332,7 @@ for Ngrid in grid_dirs:
 
 
 
-
+logging.info("Simulation finished!")
 logging.info(" %f minutes for run" % round((time.time()/60 - start_time/60),2) )
 
 

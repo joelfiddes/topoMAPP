@@ -64,9 +64,10 @@ lwPoint<-lwinTscale( tpl=t_mod,rhpl=r_mod,rhGrid=rhSurf,tGrid=tSurf, lwGrid=lwSu
 #correct lwin for svf
 
 if (svfCompute==TRUE){
-	print(length(lwPoint))
-	print(length(mf$svf))
-lwP=lwPoint %*% diag(mf$svf)
+
+#lwP=lwPoint %*% diag(mf$svf) # this doesnt handle single column lwPoint. What was the purpose?!
+lwP=lwPoint * mf$svf
+
 }
 
 if (svfCompute==FALSE){
