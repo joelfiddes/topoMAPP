@@ -129,10 +129,11 @@ fs=gt.par.wline(fs=fs,ln=lnnhc,vs=surfacedf$NormalHydrConductivity[lc])
 fs=gt.par.wline(fs=fs,ln=lnlhc,vs=surfacedf$LateralHydrConductivity[lc])
 
 #snow - reduce on debris slopes
-if(lc==3){
-scf=gt.par.fline(fs=fs, keyword="SnowCorrFactor") 
-fs=gt.par.wline(fs=fs,ln=scf,vs=0.4)
-}
+# if(lc==3){
+# scf=gt.par.fline(fs=fs, keyword="SnowCorrFactor") 
+# fs=gt.par.wline(fs=fs,ln=scf,vs=0.4)
+# }
+
 #gt.exp.write(eroot_loc=paste(simRoot, "sim",i, sep=""),eroot_sim,enumber=1, fs=fs)
 comchar<-"!" #character to indicate comments
 con <- file(paste0(simindex,"/",parfilename), "w")  # open an output file connection

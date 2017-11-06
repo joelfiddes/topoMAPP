@@ -211,7 +211,7 @@ wmat = foreach(i = 1:npix,
 		HX = c()
 		for ( j in 1 : nens){
 	
-		print(jstr)
+		print(j)
 		# number of smallpix in MODIS pixel
 		#nsmlpix <- length(sampids)
 		nsmlpix <- length(which(!is.na(sampids)==TRUE))
