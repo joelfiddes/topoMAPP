@@ -52,6 +52,19 @@ mf=read.csv('listpoints.txt')
 npoints=length(mf$ele)
 eraBoxEle=read.table('../eraEle.txt',sep=',', header=FALSE)[,1]
 
+#=======================================================================================================
+#			Get correct NBOX
+#=======================================================================================================
+ex = raster('../spatial/eraExtent.tif')
+rst = raster(file)
+values(rst) <- 1:ncell(rst)
+n = crop(rst,ex)
+vec = getValues(n)
+# convert nbox from eraExtent eg 2 to nbox from ERA download
+nbox = vec[nbox]
+#=======================================================================================================
+
+
 #find ele diff station/gidbox
 #eraBoxEle<-getEraEle(dem=eraBoxEleDem, eraFile=tFile) # $masl
 gridEle<-rep(eraBoxEle[nbox],length(mf$ele))
