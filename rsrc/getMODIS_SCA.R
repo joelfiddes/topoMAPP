@@ -1,5 +1,5 @@
 library(MODIStsp) 
-library(hash)
+
 args = commandArgs(trailingOnly=TRUE)
 gui=args[1]
 options_file=args[2]
