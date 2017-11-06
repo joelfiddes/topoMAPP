@@ -90,7 +90,7 @@ if os.path.isfile(fname) == False:
 		os.system(cmd) 
 
 	from domain_setup import getDEM2 as gdem
-	logging.info("Retrive DEM")
+	logging.info("Retrieve DEM")
 	gdem.main(wd ,config["main"]["demDir"] ,config["era-interim"]["domain"], config["main"]["shp"])
 
 	from domain_setup import makeKML as kml

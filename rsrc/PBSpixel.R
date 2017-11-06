@@ -140,16 +140,25 @@ wmat = foreach(i = 1:npix,
 	lastdata = which(rvec>0)[1] # last non-zero value
 	lastdataindex = length(vec) - lastdata+1
 	firstnodata = lastdataindex+1
-	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=T)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
 	start=lastdateover95 
 	end=firstnodata
 	
-	if(start >= end){
+	if(!is.na(start) & !is.na(end) & start >= end){
 	start=200#lastdateover95 
 	end=280#firstnodata
 	}
+	
+	if(is.na(start)){
+	start=200#lastdateover95 
+	}
+	
+	if(is.na(end)){
+	end=280#firstnodata
+	}	
+	
 	# identify missing dates and reset start end index
-	obsind = which(!is.na(obs)==T)
+	obsind = which(!is.na(obs)==TRUE)
 	
 	# cut to start end points (melt season )
 	obsind <- obsind[obsind >= start & obsind <= end]
@@ -159,12 +168,16 @@ wmat = foreach(i = 1:npix,
 	while(length(obsind)<2){
 
 	obs <- pixTS[i+n,] /100
-	obsind <- which(!is.na(obs)==T)
+	obsind <- which(!is.na(obs)==TRUE)
 	obsind <- obsind[obsind >= start & obsind <= end]
 	n<-n+1
 	print(n)
 	print(i+n)
-	if(n > 20){break}
+	if(n > 20){
+		start=200#lastdateover95 
+	end=280#firstnodata
+	next
+	}
 	
 	# if algorithm, reaches last pixel search then goes backwards
 		if ((i+n) == npix){
@@ -198,7 +211,7 @@ wmat = foreach(i = 1:npix,
 		HX = c()
 		for ( j in 1 : nens){
 	
-		print(i)
+		print(jstr)
 		# number of smallpix in MODIS pixel
 		#nsmlpix <- length(sampids)
 		nsmlpix <- length(which(!is.na(sampids)==TRUE))
