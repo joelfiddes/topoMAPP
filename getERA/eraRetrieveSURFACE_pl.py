@@ -73,19 +73,19 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
         requestDatesVec.append(requestDates)
         targetVec.append(target)  
 
-        # find files that already downloaded if any with exact matches (in case of restarts)
-        dataExists = glob.glob(eraDir +"/interim_daily_PLEVEL_??????.nc")
+    # find files that already downloaded if any with exact matches (in case of restarts)
+    dataExists = glob.glob(eraDir +"/interim_daily_SURF_??????.nc")
 
-        # list only files that dont exist
-        targetVecNew = [x for x in targetVec if x not in dataExists]
-        logging.info("ECWMF data found:" )
-        logging.info(dataExists)
-        logging.info("Downloading from ECWMF:")
-        logging.info(targetVecNew)
+    # list only files that dont exist
+    targetVecNew = [x for x in targetVec if x not in dataExists]
+    logging.info("ECWMF data found:" )
+    logging.info(dataExists)
+    logging.info("Downloading from ECWMF:")
+    logging.info(targetVecNew)
 
-        # Amend requestDatesVec
-        index = [targetVec.index(x) for x in targetVecNew]
-        requestDatesVecNew  = [requestDatesVec[i] for i in index]
+    # Amend requestDatesVec
+    index = [targetVec.index(x) for x in targetVecNew]
+    requestDatesVecNew  = [requestDatesVec[i] for i in index]
 
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 

@@ -105,27 +105,35 @@ fsca.df [fsca.df <0]<-0
 #construct dates
 date = c()
 
-for(i in 1: length( names(rstack)))
+x = names(MOD[2,])
+
+for(i in 1: length( x))
 {
-	year <- unlist(strsplit(names(rstack)[i], '_'))[4]
-	doy <- unlist(strsplit(names(rstack)[i], '_'))[5]
+	year <- unlist(strsplit(x[i], '_'))[4]
+	doy <- unlist(strsplit(x[i], '_'))[5]
 	dd = strptime(paste(year, doy), format="%Y %j")
 	date = c(date, as.character(dd))
 	
 }
 
+
+
+write.csv(date,paste0(wd,"/fsca_dates.csv"), row.names=FALSE )
+
 #construct dataframes
+df=c()
 for (i in 1:Npoints)
 {
-	ndsi = as.vector(fsca.df[i,])
-	
-	fsca= (-0.01 + (1.45*ndsi)) # https://modis-snow-ice.gsfc.nasa.gov/uploads/C6_MODIS_Snow_User_Guide.pdf
-	fsca [fsca >100]<-100
-	fsca [fsca <0]<-0
+	fsca = as.vector(fsca.df[i,])
+	df = cbind(df, fsca)
 
-	df = data.frame(date, fsca)
-	write.csv(df, paste0(wd,'/MODIS/fca_P',i,'.csv'), quote=FALSE, row.names=FALSE)
+
 }
+df = data.frame(df)
+
+names(df) <- paste0("p", 1:Npoints)
+	write.csv(df,paste0(wd,"/fsca_obs.csv"), row.names=FALSE )
+	
 #====================================================================
 # MODIS SA CODES
 #====================================================================

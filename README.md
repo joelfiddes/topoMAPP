@@ -46,9 +46,16 @@ There are three types of config
 ## Config
 
 ## Setting up domain
+- The domain is defined by a shape file either of polygon or points geometry. Based on this TopoMAPP retrieves SRTM DEM required for AOI.
+- 
 
 ## ECWMF reanalysis
-This is costly to download especially higher resolution ERA5 (approx. 1.5h /year/ 20 grids / 80mbps line). Howver this is all fully automated so you can set and forget and leave to run on your server overnight or however long is required. Once downloaded you can run muultiple experiments (eg. ensemble simulations) without requiring further download as long as your temporal and spatial domain do not change
+This is costly to download especially higher resolution ERA5 (approx. 1.5h /year/ 20 grids / 80mbps line). Howver this is all fully automated so you can set and forget and leave to run on your server overnight or however long is required. Once downloaded you can run muultiple experiments (eg. ensemble simulations) without requiring further download as long as your temporal and spatial domain do not change.
+
+- The code uses joblib to parallelise the requests according to num_core variable. 
+- 3 active and 20 queued requests are permitted by the api: https://software.ecmwf.int/wiki/display/WEBAPI/WebAPI+FAQ#WebAPIFAQ-Isthereanylimitationonthenumberofrequeststhatausercansubmit?
+- If there are failures simply rerun and will check what is already downloaded and what still required. 
+- ECWMF joblist portal can be useful for checking progress, jobs submitted etc: http://apps.ecmwf.int/webmars/joblist/
 
 ## TopoSUB
 
