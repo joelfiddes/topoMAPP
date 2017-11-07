@@ -1,47 +1,45 @@
 #!/usr/bin/env python
+""" 
+This module scale meteo0001.txt files directly with ensemble perturbations. And then runs LSM
+ 
+
+"""
 import subprocess
 import glob
 import logging
 import os
+import pandas as pd
 
 def main(Ngrid, config):
-#====================================================================
-#	Setup Geotop simulations
-#====================================================================
-	#ncells = dims.main(wd, wd + "/spatial/eraExtent.tif")
-	print "[INFO]: Setup Geotop simulations" 
 
-	# set up sim directoroes #and write metfiles
-	#for Ngrid in range(1,int(ncells)+1):
-		#gridpath = wd +"/grid"+ Ngrid
+	#list sim dirs
+	sim_dirs = glob.glob(Ngrid +"/S*")
 
-	#for Ngrid in grid_dirs:	
-	gridpath = str(Ngrid)
+	logging.info("Perturburbing simulation meteo:")
+	logging.info(sim_dirs)
 
-	import os
-	if os.path.exists(gridpath):
-		print "[INFO]: Setting up geotop inputs " + str(Ngrid)
+	# loop through sim dirs
+	for s in sim_dirs:
 
-	 	print "[INFO]: Creating met files...."
-	 	from gtop_setup import prepMet as met
-		met.main(gridpath, config["toposcale"]["svfCompute"],str(config["da"]["tscale"]),str(config["da"]["pscale"]),str(config["da"]["swscale"]),str(config["da"]["lwscale"]))
+	# read meteo0001
+		df = pd.read_csv( s +"/meteo0001.txt")
 
-		print "[INFO]: extract surface properties"
-		from gtop_setup import pointsSurface as psurf
-		psurf.main(gridpath)
+	# scale meteo
+		df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
+		df['Prec'] = df['Tair'] + config['da']['tscale'] #additative
+		df['Prec'] = df['LW'] + config['da']['lwscale']#additative
+		df['Prec'] = df['SW'] + config['da']['swscale']#additative
 
-		print "[INFO]: making inputs file"
-		from gtop_setup import makeGeotopInputs as gInput
-		gInput.main(gridpath, config["geotop"]["geotopInputsPath"], config["main"]["startDate"], config["main"]["endDate"])
+		#write meteo
+		df.to_csv( s +"/meteo0001.txt", index = False)
 
-	else:
-		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
+
 
 
 #====================================================================
 #	Run LSM
 #====================================================================
-	print "[INFO]: Running LSM" 
+	logging.info("Running LSM")
 
 	# set up sim directoroes #and write metfiles
 
@@ -49,7 +47,7 @@ def main(Ngrid, config):
 
 	if os.path.exists(gridpath):
 
-	 	print "[INFO]: Simulations grid " + str(Ngrid) + " running (parallel model runs)"
+	 	logging.info("Simulations grid " + str(Ngrid) + " running (parallel model runs)")
 		
 		# batchfile="batch.sh"
 		# sim_entries=gridpath +"/S*"
@@ -74,7 +72,7 @@ def main(Ngrid, config):
 		Parallel(n_jobs=int(num_cores))(delayed(subprocess.call)([config['geotop']['lsmPath'] + '/' + config['geotop']['lsmExe'], i ]) for i in jobs)
 		# ===============================================
 	else:
-		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
+		logging.info("[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1")
 
 #====================================================================
 #	Calling MAIN
@@ -84,3 +82,7 @@ if __name__ == '__main__':
 	Ngrid      = sys.argv[1]
 	config      = sys.argv[2]
 	main(Ngrid, config)
+
+
+
+	config['geotop']['lsmPath']+'/'+config['geotop']['lsmExe']

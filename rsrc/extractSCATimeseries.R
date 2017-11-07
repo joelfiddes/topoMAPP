@@ -104,7 +104,7 @@ fsca.df [fsca.df <0]<-0
 
 #construct dates
 date = c()
-names(rstack)
+
 for(i in 1: length( names(rstack)))
 {
 	year <- unlist(strsplit(names(rstack)[i], '_'))[4]
@@ -117,7 +117,12 @@ for(i in 1: length( names(rstack)))
 #construct dataframes
 for (i in 1:Npoints)
 {
-	fsca = as.vector(fsca.df[i,])
+	ndsi = as.vector(fsca.df[i,])
+	
+	fsca= (-0.01 + (1.45*ndsi)) # https://modis-snow-ice.gsfc.nasa.gov/uploads/C6_MODIS_Snow_User_Guide.pdf
+	fsca [fsca >100]<-100
+	fsca [fsca <0]<-0
+
 	df = data.frame(date, fsca)
 	write.csv(df, paste0(wd,'/MODIS/fca_P',i,'.csv'), quote=FALSE, row.names=FALSE)
 }

@@ -3,8 +3,8 @@
 # ======== code ===================
 
 # env
-wd = "/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler_testRadflux/" #
-priorwd = "/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/test_radflux/" #
+wd = "/home/joel/sim/points_ensemble/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler_testRadflux/" #
+priorwd = "/home/joel/sim/points/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/test_radflux/" #
 grid=9 #2
 
 
@@ -43,18 +43,6 @@ rstack = crop(rstack, landform)
 # output
 outfile = "wmat_mp.rd" #"wmat_trunc20.rd"
  
-# identify melt season 
-
-# using a curve to find max
-#require(lattice)
-#mean_sca=cellStats(rstack, "mean")
-#x=1:length(mean_sca)
-#y=mean_sca
-#xyplot(y ~ x, type=c("smooth", "p"))
-
-
-
-
 # pixel based timeseries 
 pixTS = extract( rstack , 1:ncell(rstack) )
 
@@ -62,26 +50,7 @@ pixTS = extract( rstack , 1:ncell(rstack) )
 npix = ncell( rstack)
 
 
-#======= objective search
-#for (i in (1:ncell(rstack))){
 
-#vec=pixTS[i,]
-#rvec=rev(vec)
-#lastdata = which(rvec>0)[1] # last non-zero value
-#lastdataindex = length(vec) - lastdata+1
-#firstnodata = lastdataindex+1
-##lastdateover90 = length(vec) - which(rvec>90)[1] -2
-#lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=T)*0.95))[1] # last date over 95% of max value accounts for max below 100%
-
-##meltperiod=c(vec[lastdateover90], vec[firstnodata])
-##plot(vec)
-##lines(c(lastdateover90, firstnodata), meltperiod, col='red',lwd=3)
-##}
-
-#start=lastdateover95 
-#end=firstnodata
-
-# add dummy check that this lies
 #===============================================================================
 #	Construct results matrix
 #===============================================================================

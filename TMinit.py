@@ -1,4 +1,5 @@
 import os
+import logging
 
 def main(config, ensembRun):
 #====================================================================
@@ -8,8 +9,8 @@ def main(config, ensembRun):
 #	copied (eg no retoposcale or toposub needed)
 #====================================================================
 	# notifications
-	print "[INFO]: initialising " + config['main']['wd'] + " from " + config["main"]["initDir"]
-	print "[INFO]: copying only Grid" + config["main"]["initGrid"]
+	logging.info("initialising " + config['main']['wd'] + " from " + config["main"]["initDir"])
+	logging.info("Copying only Grid" + config["main"]["initGrid"])
 
 	# Creat wd dir if doesnt exist
 	if not os.path.exists(config['main']['wd']):
@@ -42,10 +43,19 @@ def main(config, ensembRun):
 	if ensembRun == True:
 		#if config["main"]["initGrid"] == "*" # could use this for supporting copitying of all files
 		# copies grids can be one or all
+		
+		# make new dierectory
+		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
+		cmd = "mkdir  %s"%(dst)
+		os.system(cmd)
+
+		# copy sim dirs only
 		src = config["main"]["initDir"] + "/grid" + config["main"]["initGrid"] +"/S*"
-		dst = config['main']['wd']
+		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
 		cmd = "cp -r  %s %s"%(src,dst)
 		os.system(cmd)
+
+
 #====================================================================
 #	Calling MAIN
 #====================================================================
