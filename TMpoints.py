@@ -21,10 +21,13 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	run toposcale
 	#====================================================================
-	logging.info( "TopoSCALE: " + os.path.basename(os.path.normpath(Ngrid)) )
-	import TMtoposcale
-	TMtoposcale.main(wd, Ngrid, config)
-
+	fname1 = gridpath + "/tPoint.txt"
+	if os.path.isfile(fname1) == False: #NOT ROBUST
+		logging.info( "TopoSCALE: " + os.path.basename(os.path.normpath(Ngrid)) )
+		import TMtoposcale
+		TMtoposcale.main(wd, Ngrid, config)
+	else:
+		logging.info( "TopoSCALE already run: " + os.path.basename(os.path.normpath(Ngrid)) )
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
@@ -36,41 +39,41 @@ def main(wd, Ngrid, config):
 	#	Get MODIS SCA
 	#====================================================================
 
-	if config["modis"]["getMODISSCA"] == "TRUE":
+	# if config["modis"]["getMODISSCA"] == "TRUE":
 			
-		gridpath = str(Ngrid)
-		if os.path.exists(gridpath):
+	# 	gridpath = str(Ngrid)
+	# 	if os.path.exists(gridpath):
 
-			# set up directory
-			sca_wd=gridpath + "/MODIS/SC"
-			if not os.path.exists(sca_wd):
-				os.makedirs(sca_wd)
+	# 		# set up directory
+	# 		sca_wd=gridpath + "/MODIS/SC"
+	# 		if not os.path.exists(sca_wd):
+	# 			os.makedirs(sca_wd)
 
-			# compute from dem of small grid
-			from getERA import getExtent as ext
-			latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
-			latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
-			lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
-			lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
+	# 		# compute from dem of small grid
+	# 		from getERA import getExtent as ext
+	# 		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
+	# 		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
+	# 		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
+	# 		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
 
-			# call bash script that does grep type stuff to update values in options file
-			cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file_SCA"], sca_wd, config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
-			subprocess.check_output( cmd)
+	# 		# call bash script that does grep type stuff to update values in options file
+	# 		cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file_SCA"], sca_wd, config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
+	# 		subprocess.check_output( cmd)
 
-			# run MODIStsp tool
-			logging.info( "Fetch MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
-			from DA import getMODIS as gmod
-			gmod.main("FALSE" , config["modis"]["options_file_SCA"]) #  able to run non-interactively now
+	# 		# run MODIStsp tool
+	# 		logging.info( "Fetch MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+	# 		from DA import getMODIS as gmod
+	# 		gmod.main("FALSE" , config["modis"]["options_file_SCA"]) #  able to run non-interactively now
 
-			# extract timersies per point
-			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
-			from DA import scaTS
-			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
+	# 		# extract timersies per point
+	# 		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+	# 		from DA import scaTS
+	# 		scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,wd + "/spatial/points.shp" )
 
-			# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
+	# 		# POSTPROCESS FSCA FILES TO FILL GAPS (linearly interpolate)
 
-	else:
-		logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
+	# else:
+	# 	logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 
 # calling main

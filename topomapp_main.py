@@ -288,25 +288,53 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Run bbox script
 #====================================================================
-	if config["main"]["runtype"] == "bbox":
-		import TMgrid
-		TMgrid.main(wd, Ngrid, config)
+	fname = gridpath + "/groundResults"
+	if os.path.isfile(fname) == False:
+# chech fro resultsCube
+		if config["main"]["runtype"] == "bbox":
+			import TMgrid
+			TMgrid.main(wd, Ngrid, config)
 
 #====================================================================
 #	Run points script
 #====================================================================
-
-# make into proper modules with arguments etc
-# import config and Ngrid
-	if config["main"]["runtype"] == "points":
-		import TMpoints
-		TMpoints.main(wd, Ngrid, config)
+	fname = gridpath + "/groundResults"
+	if os.path.isfile(fname) == False:
+		if config["main"]["runtype"] == "points":
+			import TMpoints
+			TMpoints.main(wd, Ngrid, config)
 
 #====================================================================
 #	Aggregate results and clean up
 #====================================================================
-	from topoResults import resultsCube
-	resultsCube.main(Ngrid)
+	fname = gridpath + "/groundResults"
+	if os.path.isfile(fname) == False:
+		from topoResults import resultsCube
+		resultsCube.main(Ngrid)
+
+#====================================================================
+#	Run SCA here as separate loop to keep as distinct (long) job
+#====================================================================
+
+for Ngrid in grid_dirs:
+	gridpath = Ngrid
+	logging.info( "Fetching MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
+#====================================================================
+#	Does grid contain points?
+#====================================================================
+ 	if config['main']['runtype'] == "points":
+		from listpoints_make import findGridsWithPoints
+		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+		if(len(numPoints) == 0):
+			logging.info( "Grid box contains no points, skip to next grid")
+			continue
+
+	if config["modis"]["getMODISSCA"] == "TRUE":
+		import TMsca
+		TMsca.main(Ngrid, config)
+
+	else:
+		logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 #====================================================================
 #	Run ensemble
