@@ -70,9 +70,9 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
 
     # list only files that dont exist
     targetVecNew = [x for x in targetVec if x not in dataExists]
-    logging.info("ECWMF data found:" )
+    logging.info("ECWMF PLEVEL data found:" )
     logging.info(dataExists)
-    logging.info("Downloading from ECWMF:")
+    logging.info("Downloading PLEVEL from ECWMF:")
     logging.info(targetVecNew)
 
     # Amend requestDatesVec
