@@ -6,6 +6,8 @@ import sys
 from ecmwfapi import ECMWFDataServer
 import time
 from dateutil.relativedelta import *
+import os
+import logging
 start_time = time.time()
 server = ECMWFDataServer()
  
@@ -68,8 +70,13 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
             lastDate = "%04d%02d%02d" % (year, month, numberOfDays)
             target = eraDir + "/interim_daily_PLEVEL_%04d%02d.nc" % (year, month)
             requestDates = (startDate + "/TO/" + lastDate)
-            interim_request(requestDates, target, grid, bbox, dataset,time, step, eraClass)
- 
+
+            # check if exists
+            if os.path.isfile(target) == False:
+                interim_request(requestDates, target, grid, bbox, dataset,time, step, eraClass)
+            else:
+                logging.info("Found: " + target)
+                
 def interim_request(requestDates, target, grid, bbox, dataset,time, step, eraClass):
     """      
         An ERA interim request for analysis pressure level data.

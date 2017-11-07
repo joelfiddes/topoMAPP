@@ -6,6 +6,8 @@ import sys
 from ecmwfapi import ECMWFDataServer
 from dateutil.relativedelta import *
 from retrying import retry
+import logging
+import glob
 
 server = ECMWFDataServer()
  
@@ -63,11 +65,23 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
         requestDatesVec.append(requestDates)
         targetVec.append(target)  
 
+        # find files that already downloaded if any with exact matches (in case of restarts)
+        dataExists = glob.glob(eraDir +"/interim_daily_PLEVEL_??????.nc")
+
+        # list only files that dont exist
+        targetVecNew = [x for x in targetVec if x not in dataExists]
+        logging.info("Found:" +dataExists)
+        logging.info("Downloading:" +targetVecNew)
+
+        # Amend requestDatesVec
+        index = [targetVec.index(x) for x in targetVecNew]
+        requestDatesVecNew  = [requestDatesVec[i] for i in index]
+
     # https://zacharyst.com/2016/03/31/parallelize-a-multifunction-argument-in-python/
     from joblib import Parallel, delayed 
     import multiprocessing 
 
-    Parallel(n_jobs=int(num_cores))(delayed(interim_request)(requestDatesVec[i], targetVec[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVec)))
+    Parallel(n_jobs=int(num_cores))(delayed(interim_request)(requestDatesVecNew[i], targetVecNew[i] , grid, bbox, dataset,timeVec, step, eraClass) for i in range(0,len(requestDatesVecNew)))
 
 
 @retry(wait_random_min=10000, wait_random_max=20000)
