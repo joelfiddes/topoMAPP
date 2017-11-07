@@ -52,7 +52,7 @@ priorwd = "/home/joel/sim/scale_test_sml/"
 grid=9
 # IO files
 plotout=(paste0(wd,"/daplot_median.pdf"))
-load( paste0(wd,"wmat_2.rd"))
+load( paste0(wd,"wmat_mp.rd"))
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
