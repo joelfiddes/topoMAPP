@@ -1,13 +1,14 @@
 
-# TopoMAPP
+# Introduction: TopoMAPP
 
+** WORK IN PROGRESS - not ready for running out the box, get in touch if would like to know more help in setting this up **
 This modelling framework combines previously published tools TopoSUB and TopoSCALE with ensemble and data assimilation methods. The tool can be run in 3 modes:
 - NORM
 - ENSEMBLE
 - DA
 
-and at 2 scales:
-- bbox
+and at 2 spatial geometries:
+- AOI / bbox
 - point
 
 # Setup
@@ -22,14 +23,15 @@ and at 2 scales:
 - stdout redirected to file stdout.log in ./topomapp src code directory
 
 ## Dependencies
-- GDAL > 2 MODIS R package
+- Linux 16.04 (probably works on 14.04 too)
+- GDAL > v.2 
 - CDO
-- Rlibs (packaged)
-- Pythonlibs (packaged)
-- Geotop (packaged)
+- Rlibs (tobe detailed/packaged)
+- Pythonlibs (tobe detailed/ packaged)
+- Geotop model (binary included / packaged) http://geotopmodel.github.io/geotop/
 
 ## Structure
-Main code-base is R code,  Python is used as a wrapper and to give the project some architecture. Plus a dash of bash.
+Main code-base is R code,  Python is used as a wrapper and to give the project architecture. Plus a dash of bash.
 
 ## Config  
 There are three types of config
@@ -37,3 +39,23 @@ There are three types of config
 - Geotop INPTS: model parameters and all thing GeoTOP are defined here. This does not need to be edited regularly. Set and forget.
 - MODIS JSON: these 2 configuration files setup the MODIS download of NDVI and SCA. They usually don't need to be edited manually
 
+# What it does
+
+## Modes
+
+## Config
+
+## Setting up domain
+
+## ECWMF reanalysis
+This is costly to download especially higher resolution ERA5 (approx. 1.5h /year/ 20 grids / 80mbps line). Howver this is all fully automated so you can set and forget and leave to run on your server overnight or however long is required. Once downloaded you can run muultiple experiments (eg. ensemble simulations) without requiring further download as long as your temporal and spatial domain do not change
+
+## TopoSUB
+
+## TopoSCALE
+
+## Probabilistic
+
+## Data assimilation
+
+##
