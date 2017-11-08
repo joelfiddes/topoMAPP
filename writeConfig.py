@@ -47,7 +47,7 @@ config['main']['tz'] = -1
 # control quick starts
 config['main']['initSim'] = 'FALSE' # initialises interim data and dem from existing to allow perturbed experiment 
 config['main']['initDir'] = '/home/joel/sim/da_test'
-config['main']['initGrid'] = 1 # optional subset of grids to init sim with, can be "*" for all grids
+config['main']['initGrid'] = 1 # can be single number or comma seperated list eg. 1,2,3
 
 # option to supply own dem - doesnt work yet
 config['main']['demexists'] = 'FALSE'

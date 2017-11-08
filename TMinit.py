@@ -6,7 +6,7 @@ def main(config, ensembRun):
 #	Initialise run: this can be used to copy meteo and surfaces to a 
 # 	new sim directory. 
 # 	Main application is in ensemble runs where only sim dir are 
-#	copied (eg no retoposcale or toposub needed)
+#	copied (eg no rerun toposcale or toposub needed)
 #====================================================================
 	# notifications
 	logging.info("initialising " + config['main']['wd'] + " from " + config["main"]["initDir"])
@@ -54,7 +54,6 @@ def main(config, ensembRun):
 		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
 		cmd = "cp -r  %s %s"%(src,dst)
 		os.system(cmd)
-
 
 #====================================================================
 #	Calling MAIN

@@ -340,7 +340,7 @@ if config["modis"]["getMODISSCA"] == "TRUE":
 		gridpath = Ngrid
 		logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
 
-	#	Does grid contain points?
+	# Does grid contain points?
 	 	if config['main']['runtype'] == "points":
 			from listpoints_make import findGridsWithPoints
 			numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])

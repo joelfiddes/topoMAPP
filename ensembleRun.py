@@ -17,7 +17,7 @@ import logging
 
 def main(config):
 
-	initgrid = config['main']['initGrid']
+	initgrids = config['main']['initGrid']
 	root = config['main']['wd'].rstrip("/") + "_ensemble"
 	N = config['ensemble']['members']
 	#initdir = config['main']['initDir']
@@ -56,13 +56,13 @@ def main(config):
 
 	#loop over ensemble members
 	for i in range(0,int(N)):
-		logging.info("Running ensemble member:" + str(i))
+		logging.info("Configuring ensemble member:" + str(i))
 		pbias = df['pbias'][i]
 		tbias = df['tbias'][i]
 		lwbias = df['lwbias'][i]
 		swbias = df['swbias'][i]
 
-		logging.info("[INFO]: Config ensemble members")
+		
 		#config = ConfigObj(inifile)
 		#config.filename = inifile
 		config["main"]["wd"]  = root + "/ensemble" + str(i) + "/"
@@ -74,7 +74,7 @@ def main(config):
 		config["main"]["initSim"]  = 'TRUE'
 		config['main']['initDir'] = master
 		config['toposub']['inform'] = 'FALSE'
-		config['main']['initGrid'] = initgrid
+		#config['main']['initGrid'] = initgrid
 		config.write()
 
 		logging.info("Config settings used")
@@ -83,17 +83,21 @@ def main(config):
 		#print "[INFO]: Running topomapp_main.py"
 		#os.system("python topomapp_main.py " + inifile)
 
-		# init a new instance from 	initdir and initgrid
-		import TMinit
-		TMinit.main(config, ensembRun=True)
+		for initgrid in initgrids:
+			print initgrid
+			config['main']['initGrid'] = initgrid
+			config.write()
+			# init a new instance from 	initdir and initgrid
+			import TMinit
+			TMinit.main(config, ensembRun=True)
 
-		# define Ngrid in ensemble directory
-		Ngrid = config["main"]["wd"] +"grid"+ initgrid
-		logging.info("Ngrid= " + Ngrid)
+			# define Ngrid in ensemble directory
+			Ngrid = config["main"]["wd"] +"grid"+ initgrid
+			logging.info("Ngrid= " + Ngrid)
 
-		# run setup scaling of meteo and LSM - would be quicker to read meteo sclae and then write back
-		import TMensembSim
-		TMensembSim.main(Ngrid, config)
+			# run setup scaling of meteo and LSM - would be quicker to read meteo sclae and then write back
+			import TMensembSim
+			TMensembSim.main(Ngrid, config)
 
 		# report time of run
 		logging.info("%f minutes for run of ensemble members" % round((time.time()/60 - start_time/60),2))
