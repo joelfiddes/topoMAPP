@@ -1,7 +1,8 @@
 
 # Introduction: TopoMAPP
 
-** WORK IN PROGRESS - not ready for running out the box, get in touch if would like to know more help in setting this up **
+** Project in active development - not ready for running out the box, provided as is with no guaruntee of stability. **
+
 This modelling framework combines previously published tools TopoSUB and TopoSCALE with ensemble and data assimilation methods. The tool can be run in 3 modes:
 - NORM
 - ENSEMBLE
