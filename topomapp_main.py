@@ -316,12 +316,24 @@ for Ngrid in grid_dirs:
 #	Run SCA here as separate loop to keep as distinct (long) job
 #====================================================================
 
+
+
+if config["modis"]["getMODISSCA"] == "TRUE":
+	import TMsca
+	TMsca.main(config)
+
+else:
+	logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
+
+
+#====================================================================
+#	Post-process SCA
+#====================================================================
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 	logging.info( "Fetching MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
-#====================================================================
+
 #	Does grid contain points?
-#====================================================================
  	if config['main']['runtype'] == "points":
 		from listpoints_make import findGridsWithPoints
 		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
@@ -329,12 +341,16 @@ for Ngrid in grid_dirs:
 			logging.info( "Grid box contains no points, skip to next grid")
 			continue
 
-	if config["modis"]["getMODISSCA"] == "TRUE":
-		import TMsca
-		TMsca.main(Ngrid, config)
+		if config['main']['runtype'] == "points":
+			# extract timersies per point
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+			from DA import scaTS
+			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
 
-	else:
-		logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
+		if config['main']['runtype'] == "bbox":
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
+			from DA import scaTS_GRID
+			scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
 
 #====================================================================
 #	Run ensemble

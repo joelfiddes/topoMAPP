@@ -33,17 +33,35 @@ and at 2 spatial geometries:
 ## Structure
 Main code-base is R code,  Python is used as a wrapper and to give the project architecture. Plus a dash of bash.
 
+## Data download
+MODIS and SRTM data are required by TopoMAPP and download is handled by separate tools but one NASA accounts here:
+https://urs.earthdata.nasa.gov/profile
+
+### MODIS
+MODIS download is handled by the really great R package MODIStsp available on CRAN and here: https://github.com/lbusett/MODIStsp
+
+MODIS data is required to define the surface based on NDVI (Vegetation Indexes_16Days_250m (M*D13Q1)) and optionally in the DA routines where MODIS snow products are retrieved (Snow_Cov_Daily_500m (M*D10_A1)). Options file for configuring the download is described below
+
+### SRTM
+Account required https://urs.earthdata.nasa.gov/profile and credentials file here:
+``` ~/.netrc```
+Download is implemented using wget from this server:
+http://e4ftl01.cr.usgs.gov//MODV6_Dal_D/SRTM/SRTMGL1.003/2000.02.11/
+
+and downloads closest 1x1 degree tiles to AOI using a snap out algorithm (AOI is completely enclosed by downloaded domain). It is quite simple but does some smart things like check if the requested data already exists in the ```config['main']['demDir']```.
+
 ## Config  
 There are three types of config
 - main INI: this controls the modelling scheme and is edited every time a run is setup.
 - Geotop INPTS: model parameters and all thing GeoTOP are defined here. This does not need to be edited regularly. Set and forget.
-- MODIS JSON: these 2 configuration files setup the MODIS download of NDVI and SCA. They usually don't need to be edited manually
+- MODIS JSON: these 2 configuration files setup the MODIS download of NDVI and SCA. They usually don't need to be edited manually except on firt use where credentials from earthdata account need to be entered.
+
 
 # What it does
 
 ## Modes
 
-## Config
+## Config variables
 
 ## Setting up domain
 - The domain is defined by a shape file either of polygon or points geometry. Based on this TopoMAPP retrieves SRTM DEM required for AOI.
