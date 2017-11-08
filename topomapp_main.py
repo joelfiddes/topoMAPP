@@ -171,7 +171,6 @@ else:
 #	Preprocess ERA
 #====================================================================
 fname1 = wd + "/eraDat/all/tSurf" # check for last file gerenrated by era_prep script
-
 if os.path.isfile(fname1) == False: 
 
 	logging.info("Preprocessing ERA data")
@@ -279,7 +278,7 @@ for Ngrid in grid_dirs:
 		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12"]#,"2016-08-12"]
 		for date in mydates:
 			# call bash script that does grep type stuff to update values in options file
-			cmd = ["./DA/updateOptions.sh" , date , date, config["modis"]["options_file_NDVI"], ndvi_wd, config["main"]["shp"]]
+			cmd = ["./DA/updateOptions.sh" , date , date, config["modis"]["options_file_NDVI"], ndvi_wd]
 			subprocess.check_output(cmd)
 
 			# run MODIStsp tool
