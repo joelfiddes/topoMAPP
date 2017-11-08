@@ -255,32 +255,36 @@ for Ngrid in grid_dirs:
 
 		from domain_setup import computeSVF
 		computeSVF.main(gridpath, angles=str(6), dist=str(500))
+
 #====================================================================
-#	Download MODIS NDVI here
+#	Download MODIS NDVI
+#
+#   NDVI (in contrast to SCA) is run within the Ngrid loop and HDF 
+#	are saved so multiple downloads NOT required. Data volume is low so 
+#	this is OK. This allows faster completion of each grid and permits 
+#	scalable application of the analysis algorithms on limited size domain.
 #====================================================================
 	# only run if surface tif doesnt exist
 	fname = gridpath + "/predictors/surface.tif"
 	if os.path.isfile(fname) == False:
 
 		logging.info( "Preparing land surface layer from MODIS: " + os.path.basename(os.path.normpath(Ngrid)) )
-		
-		# compute from dem of small grid
-		from getERA import getExtent as ext
-		latN = ext.main(gridpath + "/predictors/ele.tif" , "latN")
-		latS = ext.main(gridpath + "/predictors/ele.tif" , "latS")
-		lonW = ext.main(gridpath + "/predictors/ele.tif" , "lonW")
-		lonE = ext.main(gridpath + "/predictors/ele.tif" , "lonE")
+
+		# Define grid AOI shp
+		gridAOI = gridpath + "/extent.shp"
+		cmd = ["Rscript", "./rsrc/rst2shp.R" , gridpath + "/predictors/ele.tif", gridAOI]
+		subprocess.check_output(cmd)
 
 		#need to run loop of five requests at set dates (can be fixed for now)
 		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12"]#,"2016-08-12"]
 		for date in mydates:
 			# call bash script that does grep type stuff to update values in options file
-			cmd = ["./DA/updateOptions.sh" , lonW , latS , lonE , latN , date , date, config["modis"]["options_file_NDVI"], ndvi_wd,config['modis']['tileX_start'] , config['modis']['tileX_end'] , config['modis']['tileY_start'] , config['modis']['tileY_end']]
+			cmd = ["./DA/updateOptions.sh" , date , date, config["modis"]["options_file_NDVI"], ndvi_wd, config["main"]["shp"]]
 			subprocess.check_output(cmd)
 
 			# run MODIStsp tool
 			from DA import getMODIS as gmod
-			gmod.main("FALSE" , config["modis"]["options_file_NDVI"]) #  able to run non-interactively now
+			gmod.main("FALSE" , config["modis"]["options_file_NDVI"], gridAOI) #  able to run non-interactively now
 
 		from domain_setup import makeSurface as surf
 		surf.main(gridpath, ndvi_wd )
@@ -313,45 +317,51 @@ for Ngrid in grid_dirs:
 		resultsCube.main(Ngrid)
 
 #====================================================================
-#	Run SCA here as separate loop to keep as distinct (long) job
+#	Run SCA here for entire domain to make efficient in terms of 
+#	no duplicate hdf downloads
 #====================================================================
 
-
-
 if config["modis"]["getMODISSCA"] == "TRUE":
-	import TMsca
-	TMsca.main(config)
+	logging.info( "Retrieving MODIS SCA for entire domain" )
+	inRst = wd + "/spatial/eraExtent.tif"
+	outShp = wd + "/spatial/eraExtent.shp"
+	cmd = ["Rscript", "./rsrc/rst2shp.R" , inRst, outShp]
+	subprocess.check_output(cmd)
 
-else:
-	logging.info( "No MODIS SCA retrieved: " + os.path.basename(os.path.normpath(Ngrid)) )
+	import TMsca
+	TMsca.main(config, shp = outShp )
+
+
 
 
 #====================================================================
 #	Post-process SCA
 #====================================================================
-for Ngrid in grid_dirs:
-	gridpath = Ngrid
-	logging.info( "Fetching MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
+	for Ngrid in grid_dirs:
+		gridpath = Ngrid
+		logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
 
-#	Does grid contain points?
- 	if config['main']['runtype'] == "points":
-		from listpoints_make import findGridsWithPoints
-		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
-		if(len(numPoints) == 0):
-			logging.info( "Grid box contains no points, skip to next grid")
-			continue
+	#	Does grid contain points?
+	 	if config['main']['runtype'] == "points":
+			from listpoints_make import findGridsWithPoints
+			numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+			if(len(numPoints) == 0):
+				logging.info( "Grid box contains no points, skip to next grid")
+				continue
 
-		if config['main']['runtype'] == "points":
-			# extract timersies per point
-			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
-			from DA import scaTS
-			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
+			if config['main']['runtype'] == "points":
+				# extract timersies per point
+				logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+				from DA import scaTS
+				scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
 
-		if config['main']['runtype'] == "bbox":
-			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
-			from DA import scaTS_GRID
-			scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
+			if config['main']['runtype'] == "bbox":
+				logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
+				from DA import scaTS_GRID
+				scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
 
+else:
+	logging.info( "No MODIS SCA retrieved" )
 #====================================================================
 #	Run ensemble
 #====================================================================

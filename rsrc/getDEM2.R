@@ -50,7 +50,7 @@ if ( class(aoi)=="SpatialPointsDataFrame"){
 
 	# extent of era gridcells covered by AOI
 	eraExtent=extent(r2)
-}
+	}
 
 # polygon AOI
 if(class(aoi)=="SpatialPolygons"  | class(aoi)=="SpatialPolygonsDataFrame"){
