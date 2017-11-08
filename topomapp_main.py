@@ -172,7 +172,7 @@ else:
 #====================================================================
 fname1 = wd + "/eraDat/all/tSurf" # check for last file gerenrated by era_prep script
 
-if os.path.isfile(fname2) == False: 
+if os.path.isfile(fname1) == False: 
 
 	logging.info("Preprocessing ERA data")
 
