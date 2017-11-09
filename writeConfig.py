@@ -15,7 +15,7 @@ config.filename = "ini/test_code.ini"
 
 
 #=================================================================
-# Roots
+# paths to set
 #=================================================================
 simroot = "/home/joel/sim"
 srcroot = "/home/joel/src"
