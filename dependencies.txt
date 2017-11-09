@@ -2,13 +2,12 @@
 ssh -X fiddes@wessel.uio.no	
 
 #R packages
-install.packages(c("raster", "horizon","rgdal", "MODIS", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel"))
+install.packages(c("raster", "horizon","rgdal", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel"))
 
 #test successful
 require(raster)
 require(horizon)
 require(rgdal)
-require(MODIS)
 require(ncdf4)
 require(Hmisc)
 require(MODIStsp) # (install and dependencies https://github.com/lbusett/MODIStsp)
