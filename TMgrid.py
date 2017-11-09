@@ -13,11 +13,9 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	TOPOSUB: Toposub.R contains hardcoded "normal" parameters 
 	#====================================================================
-	from utils import fileSearch
-	path=gridpath
-	file="landform.tif"
-	x=fileSearch.search(path, file)
-	if x != 1: #NOT ROBUST
+	fname1 = gridpath + "landform.tif"
+	if os.path.isfile(fname1) == False: #NOT ROBUST
+
 
 		logging.info( "TopoSUB run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
