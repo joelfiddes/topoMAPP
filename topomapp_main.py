@@ -35,6 +35,27 @@ config = ConfigObj(sys.argv[1])
 wd = config["main"]["wd"]
 
 #====================================================================
+#	Initial checks
+#====================================================================
+# name = raw_input("Working directory is: " + config["main"]["wd"])
+# print "OK"
+
+# name = raw_input("Runtype is: " + config["main"]["runtype"])
+# print "OK"
+
+# name = raw_input("tscaleOnly: " + config["toposcale"]["tscaleOnly"])
+# print "OK"
+
+# name = raw_input("Start date is: " + config["main"]["startdate"])
+# print "OK"
+
+# name = raw_input("End date is: " + config["main"]["enddate"])
+# print "OK"
+
+# name = raw_input("Reanalysis is: " + config['era-interim']['dataset'])
+# print "OK"
+
+#====================================================================
 #	Creat wd dir if doesnt exist
 #====================================================================
 #directory = os.path.dirname(wd)
@@ -210,7 +231,7 @@ else:
 # make output directory at wd level so grids can share hdf scenes if overlap - save download time
 # in contrast sca is saved to gridpath and hdf not retained due to volume of files
 ndvi_wd=wd + "/MODIS/NDVI"
-if not os.path.exists(ndvi_wd):
+if not os.path.exists(ndvi_wd) and config["toposcale"]["tscaleOnly"] == "FALSE" :
 	os.makedirs(ndvi_wd)
 
 #====================================================================
@@ -225,7 +246,7 @@ logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 
-	# skip to next iteratyion if results exist
+	# skip to next iteration if results exist
 	fname1 = gridpath + "/groundResults"
 	fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname2) == True and os.path.isfile(fname2) == True:
@@ -265,7 +286,7 @@ for Ngrid in grid_dirs:
 #====================================================================
 	# only run if surface tif doesnt exist
 	fname = gridpath + "/predictors/surface.tif"
-	if os.path.isfile(fname) == False:
+	if os.path.isfile(fname) == False and config["toposcale"]["tscaleOnly"] == "FALSE":
 
 		logging.info( "Preparing land surface layer from MODIS: " + os.path.basename(os.path.normpath(Ngrid)) )
 
@@ -291,27 +312,27 @@ for Ngrid in grid_dirs:
 #====================================================================
 #	Run bbox script
 #====================================================================
-	fname = gridpath + "/groundResults"
-	if os.path.isfile(fname) == False:
-# chech fro resultsCube
-		if config["main"]["runtype"] == "bbox":
-			import TMgrid
-			TMgrid.main(wd, Ngrid, config)
+
+	if config["main"]["runtype"] == "bbox":
+		
+		import TMgrid
+		TMgrid.main(wd, Ngrid, config)
 
 #====================================================================
 #	Run points script
 #====================================================================
-	fname = gridpath + "/groundResults"
-	if os.path.isfile(fname) == False:
-		if config["main"]["runtype"] == "points":
-			import TMpoints
-			TMpoints.main(wd, Ngrid, config)
+
+	if config["main"]["runtype"] == "points":
+		
+		import TMpoints
+		TMpoints.main(wd, Ngrid, config)
 
 #====================================================================
-#	Aggregate results and clean up
+#	Aggregate results if tscaleOnly == FALSE
 #====================================================================
-	fname = gridpath + "/groundResults"
-	if os.path.isfile(fname) == False:
+	
+	if config["toposcale"]["tscaleOnly"] == "FALSE":
+		
 		from topoResults import resultsCube
 		resultsCube.main(Ngrid)
 
@@ -320,8 +341,10 @@ for Ngrid in grid_dirs:
 #	no duplicate hdf downloads
 #====================================================================
 
-if config["modis"]["getMODISSCA"] == "TRUE":
+if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE":
+
 	logging.info( "Retrieving MODIS SCA for entire domain" )
+
 	inRst = wd + "/spatial/eraExtent.tif"
 	outShp = wd + "/spatial/eraExtent.shp"
 	cmd = ["Rscript", "./rsrc/rst2shp.R" , inRst, outShp]
@@ -348,16 +371,16 @@ if config["modis"]["getMODISSCA"] == "TRUE":
 				logging.info( "Grid box contains no points, skip to next grid")
 				continue
 
-			if config['main']['runtype'] == "points":
-				# extract timersies per point
-				logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
-				from DA import scaTS
-				scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
+		if config['main']['runtype'] == "points":
+			# extract timersies per point
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+			from DA import scaTS
+			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
 
-			if config['main']['runtype'] == "bbox":
-				logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
-				from DA import scaTS_GRID
-				scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
+		if config['main']['runtype'] == "bbox":
+			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
+			from DA import scaTS_GRID
+			scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
 
 else:
 	logging.info( "No MODIS SCA retrieved" )

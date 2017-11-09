@@ -1,7 +1,7 @@
 
 # Introduction: TopoMAPP
 
-*Project in active development - not ready for running out the box, provided as is with no guaruntee of stability.*
+*Project in active development - not ready for running out the box, provided as is with no guarantee of stability.*
 
 This modelling framework combines previously published tools TopoSUB and TopoSCALE with ensemble and data assimilation methods. The tool can be run in 3 modes:
 - NORM
@@ -11,6 +11,13 @@ This modelling framework combines previously published tools TopoSUB and TopoSCA
 and at 2 spatial geometries:
 - AOI / bbox
 - point
+
+Key functions:
+- Automated handling of all download requirements
+- Downscaling routines
+- Efficient numerical simulartor
+- Ensemble simulations
+- Data assimilation routines
 
 # Setup
 ## To run

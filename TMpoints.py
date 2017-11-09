@@ -35,9 +35,10 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================
-	logging.info( "GeoTOP setup and run: " + os.path.basename(os.path.normpath(Ngrid)) )
-	import TMsim
-	TMsim.main(Ngrid, config)
+	if config["toposcale"]["tscaleOnly"] == "FALSE":
+		logging.info( "GeoTOP setup and run: " + os.path.basename(os.path.normpath(Ngrid)) )
+		import TMsim
+		TMsim.main(Ngrid, config)
 
 # calling main
 if __name__ == '__main__':
