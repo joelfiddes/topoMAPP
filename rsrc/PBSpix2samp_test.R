@@ -6,95 +6,105 @@ require(raster)
 
 gridN = 9
  
-#================ GRID 2 (same as 9 but with svf)=================================
+#  ================ GRID 2 (same as 9 but with svf)=================================
 
 
-if( gridN == 2){
-	print (gridN)
+ if( gridN == 2){
+ print (gridN)
+#wd = "/home/joel/sim/ensembler3/"
+#priorwd = "/home/joel/sim/da_test2/" 
+wd = "/home/joel/sim/ensembler_testRadflux/" ##"/home/joel/sim/ensembler3/" #"/home/joel/sim
+priorwd = "/home/joel/sim/test_radflux/"
+grid=2
+# IO files
+plotout=(paste0(wd,"/daplot_median.pdf"))
+load( paste0(wd,"wmat_2.rd"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
-	wd = "/home/joel/sim/ensembler_testRadflux/" ##"/home/joel/sim/ensembler3/" #"/home/joel/sim
-	priorwd = "/home/joel/sim/test_radflux/"
-	grid=2
-	plotout=(paste0(wd,"/daplot_median.pdf"))
-	load( paste0(wd,"wmat_2.rd"))
-	rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-	obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+# variables
+start=180
+end=300
+# number of ensembles
+nens=50
 
-	# number of ensembles
-	nens=50
+# R value for PBS algorithm
+R=0.016
 
-	# R value for PBS algorithm
-	R=0.016
+# number of tsub clusters
+Nclust=150
 
-	# number of tsub clusters
-	Nclust=150
+# threshold for converting swe --> sca
+sdThresh <- 13
 
-	# threshold for converting swe --> sca
-	sdThresh <- 13
-
-	# cores used in parallel jobs
-	cores=4
-	}
+# cores used in parallel jobs
+cores=4
+ }
  
 #  ================ GRID 9 =================================
 
-if( gridN == 9){
-	print (gridN)
+ if( gridN == 9){
+ 	pix = c(1883, 402,1428, 8014, 1153,1165,1196, 1029)
+ print (gridN)
+#wd = "/home/joel/sim/ensembler3/"
+#priorwd = "/home/joel/sim/da_test2/" 
+wd = "/home/joel/sim/ensembler_scale_sml/" 
+priorwd = "/home/joel/sim/scale_test_sml/"
+grid=9
+# IO files
+plotout=(paste0(wd,"/daplot_median.pdf"))
+load( paste0(wd,"wmat_mp.rd"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
-	wd = "/home/joel/sim/ensembler_scale_sml/" 
-	priorwd = "/home/joel/sim/scale_test_sml/"
-	grid=9
+# number of ensembles
+nens=50
 
-	plotout=(paste0(wd,"/daplot_median.pdf"))
-	load( paste0(wd,"wmat_mp.rd"))
-	rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-	obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+# R value for PBS algorithm
+R=0.016
 
-	# number of ensembles
-	nens=50
+# number of tsub clusters
+Nclust=150
 
-	# R value for PBS algorithm
-	R=0.016
+# threshold for converting swe --> sca
+sdThresh <- 13
 
-	# number of tsub clusters
-	Nclust=150
-
-	# threshold for converting swe --> sca
-	sdThresh <- 13
-
-	# cores used in parallel jobs
-	cores=4
- 	}
- 
+# cores used in parallel jobs
+cores=4
+ }
  #  ================ GRID 5 =================================
-if( gridN == 5){
-	print (gridN)
-	wd = "/home/joel/sim/ensembler3/"
-	priorwd = "/home/joel/sim/da_test2/" 
+ if( gridN == 5){
+  print (gridN)
+wd = "/home/joel/sim/ensembler3/"
+priorwd = "/home/joel/sim/da_test2/" 
 
-	grid=1
-	# IO files
-	plotout=(paste0(wd,"/daplot_median.pdf"))
-	load( paste0(wd,"wmat_2.rd"))
-	rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-	obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
+grid=1
+# IO files
+plotout=(paste0(wd,"/daplot_median.pdf"))
+load( paste0(wd,"wmat_2.rd"))
+rstack = brick(paste0(priorwd,"fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 
-	# number of ensembles
-	nens=100
+# variables
+start=180
+end=300
 
-	# R value for PBS algorithm
-	R=0.016
+# number of ensembles
+nens=100
 
-	# number of tsub clusters
-	Nclust=150
+# R value for PBS algorithm
+R=0.016
 
-	# threshold for converting swe --> sca
-	sdThresh <- 13
+# number of tsub clusters
+Nclust=150
 
-	# cores used in parallel jobs
-	cores=4
-	}
+# threshold for converting swe --> sca
+sdThresh <- 13
 
+# cores used in parallel jobs
+cores=4
+ }
+# ======== code ===================
 
 # readin
 landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
@@ -107,6 +117,7 @@ npix = ncell( rstack)
 
 # compute ensemble index of max weight per pixel
 ID.max.weight = apply(wmat, 1, which.max) 
+#max.weight = apply(wmat, 1, max) 
 
 # make raster container
 rst <- rstack[[1]]
@@ -118,22 +129,19 @@ rst = setValues(rst, as.numeric(ID.max.weight))
 #	Run pixel calcs in vectorised form
 #===============================================================================
 getmode <- function(v) {
-	   uniqv <- unique(v)
-	   uniqv[which.max(tabulate(match(v, uniqv)))]
-		}
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
 
-r = landform # 30 m grid
-s = rst # 500m grid
-
-# Disaggregate and resample to FGRID
+r = landform
+s = rst
 d=disaggregate(s, fact=c(round(dim(r)[1]/dim(s)[1]),round(dim(r)[2]/dim(s)[2])), method='') #fact equals r/s for cols and rows
 e=resample(d, r,  method="ngb")
 
-# vectorise grids
-ensem.vec = as.vector(e) # ID ensemble of max weights
-samp.vec = as.vector(r) # ID of SAMP
+ensem.vec = as.vector(e)
+samp.vec = as.vector(r)
 
-#modal_ensembID=c()
+modal_ensembID=c()
 mylist=list()
 for ( i in 1 : Nclust ){
 
@@ -147,8 +155,8 @@ ensemble_weights = table(vec)/length(vec)
 mylist[[i]] <- ensemble_weights 
 
 # get modal ensemble per sample
-#meid = getmode(vec)
-#modal_ensembID=c(modal_ensembID, meid)
+meid = getmode(vec)
+modal_ensembID=c(modal_ensembID, meid)
 }
 
 save(mylist, file = paste0(wd,"mylist.rd"))
@@ -188,6 +196,26 @@ myarray[myarray<=sdThresh]<-0
 myarray[myarray>sdThresh]<-1
 
 
+#===============================================================================
+#			compute weight ensemble per sample - posterior SWE
+#===============================================================================
+ 
+# we_mat=c()
+# for ( i in 1:Nclust ){
+#	# vector of ensemble IDs
+#	ids = as.numeric(names(mylist[[i]]))
+#	
+#	# vector of ensemble weights 
+#	weights = as.numeric((mylist[[i]]))
+#	 #weights[ which.max(weights) ]<-1
+#	# weights[weights<1]<-0
+#	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+#	we <-  myarray_swe[,i,ids] %*%weights
+#	#if(!is.null(dim(we))){we = rowSums(we)}
+#	we_mat=cbind(we_mat, we) # time * samples weighted 
+# 
+# }
+	
 
 #===============================================================================
 #			compute modal swe
@@ -216,7 +244,25 @@ myarray[myarray>sdThresh]<-1
  }
 
 
-
+#===============================================================================
+#			compute weight ensemble per sample - posterior sca
+#===============================================================================
+ 
+# we_mat_sca=c()
+# for ( i in 1:Nclust ){
+#	# vector of ensemble IDs
+#	ids = as.numeric(names(mylist[[i]]))
+#	
+#	# vector of ensemble weights 
+#	weights = as.numeric((mylist[[i]]))
+#	 
+#	
+#	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+#	we <-  myarray[,i,ids] %*%weights
+#	#if(!is.null(dim(we))){we = rowSums(we)}
+#	we_mat_sca=cbind(we_mat_sca, we) # time * samples weighted 
+# 
+# }
 
 #===============================================================================
 #			compute modal sca
@@ -261,7 +307,6 @@ d2=format(d, '%d/%m/%Y %H:%M') #geotop format
 
 # GET CORRESPONDING SIM TIMESTAMPS of profile obs 
 obsIndex.MOD = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
-
 #===============================================================================
 #	EVALUATE
 #===============================================================================
@@ -775,231 +820,3 @@ median.vec = c(median.vec, med$y)
 ##lines(post_sca, col='red', lwd=lwd , lty=2)
 #axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
 #legend("topright",c("SWE_prior", "SWE_post", "SWE_obs" , "ENSEMBLE"),col= c("blue", "red","black", "grey"), lty=c(1,1,NA, 1),pch=c(NA,NA,24,NA),lwd=lwd)
-
-
-
-
-
-# generic plot pars
-lwd=3
-pdf(paste0(plotout,"_SCA"),width=7, height=12 )
-
-par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
-par(mfrow=c(3,1))
-for ( j in 1:Nval ) {
-
-# sample ID
-id=samples[j]
-
-sample= id
-ndays = length(myarray[ , 1, 1])
-
-median.vec = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = mylist[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(mylist[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
-
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
-median.vec = c(median.vec, med$y)
-}
-
-##==========================Compute quantiles=====================================
-
-low.vec = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = mylist[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(mylist[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
-
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
-low.vec = c(low.vec, med$y)
-}
-
-
-high.vec = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = mylist[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(mylist[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
-
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
-high.vec = c(high.vec, med$y)
-}
-
-
-# PRIOR
-
-# MEDIAN
-id=samples[j]
-
-sample= id
-ndays = length(myarray[ , 1, 1])
-
-median.prior = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = rep((1/nens),nens)
-
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.5)
-median.prior = c(median.prior, med$y)
-}
-
-
-# 5%
-id=samples[j]
-
-sample= id
-ndays = length(myarray[ , 1, 1])
-
-low.prior = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = rep((1/nens),nens)
-
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.05)
-low.prior = c(low.prior, med$y)
-}
-
-# 95%
-id=samples[j]
-
-sample= id
-ndays = length(myarray[ , 1, 1])
-
-high.prior = c()
-for ( i in 1: ndays){
-
-mu = myarray[ i, sample, ]
-w = rep((1/nens),nens)
-
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
-high.prior = c(high.prior, med$y)
-}
-
-
-
-
-
-simindex=paste0('S',formatC(id, width=5,flag='0'))# samples[1]
-
-#
-valdat<- myList[[j]]
-# convert obs timestamps
-d = strptime(valdat$DATUM, format="%d.%m.%Y")
-d2=format(d, '%d/%m/%Y %H:%M') #geotop format
-#d3=format(d, '%Y/%m/%d') # obsvec format
-
-#index of sim data in obs
-obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
-
-# index of obs in sim data
-simIndexVal = which(d2 %in% dat$Date12.DDMMYYYYhhmm.)
-
-
-#get prior
-dat = read.table(paste0(priorwd,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
-prior_swe = dat$snow_water_equivalent.mm.
-
-# obs
-val = valdat$SWE.mm[simIndexVal]
-
-#get posterioi
-post_swe = we_mat[,id]
-post_sca = we_mat_sca[,id]*1000
-# rmse
-error = val - post_swe[obsIndexVal]
-rms = rmse(error)
-
-# plot prior,post, obs
-# plot prior,post, obs
-plot(median.prior, ylim=c(0,1),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j],' RMSE=',round(rms,2))) # prior
-for (i in 1:nens){lines(myarray[,id,i], col='grey')}
-
-# 90 percentile and median prior
-y = c(low.prior ,rev(high.prior))
-x = c(1:length(low.prior), rev(1:length(high.prior)) )
-polygon (x,y, col=rgb(1, 0, 0,0.5))
-
-
-
-# 90 percentile and median posterioir
-y = c(low.vec ,rev(high.vec))
-x = c(1:length(low.vec), rev(1:length(high.vec)) )
-polygon (x,y, col=rgb(0, 0, 1,0.5))
-lines(median.vec, col='blue',lwd=3)
-lines(median.prior, col='red',lwd=3)
-# posterior mode
-#lines(post_swe,col='green',lwd=lwd) #post
-
-#obs
-points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
-
-# modal prior
-#lines(prior_swe, col='red',lwd=3)
-
-
-#lines(ma(post,20), col='green',lwd=3)
-#lines(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='orange',lwd=3)
-#points(obsIndex.MOD[start:end],pointObs[4,start:end]*10, col='black',cex=2, pch=3)
-#lines(post_sca, col='red', lwd=lwd , lty=2)
-axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd)
-
-}
-
-dev.off()
-
