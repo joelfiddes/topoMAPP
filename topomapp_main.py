@@ -387,9 +387,9 @@ else:
 #====================================================================
 #	Run ensemble
 #====================================================================
-	# if config["ensemble"]["run"] == "TRUE":
-	# 	import ensembleRun
-	# 	ensembleRun.main(config)
+if config["ensemble"]["run"] == "TRUE":
+	import ensembleRun
+	ensembleRun.main(config)
 
 #====================================================================
 #	Run DA
