@@ -17,6 +17,7 @@ import logging
 
 def main(config):
 
+
 	initgrids = config['main']['initGrid']
 	root = config['main']['wd'].rstrip("/") + "_ensemble"
 	N = config['ensemble']['members']
@@ -36,6 +37,7 @@ def main(config):
 	#	Logging
 	logging.basicConfig(level=logging.DEBUG, filename=root+"/logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
+	logging.info("----- START ENSEMBLE RUNS-----")
 
 	# write copy of config for ensemble editing
 	config.filename = root +"/ensemble_config.ini"
@@ -44,7 +46,7 @@ def main(config):
 	
 
 	# start ensemble runs
-	logging.info("Running ensemble members: " + str(N))
+	logging.info("Running " + str(N) + " ensemble members." )
 
 	#generate ensemble
 	os.system("Rscript rsrc/ensemGen.R " + str(N))
@@ -56,7 +58,10 @@ def main(config):
 
 	#loop over ensemble members
 	for i in range(0,int(N)):
-		logging.info("Configuring ensemble member:" + str(i))
+
+		
+
+		logging.info("----- Start ensemble member: " + str(i) + "-----")
 		pbias = df['pbias'][i]
 		tbias = df['tbias'][i]
 		lwbias = df['lwbias'][i]
@@ -80,28 +85,39 @@ def main(config):
 		logging.info("Config settings used")
 		logging.info(config)
 
-		#print "[INFO]: Running topomapp_main.py"
-		#os.system("python topomapp_main.py " + inifile)
+		# check if runSucess exists and skip if true
+		fname1 = config['main']['wd'] + "/.runSuccess"
+		if os.path.isfile(fname1) == False: 
 
-		for initgrid in initgrids:
-			print initgrid
-			config['main']['initGrid'] = initgrid
-			config.write()
-			# init a new instance from 	initdir and initgrid
-			import TMinit
-			TMinit.main(config, ensembRun=True)
+		
 
-			# define Ngrid in ensemble directory
-			Ngrid = config["main"]["wd"] +"grid"+ initgrid
-			logging.info("Ngrid= " + Ngrid)
+			#print "[INFO]: Running topomapp_main.py"
+			#os.system("python topomapp_main.py " + inifile)
 
-			# run setup scaling of meteo and LSM - would be quicker to read meteo sclae and then write back
-			import TMensembSim
-			TMensembSim.main(Ngrid, config)
+			for initgrid in initgrids:
+				print initgrid
+				config['main']['initGrid'] = initgrid
+				config.write()
+				# init a new instance from 	initdir and initgrid
+				import TMinit
+				TMinit.main(config, ensembRun=True)
 
+				# define Ngrid in ensemble directory
+				Ngrid = config["main"]["wd"] +"grid"+ initgrid
+				logging.info("Ngrid= " + Ngrid)
+
+				# run setup scaling of meteo and LSM - would be quicker to read meteo sclae and then write back
+				import TMensembSim
+				TMensembSim.main(Ngrid, config)
+
+			f= open(config['main']['wd'] + "/.runSuccess","w+")
+			f.close() 
+			logging.info("%f minutes for run of ensemble member" % round((time.time()/60 - start_time/60),2))
+
+		else:
+			logging.info(config['main']['wd'] + " exists")	
 		# report time of run
-		logging.info("%f minutes for run of ensemble members" % round((time.time()/60 - start_time/60),2))
-
+		
 
 
 #====================================================================

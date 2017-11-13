@@ -24,21 +24,33 @@ shp=shapefile("/home/joel/data/GCOS/metadata_easy.shp")
 
 
 
-load( paste0(wd,"HX.rd"))
+load( paste0(wd,"/main_results/HX.rd"))
 HX <- HX
-load( paste0(wd,"wmat_mp.rd"))
+load( paste0(wd,"/main_results/wmat_mp.rd"))
 wmat <- wmat
 ndays=358
 nens =50
 pix = c(1883, 402,1428, 8014, 1153,1165,1196, 1029)
+myplot = TRUE
 
 
+# get high pixels
+dem = raster(paste0(priorwd,"/predictors/ele.tif"))
+elegrid = crop(dem, landform)
+r = aggregate(elegrid,res(rstack)/res(elegrid) )
+rstack_ele <- resample(r , rstack)
+pix = which(getValues(rstack_ele) >2000)
+
+pix<-pix[50:length(pix)]
+#pix=1:20000
 
 # which pixels are our val points?
 pixIDS = extract(rstack[[1]],shp, cellnumbers=T)
 #i= 1428#402#1883 #402, 1428, 8014
 
-pdf(paste0(wd,"/fSCA.pdf"))
+if(myplot == TRUE){
+#pdf(paste0(wd,"/fSCA.pdf"))
+}
 rmsvec=c()
 par(mfrow=c(4,2))
 for( i in pix){
@@ -237,8 +249,10 @@ rmse <- function(error)
 rms = rmse(obs-med.post)
 rmsvec=c(rmsvec,rms)
 }
-dev.off()
 
+if(myplot == TRUE){
+#ev.off()
+}
 
 
 

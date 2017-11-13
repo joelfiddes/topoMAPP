@@ -10,7 +10,7 @@ def main(config, ensembRun):
 #====================================================================
 	# notifications
 	logging.info("initialising " + config['main']['wd'] + " from " + config["main"]["initDir"])
-	logging.info("Copying only Grid" + config["main"]["initGrid"])
+	logging.info("Copying Grid" + config["main"]["initGrid"])
 
 	# Creat wd dir if doesnt exist
 	if not os.path.exists(config['main']['wd']):

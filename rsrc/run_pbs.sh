@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "run PBS"
-Rscript rsrc/PBSpixel_test.R 180 350 13
+Rscript rsrc/PBSpixel_test.R 180 350 0
 
 echo "calc SWE"
 Rscript rsrc/PBSpix2samp_test.R 

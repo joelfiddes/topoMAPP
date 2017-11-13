@@ -15,8 +15,8 @@ def main(Ngrid, config):
 	#list sim dirs
 	sim_dirs = glob.glob(Ngrid +"/S*")
 
-	logging.info("Perturburbing simulation meteo:")
-	logging.info(sim_dirs)
+	logging.info("Perturburbing simulation meteo files")
+	# logging.info(sim_dirs)
 
 	# loop through sim dirs
 	for s in sim_dirs:
@@ -85,4 +85,4 @@ if __name__ == '__main__':
 
 
 
-	config['geotop']['lsmPath']+'/'+config['geotop']['lsmExe']
+	#config['geotop']['lsmPath']+'/'+config['geotop']['lsmExe']

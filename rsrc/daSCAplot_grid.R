@@ -8,9 +8,9 @@ landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
 # crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
 rstack = crop(rstack, landform)
 
-load( paste0(wd,"HX.rd"))
-HX <- HX
-load( paste0(wd,"wmat_mp.rd"))
+load( paste0(wd,"/main_results/HX.rd"))
+HX <- wmat
+load( paste0(wd,"/main_results/wmat_mp.rd"))
 wmat <- wmat
 ndays=358
 nens =50
@@ -37,19 +37,25 @@ mat = rstack[pix]
 
 
 obs <- apply(mat, FUN="mean", 2,na.rm=T)/100
+
+
 }
 
 if (subset == FALSE){
 	# get timeseries of obs
-	obs <- cellStats(rstack[pix], 'mean') /100
+	obs <- cellStats(rstack, 'mean') /100
 }
+
+
 nNa=c()
 for ( i in 1:358 ) {
 x=rstack[[i]]
-countNa <-  sum(  getValues(is.na(x))  )/ncell(x) 
+#countNa <-  sum(  getValues(is.na(x))  )/ncell(x) 
+countNa <-  length(  which(is.na(x[pix]))  ) / length(pix)
 nNa = c(nNa, countNa)
 }
 
+# find highNA scenes and set to NA
 index = which(nNa > 0.1)
 obs[index] <- NA
 glaciers = min(obs,na.rm=T)
@@ -57,11 +63,11 @@ glaciers = min(obs,na.rm=T)
 obs = obs - glaciers
 
 # prior
-x = apply(HX, FUN = 'mean', 2)
+x = apply(HX[pix,], FUN = 'mean', 2)
 prior =matrix(x , nrow=ndays, ncol=nens)
 
 # posterior
-weight = apply(wmat, FUN = 'mean', 2)
+weight = apply(wmat[pix,], FUN = 'mean', 2)
 
 
 
@@ -229,10 +235,12 @@ lines(low.post, col='blue')
 lines(med.post, col='blue', lwd=3)
 points(obs, col='green', lwd=4)
 
+# posterior blue
 y = c(low.post ,rev(high.post))
 x = c(1:length(low.post), rev(1:length(high.post)) )
 polygon (x,y, col=rgb(0, 0, 1,0.5))
 
+# prior red
 y = c(low.pri ,rev(high.pri))
 x = c(1:length(low.pri), rev(1:length(high.pri)) )
 polygon (x,y, col=rgb(1, 0, 0,0.5))

@@ -409,7 +409,7 @@ if config["ensemble"]["run"] == "TRUE":
 
 
 logging.info("Simulation finished!")
-logging.info(" %f minutes for run" % round((time.time()/60 - start_time/60),2) )
+logging.info(" %f minutes for total run" % round((time.time()/60 - start_time/60),2) )
 
 
 
