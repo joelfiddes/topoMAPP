@@ -73,6 +73,7 @@ def main(Ngrid, config):
 		num_cores= config['geotop']['num_cores'] #multiprocessing.cpu_count()
 		Parallel(n_jobs=int(num_cores))(delayed(subprocess.call)([config['geotop']['lsmPath'] + '/' + config['geotop']['lsmExe'], i ]) for i in jobs)
 		# ===============================================
+
 	else:
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 

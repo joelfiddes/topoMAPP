@@ -1,6 +1,6 @@
 ## generates ensemble matrix
 # takes N ensemble memebers as arg
-
+# need to use this ref https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
 args = commandArgs(trailingOnly=TRUE)
 N=as.numeric(args[1])
  
@@ -37,10 +37,10 @@ cv=lognormDraws(N,0.4,0.01)
 alpha=lognormDraws(N,0.2,0.01)	# SoilAlbVisDry
 #pbias=lognormDraws(N,1,0.5)	
 pbias=lognormDraws(N,1.5,1)
-tbias=normDraws(N,0,1)
-swbias=normDraws(N,0,20)
+tbias=normDraws(N,1,1.2)
+swbias=normDraws(N,1,0.1)
 	
-lwbias=normDraws(N,0,20)
+lwbias=normDraws(N,1,0.1)
 
 df=data.frame(pbias,tbias,swbias,lwbias)
 write.csv(df,'ensemble.csv')
