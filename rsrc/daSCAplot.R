@@ -66,7 +66,7 @@ prior =matrix(HXvec , nrow=ndays, ncol=nens)
 
 # posterior
 weight = wmat[i,]
-post=prior*weight
+
 
 
 

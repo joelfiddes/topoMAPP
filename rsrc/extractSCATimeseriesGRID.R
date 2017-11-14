@@ -31,27 +31,24 @@ setwd(sca_wd)
 
 
 if( length(list.files(pattern="MOD*")) >0) {
-
-MOD=stack(list.files(pattern="MOD*"))
-MOD.names = names(MOD) # explicitly capture names to avoid loss
-MOD [MOD >100]<-NA
-names(MOD)<- MOD.names
-MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
+	print(paste0(length(list.files(pattern="MOD*")), " MOD files found"))
+	MOD=stack(list.files(pattern="MOD*"))
+	MOD.names = names(MOD) # explicitly capture names to avoid loss
+	MOD [MOD >100]<-NA# filter non-ndsi values
+	names(MOD)<- MOD.names
+	MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
 
 
 if( length(list.files(pattern="MYD*")) >0) {
+	print(paste0(length(list.files(pattern="MYD*")), " MYD files found"))
+	MYD=stack(list.files(pattern="MYD*"))
 
-MYD=stack(list.files(pattern="MYD*"))
-
-MYD.names = names(MYD)
-
-MYD [MYD >100]<-NA
-
-names(MYD)<- MYD.names
-
-MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
-#Npoints=dim(MOD)[1]
+	MYD.names = names(MYD)
+	MYD [MYD >100]<-NA # filter non-ndsi values
+	names(MYD)<- MYD.names
+	MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
+}
 
 
 # Fill missing layers in each stack

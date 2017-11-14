@@ -26,9 +26,9 @@ def main(Ngrid, config):
 
 	# scale meteo
 		df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
-		df['Prec'] = df['Tair'] + config['da']['tscale'] #additative
-		df['Prec'] = df['LW'] + config['da']['lwscale']#additative
-		df['Prec'] = df['SW'] + config['da']['swscale']#additative
+		df['Tair'] = df['Tair'] + config['da']['tscale'] #additative
+		df['LW'] = df['LW'] + config['da']['lwscale']#additative
+		df['SW'] = df['SW'] + config['da']['swscale']#additative
 
 		#write meteo
 		df.to_csv( s +"/meteo0001.txt", index = False)
