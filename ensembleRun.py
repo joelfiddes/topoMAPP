@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import subprocess
 import pandas as pd
 import time
 import sys
@@ -36,10 +37,10 @@ def main(config):
 	logging.info("Running " + str(N) + " ensemble members." )
 
 	#generate ensemble
-	os.system("Rscript rsrc/ensemGen.R " + str(N) + root)
+	subprocess.call(["Rscript", "rsrc/ensemGen.R" , str(N) , root])
 
 	# read in csv as pd data
-	df = pd.read_csv("ensemble.csv")
+	df = pd.read_csv(root+"/ensemble.csv")
 
 	# Assimilation cycle loop start here
 

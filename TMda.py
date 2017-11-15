@@ -8,11 +8,11 @@ def main(config):
 
 	# define variable
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# contains all the modis data
-	wd = "/home/joel/sim/wfj_interim_ensemble_v2/"
+	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
 	priorwd = "/home/joel/sim/wfj_interim/"
 	initgrids = str(1)
 	nens = str(50)
-	Nclust=str(50)
+	Nclust=str(150)
 	cores = str(6)
 	sdThresh = str(13) # mm threshold of swe to sca conversion
 	DSTART = str(210) # default start of melt in case algorithm fails
@@ -72,7 +72,7 @@ def main(config):
 		subprocess.check_output(cmd)
 
 
-		cmd = ["convert" , "fSCA.pdf" , "swe.pdf" , "fSCA_grid.pdf",  "-quality 100", "-sharpen 0x1.0" , "da_plots.pdf"]
+		cmd = ["convert" , wd+"fSCA.pdf" , wd+"swe.pdf" , wd+"fSCA_grid.pdf",  wd+"da_plots.pdf"]
 		subprocess.check_output(cmd)
 		logging.info( "DA run complete!")
 #====================================================================
