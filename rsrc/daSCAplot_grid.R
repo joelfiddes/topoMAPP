@@ -12,7 +12,7 @@ load( paste0(wd,"/main_results/HX.rd"))
 HX <- wmat
 load( paste0(wd,"/main_results/wmat_mp.rd"))
 wmat <- wmat
-ndays=358
+ndays=nlayers(rstack)
 nens =50
 subset=TRUE
 
@@ -48,7 +48,7 @@ if (subset == FALSE){
 
 
 nNa=c()
-for ( i in 1:358 ) {
+for ( i in 1:ndays ) {
 x=rstack[[i]]
 #countNa <-  sum(  getValues(is.na(x))  )/ncell(x) 
 countNa <-  length(  which(is.na(x[pix]))  ) / length(pix)
@@ -81,14 +81,6 @@ for ( days in 1:ndays){
 
 mu = prior[ days, ]
 w = weight
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- weight
 
 df = data.frame(mu, wfill )
@@ -106,14 +98,6 @@ for ( days in 1: ndays){
 
 mu = prior[ days, ]
 w = weight
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- weight
 
 df = data.frame(mu, wfill )
@@ -130,14 +114,6 @@ for ( days in 1: ndays){
 
 mu = prior[ days, ]
 w = weight
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- weight
 
 df = data.frame(mu, wfill )
@@ -158,14 +134,6 @@ for ( days in 1: ndays){
 
 mu = prior[ days, ]
 w = rep((1/nens),nens)
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- w
 
 df = data.frame(mu, wfill )
@@ -183,14 +151,6 @@ for ( days in 1: ndays){
 
 mu = prior[ days, ]
 w = rep((1/nens),nens)
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- w
 
 df = data.frame(mu, wfill )
@@ -207,14 +167,6 @@ for ( days in 1: ndays){
 
 mu = prior[ days, ]
 w = rep((1/nens),nens)
-
-# fill missing ensemble weights with 0
-#index = as.numeric(names(mylist[[ sample ]]))
-#df=data.frame(index,w)
-#df.new = data.frame(index = 1:nens)
-#df.fill = merge(df.new,df, all.x = TRUE)
-#wfill=df.fill$Freq
-#wfill[which(is.na(wfill))]<-0
 wfill <- w
 
 df = data.frame(mu, wfill )

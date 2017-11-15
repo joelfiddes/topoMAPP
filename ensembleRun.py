@@ -6,14 +6,6 @@ import sys
 from configobj import ConfigObj
 import logging
 
-#===============================================================================================
-# PARAMETERS TO SET
-
-#root = "/home/joel/sim/ensembler_test/"
-#inifile="test.ini"
-#initdir='/home/joel/sim/test_radflux'
-#initgrid = "2" # must be a single grid for ensdemble runs - do not support "*" all grids yet
-#N = 100# number of ensemble memebers
 
 def main(config):
 
@@ -24,11 +16,6 @@ def main(config):
 	#initdir = config['main']['initDir']
 	master = config['main']['wd'] # get initDir from master wd
 
-
-	#===============================================================================================
-
-	# Timer
-	start_time = time.time()
 
 	# Creat wd dir if doesnt exist
 	if not os.path.exists(root):
@@ -49,7 +36,7 @@ def main(config):
 	logging.info("Running " + str(N) + " ensemble members." )
 
 	#generate ensemble
-	os.system("Rscript rsrc/ensemGen.R " + str(N))
+	os.system("Rscript rsrc/ensemGen.R " + str(N) + root)
 
 	# read in csv as pd data
 	df = pd.read_csv("ensemble.csv")
@@ -59,7 +46,8 @@ def main(config):
 	#loop over ensemble members
 	for i in range(0,int(N)):
 
-		
+		# Loop Timer
+		start_time = time.time()
 
 		logging.info("----- Start ensemble member: " + str(i) + "-----")
 		pbias = df['pbias'][i]
@@ -115,7 +103,7 @@ def main(config):
 			logging.info("%f minutes for run of ensemble member" % round((time.time()/60 - start_time/60),2))
 
 		else:
-			logging.info(config['main']['wd'] + " exists")	
+			logging.info(config['main']['wd'] + " already exists")	
 		# report time of run
 		
 

@@ -76,7 +76,7 @@ myd.miss = all.range[!all.range %in% myd.date]
 MOD.miss.ind <- which(all.range == mod.miss)
 MYD.miss.ind <- which(all.range == myd.miss)
 
-# index of no missing layers
+# index of existing layers
 mod.nomiss = all.range[all.range %in% mod.date]
 myd.nomiss = all.range[all.range %in% myd.date]
 MOD.nomiss.ind <- which(all.range %in% mod.nomiss)
@@ -85,42 +85,61 @@ MYD.nomiss.ind <- which(all.range == myd.nomiss)
 
 # index of myd layers that correspond to missing mod layers
 myd.missmod.ind <- which(myd.date %in% mod.miss)
-mod.missmyd.ind <- which(mod.date %in% myd.miss)
 
+if (length(myd.missmod.ind ) > 0){
 # stack MOD and new MYD fill layers and index by MOD nomiss layer index and MOD miss layer index
 MOD.layerfill <-subset(stack(MOD, MYD[[myd.missmod.ind]]),     order(c(MOD.nomiss.ind, MOD.miss.ind)))
-MYD.layerfill <-subset(stack(MYD, MOD[[mod.missmyd.ind]]),     order(c(MYD.nomiss.ind, MYD.miss.ind)))
+print("MOD date gaps filled with MYD")
+	}
+if (length(myd.missmod.ind ) == 0){
+	MOD.layerfill <- MOD
+print("No MOD date gaps found")
+	}
 
-# MOD Na filled with MYD data if exists
-MOD.fill = cover(MOD.layerfill, MYD.layerfill)
+# index of mod layers that correspond to missing myd layers
+mod.missmyd.ind <- which(mod.date %in% myd.miss)
+
+if (length(mod.missmyd.ind ) > 0){
+# stack MOD and new MYD fill layers and index by MOD nomiss layer index and MOD miss layer index
+	MYD.layerfill <-subset(stack(MYD, MOD[[mod.missmyd.ind]]),     order(c(MYD.nomiss.ind, MYD.miss.ind)))
+	print("MYD date gaps filled with MOD")
+	}
+
+if (length(mod.missmyd.ind ) == 0){
+	MYD.layerfill <- MYD
+	print("No MYD date gaps found")
+	}
+
+# MOD Na cells filled with MYD data if exists :  Replace ‘NA’ values in the first Raster object (‘x’) with the values of the second (‘y’), and so forth for  additional Rasters. 
+
+#implement as loop to avoid large datset problems that existed
+rstack = stack()
+for (i in 1:nlayers(MOD.layerfill)){
+	rstack  = stack(rstack,  cover(MOD.layerfill[[i]], MYD.layerfill[[i]]))
+}
+MOD.fill <- rstack
+names(MOD.fill) <- names(MOD.layerfill)
+
 
 #count NA
-MOD.na <- length(which(is.na(values(MOD))) )
+MOD.na <- length(which(is.na(values(MOD.layerfill))) )
 MOD.fill.na <- length(which(is.na(values(MOD.fill))) )
 
-print(paste0("orig NAs in MOD=",MOD.na," New NAs in filled MOD=",MOD.fill.na,""))
-}else {MOD.fill <- MOD}
+oldNa <- (MOD.na/(ncell(MOD.layerfill)* nlayers(MOD.layerfill)))*100
+
+newNa <- (MOD.fill.na/(ncell(MOD.layerfill)* nlayers(MOD.layerfill)))*100
+
+
+
+print(paste0("orig NAs in MOD=",round(oldNa,2),"% New NAs in filled MOD=",round(newNa,2),"%"))
+
+#}else {MOD.fill <- MOD}
 
 #compute cloudiness / NA
-cloudinessMOD = cellStats(is.na(MOD.fill),'sum') / ncell(MOD.fill)
-cloudfreeMOD= which(cloudinessMOD < cloudThreshold)
-print(paste0("mean cloudiness TERRA MOD ",round(mean(cloudinessMOD),2)))
-MOD_cf=MOD.fill[[cloudfreeMOD]]
-
-#cloudinessMYD = cellStats(is.na(MYD),'sum') / ncell(MYD)
-#cloudfreeMYD= which(cloudinessMYD < cloudThreshold)
-#print(paste0("mean cloudiness AQUA MYD ",mean(cloudinessMYD)))
-#MYD_cf=MYD[[cloudfreeMYD]]
-
-#plot(mod.date[cloudfreeMOD],MOD_MEAN[cloudfreeMOD])
-#points(myd.date[cloudfreeMYD],MYD_MEAN[cloudfreeMYD], col='red')
-
-
-#MOD_cf=MOD[[cloudfreeMOD]]
-#MYD_cf=MYD[[cloudfreeMYD]]
-#if (mean(cloudinessMYD) < mean(cloudinessMOD)){ rstack <- MYD_cf}
-#if (mean(cloudinessMOD) < mean(cloudinessMYD)){ rstack <- MOD_cf}
-## do cover here to merge obs to reduce NAs
+# cloudinessMOD = cellStats(is.na(MOD.fill),'sum') / ncell(MOD.fill)
+# cloudfreeMOD= which(cloudinessMOD < cloudThreshold)
+# print(paste0("mean cloudiness TERRA MOD ",round(mean(cloudinessMOD),2)))
+# MOD_cf=MOD.fill[[cloudfreeMOD]]
 
 
 

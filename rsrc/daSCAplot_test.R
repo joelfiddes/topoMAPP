@@ -1,11 +1,12 @@
 require(raster)
 
-args = commandArgs(trailingOnly=TRUE)
-wd = args[1]
-priorwd = args[2]
-grid = as.numeric(args[3])
-nens = as.numeric(args[4])
-valshp=args[5]
+
+sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# contains all the modis data
+wd = "/home/joel/sim/wfj_interim_ensemble_v1/"
+priorwd = "/home/joel/sim/wfj_interim/"
+grid = 1
+nens = 50
+valshp="/home/joel/data/GCOS/metadata_easy.shp"
 
 
 #readin
@@ -30,15 +31,17 @@ pix = 1:ncell(rstack) #c(1883, 402,1428, 8014, 1153,1165,1196, 1029)
 #pix=1:20000
 
 # which pixels are our val points?
-pixIDS = extract(rstack[[1]],shp, cellnumbers=T)
-pix=na.omit(pixIDS[,1])
+
+#pixIDS = extract(rstack[[1]],shp, cellnumbers=T)
+#pix=na.omit(pixIDS[,1])
+
 #i= 1428#402#1883 #402, 1428, 8014
 
 #====================================================================
 #	PLOT
 #====================================================================
 
-pdf(paste0(wd,"/fSCA.pdf"), height=8, width=5)
+#pdf(paste0(wd,"/fSCA.pdf"), height=8, width=5)
 rmsvec=c()
 
 plotdim = ceiling(sqrt(length(pix)))
@@ -221,7 +224,8 @@ rms = rmse(obs-med.post)
 rmsvec=c(rmsvec,rms)
 }
 
-dev.off()
+#dev.off()
+
 
 
 

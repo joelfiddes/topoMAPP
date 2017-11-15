@@ -3,7 +3,7 @@
 # need to use this ref https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
 args = commandArgs(trailingOnly=TRUE)
 N=as.numeric(args[1])
- 
+wd= args[2]
 # source: https://msalganik.wordpress.com/2017/01/21/making-sense-of-the-rlnorm-function-in-r/
 
 # FUNCTIONS
@@ -43,15 +43,15 @@ swbias=normDraws(N,1,0.1)
 lwbias=normDraws(N,1,0.1)
 
 df=data.frame(pbias,tbias,swbias,lwbias)
-write.csv(df,'ensemble.csv')
+write.csv(df,paste0(wd,'/ensemble.csv'))
 
-pdf("ensembleDistributions.pdf")
-par(mfrow=c(2,2))
-plot(density(tbias))
-plot(density(pbias))
-plot(density(swbias))
- plot(density(lwbias))
- dev.off()
+pdf(paste0(wd,"/ensembleDistributions.pdf"))
+	par(mfrow=c(2,2))
+	plot(density(tbias))
+	plot(density(pbias))
+	plot(density(swbias))
+	plot(density(lwbias))
+dev.off()
 
 
 

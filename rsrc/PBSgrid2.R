@@ -1,95 +1,44 @@
-# compute PBS at grid level
-
-args = commandArgs(trailingOnly=TRUE)
-
-
-sdThresh=13
-
-# ======== code ===================
-# env
-wd = "/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler3/" #"/home/joel/sim/ensembler_scale_sml/" #"/home/joel/sim/ensembler_testRadflux/" #
-priorwd = "/home/joel/sim/scale_test_sml/" #"/home/joel/sim/da_test2/"  #"/home/joel/sim/scale_test_sml/" #"/home/joel/sim/test_radflux/" #
-grid=9 #2
-
-
-# variables
-
-# number of ensembles
-nens <- 50 #50 #50
-
-# R value for PBS algorithm
-R <- 0.016
-
-# number of tsub clusters
-Nclust <- 150
-
-# threshold for converting swe --> sca
-#sdThresh <- 13
-
-# cores used in parallel jobs
-cores=6 # take this arg from config
-
-
 # dependency
 source("./rsrc/PBS.R") 
-require(foreach)
-require(doParallel)
 require(raster) 
 require(zoo)
 
-# readin
-dem = raster(paste0(priorwd,"/predictors/ele.tif"))
-landform = raster(paste0(wd,"ensemble0/grid",grid,"/landform.tif"))
-rstack = brick(paste0(priorwd,"fsca_stack.tif"))
-obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
-lp= read.csv(paste0(priorwd, "grid",grid,"/listpoints.txt"))
+args = commandArgs(trailingOnly=TRUE)
+wd = args[1]
+priorwd = args[2]
+grid = as.numeric(args[3])
+nens = as.numeric(args[4])
+Nclust = as.numeric(args[5])
+sdThresh=as.numeric(args[6])
+R=as.numeric(args[7])
+DSTART = as.numeric(args[8])
+DEND = as.numeric(args[9])
 
-# crop rstack
-rstack = crop(rstack, landform)
+# load files
+load( paste0(wd,"wmat.rd"))
+rstack = brick(paste0(wd,"fsca_crop.tif"))
+obsTS = read.csv(paste0(wd,"fsca_dates.csv"))
+landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
+dem = raster(paste0(priorwd,"/predictors/ele.tif"))
+lp= read.csv(paste0(priorwd, "grid",grid,"/listpoints.txt"))
 
 # total number of MODIS pixels
 npix = ncell( rstack)
 
-
-#===============================================================================
-#	Construct results matrix
-#===============================================================================
-
-# retrieve results matrix: ensemble members * samples * timestampsd=strptime(obsTS$x, format='%Y-%m-%d')
-d=strptime(obsTS$x, format='%Y-%m-%d')
-d2=format(d, '%d/%m/%Y %H:%M')
-
-dat = read.table(paste0(wd,"ensemble0/grid",grid,"/S00001/out/surface.txt"), sep=',', header=T)
-
-# Extract timestamp corresponding to observation
-obsIndex = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
-
-#convert obsTS to geotop time get index of results that fit obsTS
-rstStack=stack()
-for (i in 1: nens){ #python index
-
-		resMat=c()
-		for (j in 1: Nclust){ 
-				simindex=paste0('S',formatC(j, width=5,flag='0'))
-				dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
-				
-				resMat = cbind(resMat,dat$snow_water_equivalent.mm.[obsIndex])
-				rst=raster(resMat)
-				}
-				
-	rstStack=stack(rstStack, rst)
-	myarray = as.array(rstStack)
-		}
+#====================================================================
+#	Load ensemble results matrix
+#====================================================================
+load(paste0(wd, "/ensembRes.rd"))
 
 # convert swe > sdThresh to snowcover = TRUE/1
-myarray[ myarray <= sdThresh ] <- 0
-myarray[ myarray > sdThresh ] <- 1
+ensembRes[ ensembRes <= sdThresh ] <- 0
+ensembRes[ ensembRes > sdThresh ] <- 1
 
 # compute weighted  fsca by memebership
 #https://stackoverflow.com/questions/34520567/r-multiply-second-dimension-of-3d-array-by-a-vector-for-each-of-the-3rd-dimension
 Vect = lp$members
-varr <- aperm(array(Vect, dim = c(dim(myarray)[2], dim(myarray)[1], dim(myarray)[3])), perm = c(2L, 1L, 3L))
-arr <- varr * myarray
+varr <- aperm(array(Vect, dim = c(dim(ensembRes)[2], dim(ensembRes)[1], dim(ensembRes)[3])), perm = c(2L, 1L, 3L))
+arr <- varr * ensembRes
 
 
 # compute mean MOD fSCA per sample
@@ -182,16 +131,12 @@ for( i in 1:Nclust)
 #===============================================================================
 #		PARTICLE FILTER
 #===============================================================================	
-r= 0.016
-START = 0
-END = 350
 
 obsind = which (!is.na(obs))
-obsind <- obsind[obsind > START & obsind < END]
-
+obsind <- obsind[obsind > DSTART & obsind < DEND]
 naind = which (is.na(obs))	
 
-	weight = PBS(HX[obsind,], OBS[obsind], r)
+weight = PBS(HX[obsind,], OBS[obsind], R)
 	
 	
 #===============================================================================
@@ -294,7 +239,7 @@ high.pri = c(high.pri, med$y)
 }
 
 
-
+pdf(paste0(wd,"/fSCA_grid.pdf"))
 plot(high.pri, col='red', type='l', main=i)
 lines(low.pri, col='red')
 lines(med.pri, col='red', lwd=3)
@@ -319,28 +264,28 @@ lines(low.post, col='blue')
 lines(med.post, col='blue', lwd=3)
 points(OBS2PLOT, col='green', lwd=4)
 legend("topright", c("prior", "posterior") , col=c("red", "blue"), lty=1)
-abline(v=START)
-abline(v=END)
-#dev.off()
+abline(v=DSTART)
+abline(v=DEND)
+dev.off()
 
 
 
-# spatialise median prior and posterior at clear sky days in MODIS
+# # spatialise median prior and posterior at clear sky days in MODIS
 
-#183 193 224 287
+# #183 193 224 287
 
 
-days = 183
+# days = 183
 
-mu = prior[ days, ]
-w = weight
-wfill <- weight
-id<-1:50
-df = data.frame(mu, wfill, id )
-dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+# mu = prior[ days, ]
+# w = weight
+# wfill <- weight
+# id<-1:50
+# df = data.frame(mu, wfill, id )
+# dfOrder =  df[ with(df, order(mu)), ]
+# med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
 
-# returns id of median ensemble
-id.med = approx( cumsum(dfOrder$wfill),dfOrder$id , xout=0.5, method="constant", f=0) # could also be 1
-which.max(weight)
+# # returns id of median ensemble
+# id.med = approx( cumsum(dfOrder$wfill),dfOrder$id , xout=0.5, method="constant", f=0) # could also be 1
+# which.max(weight)
 

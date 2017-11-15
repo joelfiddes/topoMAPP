@@ -1,0 +1,234 @@
+require(raster)
+
+args = commandArgs(trailingOnly=TRUE)
+wd = args[1]
+priorwd = args[2]
+grid = as.numeric(args[3])
+nens = as.numeric(args[4])
+valshp=args[5]
+
+# readin
+landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
+shp=shapefile(valshp)
+
+#	Load ensemble results matrix
+load(paste0(wd, "/ensembRes.rd"))
+
+#	Load sample weights
+load(paste0(wd,"/sampleWeights.rd"))
+
+# rmse func
+rmse <- function(error)
+{
+    sqrt(mean(error^2))
+}
+
+# read locations
+posits = intersect(shp,landform)
+samples = extract(landform,posits)
+stat = posits$STAT_AB
+Nval = length(stat)
+# read in data
+myfilenames = paste0("/home/joel/data/GCOS/sp_",stat,".txt")
+myList <- lapply(myfilenames, read.csv) 
+
+
+#===============================================================================
+#			New plot routine - compute SWE posterior
+#===============================================================================
+
+# generic plot pars
+lwd=3
+pdf(paste0(wd,"/swe.pdf"), height=8, width=5)
+
+par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
+par(mfrow=c(3,1))
+for ( j in 1:Nval ) {
+
+## POSTERIOR
+# sample ID
+id=samples[j]
+
+sample= id
+ndays = length(ensembRes[ , 1, 1])
+
+median.vec = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = sampleWeights[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(sampleWeights[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:nens)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+median.vec = c(median.vec, med$y)
+}
+
+##==========================Compute quantiles=====================================
+
+low.vec = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = sampleWeights[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(sampleWeights[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:nens)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
+low.vec = c(low.vec, med$y)
+}
+
+
+high.vec = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = sampleWeights[[ sample ]]
+
+# fill missing ensemble weights with 0
+index = as.numeric(names(sampleWeights[[ sample ]]))
+df=data.frame(index,w)
+df.new = data.frame(index = 1:nens)
+df.fill = merge(df.new,df, all.x = TRUE)
+wfill=df.fill$Freq
+wfill[which(is.na(wfill))]<-0
+
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
+high.vec = c(high.vec, med$y)
+}
+
+
+# PRIOR
+
+# MEDIAN
+id=samples[j]
+
+sample= id
+ndays = length(ensembRes[ , 1, 1])
+
+median.prior = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = rep((1/nens),nens)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+#plot(dfOrder$mu , cumsum(dfOrder$wfill))
+#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.5)
+median.prior = c(median.prior, med$y)
+}
+
+
+# 5%
+id=samples[j]
+
+sample= id
+ndays = length(ensembRes[ , 1, 1])
+
+low.prior = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = rep((1/nens),nens)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.05)
+low.prior = c(low.prior, med$y)
+}
+
+# 95%
+id=samples[j]
+
+sample= id
+ndays = length(ensembRes[ , 1, 1])
+
+high.prior = c()
+for ( i in 1: ndays){
+
+mu = ensembRes[ i, sample, ]
+w = rep((1/nens),nens)
+
+df = data.frame(mu, w )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
+high.prior = c(high.prior, med$y)
+}
+
+
+#
+valdat<- myList[[j]]
+# convert obs timestamps
+d = strptime(valdat$DATUM, format="%d.%m.%Y")
+d2=format(d, '%d/%m/%Y %H:%M') #geotop format
+#d3=format(d, '%Y/%m/%d') # obsvec format
+
+# used to get time index - just use first sim 
+dat = read.table(paste0(priorwd,"/grid",grid,"/S00001/out/surface.txt"), sep=',', header=TRUE)
+
+#index of sim data in obs
+obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
+
+# index of obs in sim data
+simIndexVal = which(d2 %in% dat$Date12.DDMMYYYYhhmm.)
+
+# obs
+val = valdat$SWE.mm[simIndexVal]
+
+
+
+# plot prior,post, obs
+# plot prior,post, obs
+plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j])) # prior
+for (i in 1:nens){lines(ensembRes[,id,i], col='grey')}
+
+# 90 percentile and median prior
+y = c(low.prior ,rev(high.prior))
+x = c(1:length(low.prior), rev(1:length(high.prior)) )
+polygon (x,y, col=rgb(1, 0, 0,0.5))
+
+# 90 percentile and median posterioir
+y = c(low.vec ,rev(high.vec))
+x = c(1:length(low.vec), rev(1:length(high.vec)) )
+polygon (x,y, col=rgb(0, 0, 1,0.5))
+lines(median.vec, col='blue',lwd=3)
+lines(median.prior, col='red',lwd=3)
+
+#obs
+points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+
+axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
+legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd)
+
+}
+
+dev.off()
