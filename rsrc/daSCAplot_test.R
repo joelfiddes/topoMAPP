@@ -63,14 +63,6 @@ weight = wmat[i,]
 
 
 
-
-
-
-
-
-
-
-	
 	# ===== get melt period / obs index used for computing PBS =====
 	vec=pixTS[i,]
 	rvec=rev(vec)
@@ -100,6 +92,7 @@ weight = wmat[i,]
 	# cut to start end points (melt season )
 	obsind <- obsind[obsind >= start & obsind <= end]
 	
+
 
 
 

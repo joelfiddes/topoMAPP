@@ -8,9 +8,9 @@ def main(config):
 
 	# define variable
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# contains all the modis data
-	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
-	priorwd = "/home/joel/sim/wfj_interim/"
-	initgrids = str(1)
+	wd = "/home/joel/sim/ensembler_scale_sml/"
+	priorwd = "/home/joel/sim/scale_test_sml/"
+	initgrids = str(9)
 	nens = str(50)
 	Nclust=str(150)
 	cores = str(6)
