@@ -240,7 +240,7 @@ high.pri = c(high.pri, med$y)
 
 
 pdf(paste0(wd,"/fSCA_grid.pdf"))
-plot(high.pri, col='red', type='l', main=i)
+plot(high.pri, col='red', type='l', main=i,  xlim=c(150,ndays))
 lines(low.pri, col='red')
 lines(med.pri, col='red', lwd=3)
 lines(high.post, col='blue')
@@ -264,8 +264,8 @@ lines(low.post, col='blue')
 lines(med.post, col='blue', lwd=3)
 points(OBS2PLOT, col='green', lwd=4)
 legend("topright", c("prior", "posterior") , col=c("red", "blue"), lty=1)
-abline(v=DSTART)
-abline(v=DEND)
+#abline(v=DSTART)
+#abline(v=DEND)
 dev.off()
 
 

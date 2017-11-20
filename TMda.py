@@ -8,17 +8,22 @@ def main(config):
 
 	# define variable
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# contains all the modis data
-	wd = "/home/joel/sim/ensembler_scale_sml/"
-	priorwd = "/home/joel/sim/scale_test_sml/"
-	initgrids = str(9)
+	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
+	priorwd = "/home/joel/sim/wfj_interim2/"
+	initgrids = str(1)
 	nens = str(50)
 	Nclust=str(150)
-	cores = str(6)
+
+
+	cores = str(4)
 	sdThresh = str(13) # mm threshold of swe to sca conversion
-	DSTART = str(210) # default start of melt in case algorithm fails
+	DSTART = str(100) # default start of melt in case algorithm fails
 	DEND = str(350) # default end of melt in case algorithm fails
 	valshp = "/home/joel/data/GCOS/metadata_easy.shp"
 	R=str(0.016)
+	file="surface" # separate key word [val? linked?]
+	param = "snow_water_equivalent.mm." # separate key word [val? linked?]
+
 	#	Logging
 	logging.basicConfig(level=logging.DEBUG, filename=wd+"/da_logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
@@ -32,7 +37,7 @@ def main(config):
 		if os.path.isfile(fname) == False:
 			# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
 			logging.info( "compute results matrix")
-			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , wd , grid, nens , Nclust , sdThresh]
+			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , wd , grid, nens , Nclust , sdThresh, file, param]
 			subprocess.check_output(cmd)
 		else:
 			logging.info( fname+ " exists")
@@ -58,12 +63,12 @@ def main(config):
 
 		# SCA plots	
 		logging.info( "plot SCA")
-		cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp		] 
+		cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND ] 
 		subprocess.check_output(cmd)
 
 		# SWE plot
 		logging.info( "plot swe")
-		cmd = ["Rscript",  "./rsrc/daSWEplot.R", wd,priorwd ,grid ,nens, valshp]
+		cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp]
 		subprocess.check_output(cmd)
 
 		# SCA grid plot
@@ -72,7 +77,7 @@ def main(config):
 		subprocess.check_output(cmd)
 
 
-		cmd = ["convert" , wd+"fSCA.pdf" , wd+"swe.pdf" , wd+"fSCA_grid.pdf",  wd+"da_plots.pdf"]
+		cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots.pdf"]
 		subprocess.check_output(cmd)
 		logging.info( "DA run complete!")
 #====================================================================

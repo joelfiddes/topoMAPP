@@ -10,12 +10,16 @@ valshp=args[5]
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 shp=shapefile(valshp)
+rstack = brick(paste0(wd,"fsca_crop.tif"))
 
 #	Load ensemble results matrix
 load(paste0(wd, "/ensembRes.rd"))
 
 #	Load sample weights
-load(paste0(wd,"/sampleWeights.rd"))
+#load(paste0(wd,"/sampleWeights.rd"))
+
+# load pixel weights
+load(paste0(wd,"/wmat.rd"))
 
 # rmse func
 rmse <- function(error)
@@ -23,77 +27,83 @@ rmse <- function(error)
     sqrt(mean(error^2))
 }
 
-# read locations
-posits = intersect(shp,landform)
-samples = extract(landform,posits)
-stat = posits$STAT_AB
+# read locations on finegrid
+samples = na.omit(extract(landform,shp))
+
+posits.fg = intersect(shp,landform)
+stat = posits.fg$STAT_AB
 Nval = length(stat)
 # read in data
 myfilenames = paste0("/home/joel/data/GCOS/sp_",stat,".txt")
 myList <- lapply(myfilenames, read.csv) 
 
+# pix weights at MODIS
+rtest <- rstack[[1]]
+values(rtest) <- 1: ncell(rtest)
+posits.pix = na.omit(extract(rtest, shp))
+#er <- ensembRes[,posits.pix,]
+wpix <- wmat[posits.pix,] # pixel weights
+
 
 
 #===============================================================================
 #			compute MODAL
-#===============================================================================
-Nclust = length(ensembRes[1,,1])
+# #===============================================================================
+# Nclust = length(ensembRes[1,,1])
 
-	swe_mod=c()
- 	for ( i in 1:Nclust ){
-	# vector of ensemble IDs
-	ids = as.numeric(names(sampleWeights[[i]]))
+# 	swe_mod=c()
+#  	for ( i in posits.fg ){
+# 	# vector of ensemble IDs
+# 	ids = as.numeric(names(sampleWeights[[i]]))
 	
-	# vector of ensemble weights 
-	weights = as.numeric((sampleWeights[[i]]))
-	 #weights[ which.max(weights) ]<-1
-	# weights[weights<1]<-0
-	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
+# 	# vector of ensemble weights 
+# 	weights = as.numeric((sampleWeights[[i]]))
+# 	 #weights[ which.max(weights) ]<-1
+# 	# weights[weights<1]<-0
+# 	# multiply filtered timeseries for sample 1 and ensembles memebers "ids"
 
-	medn <- ids[which.max(weights)]
+# 	medn <- ids[which.max(weights)]
 
-	we <-  ensembRes[,i,medn] 
+# 	we <-  ensembRes[,i,medn] 
 
 
 
-	#if(!is.null(dim(we))){we = rowSums(we)}
-	swe_mod=cbind(swe_mod, we) # time * samples weighted 
+# 	#if(!is.null(dim(we))){we = rowSums(we)}
+# 	swe_mod=cbind(swe_mod, we) # time * samples weighted 
  
- }
+#  }
 #===============================================================================
 #			New plot routine - compute SWE posterior
 #===============================================================================
 
 # generic plot pars
 lwd=3
-pdf(paste0(wd,"/swe.pdf"), height=8, width=5)
+pdf(paste0(wd,"/swe_pix.pdf"), height=8, width=5)
 
 par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
 par(mfrow=c(3,1))
-for ( j in 1:Nval ) {
+
+
+for ( j in 1:length(samples) ) {
 
 ## POSTERIOR
 # sample ID
-id=samples[j]
 
-sample= id
+
+
+sample=samples[j]
+	
+
+
 ndays = length(ensembRes[ , 1, 1])
 
+print(sample)
+print(posits.pix[j])
 median.vec = c()
 for ( i in 1: ndays){
 
 mu = ensembRes[ i, sample, ]
-w = sampleWeights[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(sampleWeights[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
-
+wfill = wpix[ j, ]
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
 #plot(dfOrder$mu , cumsum(dfOrder$wfill))
@@ -108,16 +118,7 @@ low.vec = c()
 for ( i in 1: ndays){
 
 mu = ensembRes[ i, sample, ]
-w = sampleWeights[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(sampleWeights[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
+wfill = wpix[ j, ]
 
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -132,17 +133,7 @@ high.vec = c()
 for ( i in 1: ndays){
 
 mu = ensembRes[ i, sample, ]
-w = sampleWeights[[ sample ]]
-
-# fill missing ensemble weights with 0
-index = as.numeric(names(sampleWeights[[ sample ]]))
-df=data.frame(index,w)
-df.new = data.frame(index = 1:nens)
-df.fill = merge(df.new,df, all.x = TRUE)
-wfill=df.fill$Freq
-wfill[which(is.na(wfill))]<-0
-
-
+wfill = wpix[ j, ]
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
 #plot(dfOrder$mu , cumsum(dfOrder$wfill))
@@ -232,7 +223,7 @@ simIndexVal = which(d2 %in% dat$Date12.DDMMYYYYhhmm.)
 val = valdat$SWE.mm[simIndexVal]
 
 # modal swe
-swe_modal = swe_mod[,id]
+#swe_modal = swe_mod[,id]
 
 # plot prior,post, obs
 # plot prior,post, obs

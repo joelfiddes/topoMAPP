@@ -4,6 +4,8 @@ grid = as.numeric(args[2])
 nens = as.numeric(args[3])
 Nclust = as.numeric(args[4])
 sdThresh=as.numeric(args[5])
+file=args[6]
+param=args[7]
 
 #===============================================================================
 #			get results matrix
@@ -16,10 +18,9 @@ for (i in 1: nens){ #python index
 	resMat=c()
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
-		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/surface.txt"), sep=',', header=T)
-		
-		
-		resMat = cbind(resMat,dat$snow_water_equivalent.mm.)
+		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/",file,".txt"), sep=',', header=T)
+		tv <- dat[param]
+		resMat = cbind(resMat,tv[,1]) # this index collapse 1 column dataframe to vector
 		rst=raster(resMat)
 	}
 rstStack=stack(rstStack, rst)

@@ -81,10 +81,7 @@ config["geotop"]["num_cores"] =2
 #=================================================================
 config["modis"] = {}
 config["modis"]["getMODISSCA"] = "TRUE"
-config["modis"]["tileX_start"] = 18 # this is interim measure used as bbox doesnt work if outside specified tile
-config["modis"]["tileX_end"] = 18# this is interim measure used as bbox doesnt work if outside specified tile
-config["modis"]["tileY_start"] = 4
-config["modis"]["tileY_end"] = 4
+
 
 #=================================================================
 # ENSEMBLE

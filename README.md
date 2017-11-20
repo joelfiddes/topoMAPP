@@ -23,9 +23,8 @@ Key functions:
 ## To run
 1. set config by:
 - edit writeConfig.py
-- python writeConfig.py
-2. ./run_topomap.sh fullpathToInifile
-
+- python writeConfig.py (generates INI file)
+2. ./run_topomap.sh fullpath2INI
 ## Logging
 - meaningful messages (set by logging module) in workdir "logfile"
 - stdout redirected to file stdout.log in ./topomapp src code directory

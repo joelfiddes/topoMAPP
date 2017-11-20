@@ -6,7 +6,8 @@ priorwd = args[2]
 grid = as.numeric(args[3])
 nens = as.numeric(args[4])
 valshp=args[5]
-
+DSTART = as.numeric(args[6])
+DEND = as.numeric(args[7])
 
 #readin
 shp=shapefile(valshp)
@@ -69,33 +70,35 @@ weight = wmat[i,]
 
 	
 	# ===== get melt period / obs index used for computing PBS =====
-	vec=pixTS[i,]
-	rvec=rev(vec)
-	lastdata = which(rvec>0)[1] # last non-zero value
-	lastdataindex = length(vec) - lastdata+1
-	firstnodata = lastdataindex+1
-	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
-	start=lastdateover95 
-	end=firstnodata
+	# vec=pixTS[i,]
+	# rvec=rev(vec)
+	# lastdata = which(rvec>0)[1] # last non-zero value
+	# lastdataindex = length(vec) - lastdata+1
+	# firstnodata = lastdataindex+1
+	# lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	# start=lastdateover95 
+	# end=firstnodata
 	
-	if(!is.na(start) & !is.na(end) & start >= end){
-	start=DSTART#lastdateover95 
-	end=DEND#firstnodata
-	}
+	# if(!is.na(start) & !is.na(end) & start >= end){
+	# start=DSTART#lastdateover95 
+	# end=DEND#firstnodata
+	# }
 	
-	if(is.na(start)){
-	start=DSTART#lastdateover95 
-	}
+	# if(is.na(start)){
+	# start=DSTART#lastdateover95 
+	# }
 	
-	if(is.na(end)){
-	end=DEND#firstnodata
-	}	
+	# if(is.na(end)){
+	# end=DEND#firstnodata
+	# }	
 	
-	# identify missing dates and reset start end index
-	obsind = which(!is.na(obs)==TRUE)
+	# # identify missing dates and reset start end index
+	# obsind = which(!is.na(obs)==TRUE)
 	
-	# cut to start end points (melt season )
-	obsind <- obsind[obsind >= start & obsind <= end]
+	# start = DSTART
+	# end = DEND
+	# # cut to start end points (melt season )
+	# obsind <- obsind[obsind >= start & obsind <= end]
 	
 
 
@@ -193,24 +196,28 @@ med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
 high.pri = c(high.pri, med$y)
 }
 
-plot(high.pri, col='red', type='l', main=i, xlim=c(1,ndays))
+
+plot(high.pri, col='red', type='l', main=i, xlim=c(180,ndays))
+
+# plot only obs used in DA
+#points(obsind , obs[obsind], col='red', lwd=4)
+
+y = c(low.pri ,rev(high.pri))
+x = c(1:length(low.pri), rev(1:length(high.pri)) )
+polygon (x,y, col=rgb(1, 0, 0,0.5))
+
+y = c(low.post ,rev(high.post))
+x = c(1:length(low.post), rev(1:length(high.post)) )
+polygon (x,y, col=rgb(0, 0, 1,0.5))
+
+
+
 lines(low.pri, col='red')
 lines(med.pri, col='red', lwd=3)
 lines(high.post, col='blue')
 lines(low.post, col='blue')
 lines(med.post, col='blue', lwd=3)
 points(obs, col='green', lwd=4)
-
-# plot only obs used in DA
-points(obsind , obs[obsind], col='red', lwd=4)
-
-y = c(low.post ,rev(high.post))
-x = c(1:length(low.post), rev(1:length(high.post)) )
-polygon (x,y, col=rgb(0, 0, 1,0.5))
-
-y = c(low.pri ,rev(high.pri))
-x = c(1:length(low.pri), rev(1:length(high.pri)) )
-polygon (x,y, col=rgb(1, 0, 0,0.5))
 
 rmse <- function(error)
 {

@@ -97,8 +97,9 @@ wmat = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
 	}	
 	
 	# set default here TRIAL
-	start = DSTART
-	end = DEND
+	#start = DSTART
+	#end = DEND
+
 	# identify missing dates and reset start end index
 	obsind = which(!is.na(obs)==TRUE)
 	
