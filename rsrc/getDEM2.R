@@ -77,9 +77,9 @@ df= expand.grid(data.frame(lon,lat))
 latmat = matrix(rep(lat, length(lon)),ncol=length(lon),nrow=length(lat))
 
 lonmat = matrix(rep(lon, length(lat)),ncol=length(lon),nrow=length(lat),byrow=TRUE)
-lov=as.vector(latmat)
-lav = as.vector(lonmat)
-df= data.frame(lov,lav)
+lon=as.vector(latmat)
+lat = as.vector(lonmat)
+df= data.frame(lon,lat)
 }
 
 	ngrids=length(df[,1])
