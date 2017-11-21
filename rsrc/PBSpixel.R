@@ -54,8 +54,50 @@ load(paste0(wd, "/ensembRes.rd"))
 # convert swe to sca
 ensembRes[ensembRes<=sdThresh]<-0
 ensembRes[ensembRes>sdThresh]<-1
+#===============================================================================
+#	Compute melt period by elevation
+#===============================================================================
 
+resol=5
 
+ #get high pixels subset
+dem = raster(paste0(priorwd,"/predictors/ele.tif"))
+elegrid = crop(dem, landform)
+r = aggregate(elegrid,res(rstack)/res(elegrid) )
+rstack_ele <- resample(r , rstack)
+ 
+minZ = cellStats(elegrid, "min") -1 #add buffer to allow use of "greaterthan" on lower bound and not risk excluding a point at lowest ele.
+maxZ = cellStats(elegrid, "max")
+range=maxZ-minZ
+deltaZ=range/resol
+
+#meltList <- list()
+meltPeriod=c()
+for (i in 1:resol){
+
+mStart= minZ+ (deltaZ*(i-1))
+mEnd = mStart+deltaZ
+
+pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
+x=rstack[pix]
+meanMelt = apply(x, FUN="mean", MARGIN=2)
+
+vec <- meanMelt
+rvec=rev(vec)
+lastdata = which(rvec>0)[1] # last non-zero value
+lastdataindex = length(vec) - lastdata+1
+firstnodata = lastdataindex+1
+lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+start=lastdateover95 
+end=firstnodata
+mp = c(mStart,mEnd,start,end)
+meltPeriod=rbind(meltPeriod, mp)
+}
+df = data.frame(meltPeriod)
+names(df) <- c("ele1", "ele2", "start", "end")
+
+# pixel based timeseries 
+pixEle = getValues( rstack_ele)
 #===============================================================================
 #	Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 #===============================================================================
@@ -68,24 +110,30 @@ registerDoParallel(cl) # register the cluster
 
 wmat = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
               
-   print(i)
-	
+   	print(i)
+	ele=pixEle[i]
+	lb = which(df$ele1 < ele )
+	ub = which(df$ele2 >= ele )
+	class = which(lb %in% ub)
+	meltp=df[class,]
+	start = meltp$start
+	end = meltp$end
+
 	# Extract pixel based timesries of MODIS obs and scale
 	obs = pixTS[i,] /100
 	
 	# get melt period
-	vec=pixTS[i,]
-	rvec=rev(vec)
-	lastdata = which(rvec>0)[1] # last non-zero value
-	lastdataindex = length(vec) - lastdata+1
-	firstnodata = lastdataindex+1
-	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
-	start=lastdateover95 
-	end=firstnodata
+	# vec=pixTS[i,]
+	# rvec=rev(vec)
+	# lastdata = which(rvec>0)[1] # last non-zero value
+	# lastdataindex = length(vec) - lastdata+1
+	# firstnodata = lastdataindex+1
+	# lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	# start=lastdateover95 
+	# end=firstnodata
 	
 	if(!is.na(start) & !is.na(end) & start >= end){
-	start=DSTART#lastdateover95 
-	end=DEND#firstnodata
+
 	}
 	
 	if(is.na(start)){
@@ -215,23 +263,29 @@ registerDoParallel(cl) # register the cluster
 HX = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
               
    print(i)
-	
+	ele=pixEle[i]
+	lb = which(df$ele1 < ele )
+	ub = which(df$ele2 >= ele )
+	class = which(lb %in% ub)
+	meltp=df[class,]
+	start = meltp$start
+	end = meltp$end
 	# Extract pixel based timesries of MODIS obs and scale
 	obs = pixTS[i,] /100
 	
 	# get melt period
-	vec=pixTS[i,]
-	rvec=rev(vec)
-	lastdata = which(rvec>0)[1] # last non-zero value
-	lastdataindex = length(vec) - lastdata+1
-	firstnodata = lastdataindex+1
-	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
-	start=lastdateover95 
-	end=firstnodata
+	# vec=pixTS[i,]
+	# rvec=rev(vec)
+	# lastdata = which(rvec>0)[1] # last non-zero value
+	# lastdataindex = length(vec) - lastdata+1
+	# firstnodata = lastdataindex+1
+	# lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	# start=lastdateover95 
+	# end=firstnodata
 	
 	if(!is.na(start) & !is.na(end) & start >= end){
-	start=DSTART#lastdateover95 
-	end=DEND#firstnodata
+	#start=DSTART#lastdateover95 
+	#end=DEND#firstnodata
 	}
 	
 	if(is.na(start)){

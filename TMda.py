@@ -17,7 +17,7 @@ def main(config):
 
 	cores = str(4)
 	sdThresh = str(13) # mm threshold of swe to sca conversion
-	DSTART = str(100) # default start of melt in case algorithm fails
+	DSTART = str(210) # default start of melt in case algorithm fails
 	DEND = str(350) # default end of melt in case algorithm fails
 	valshp = "/home/joel/data/GCOS/metadata_easy.shp"
 	R=str(0.016)

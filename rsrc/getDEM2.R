@@ -68,8 +68,19 @@ lon = c(demExtent@xmin: (demExtent@xmax -1) )
 lat = c(demExtent@ymin: (demExtent@ymax -1) )
 
 # if dimensions are different then replication will occur - watch this
+if ( length(lon) == length(lat) ){
 df= expand.grid(data.frame(lon,lat))
+} else {
 
+
+
+latmat = matrix(rep(lat, length(lon)),ncol=length(lon),nrow=length(lat))
+
+lonmat = matrix(rep(lon, length(lat)),ncol=length(lon),nrow=length(lat),byrow=TRUE)
+lov=as.vector(latmat)
+lav = as.vector(lonmat)
+df= data.frame(lov,lav)
+}
 
 	ngrids=length(df[,1])
 	print (paste0("Retrieving ",ngrids, " SRTM30 grids (1x1 deg)"))
