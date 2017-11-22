@@ -77,8 +77,8 @@ df= expand.grid(data.frame(lon,lat))
 latmat = matrix(rep(lat, length(lon)),ncol=length(lon),nrow=length(lat))
 
 lonmat = matrix(rep(lon, length(lat)),ncol=length(lon),nrow=length(lat),byrow=TRUE)
-lon=as.vector(latmat)
-lat = as.vector(lonmat)
+lat=as.vector(latmat)
+lon = as.vector(lonmat)
 df= data.frame(lon,lat)
 }
 
