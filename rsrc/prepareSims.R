@@ -34,8 +34,9 @@ Npreds=length(predictors)
 
 	for (p in 1:Npreds){
 	setwd(paste0(wd,'/predictors'))	
-	rst=crop(raster(predictors[p]) ,extentPoly[extentPoly$eraExtent==i,])
-	setwd(paste0(wd, '/grid', i,'/predictors'))
-	writeRaster(rst, predictors[p], overwrite=TRUE)
+	crop(raster(predictors[p]) ,extentPoly[extentPoly$eraExtent==i,], filename = paste0( wd, '/grid', i,'/predictors/' , predictors[p] ) , overwrite=TRUE)
+	#rst=crop(raster(predictors[p]) ,extentPoly[extentPoly$eraExtent==i,])
+	#setwd(paste0(wd, '/grid', i,'/predictors'))
+	#writeRaster(rst, predictors[p], overwrite=TRUE)
 	}
 }
