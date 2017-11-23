@@ -331,10 +331,12 @@ for Ngrid in grid_dirs:
 #	Aggregate results if tscaleOnly == FALSE
 #====================================================================
 	
-	if config["toposcale"]["tscaleOnly"] == "FALSE":
+	#This doesent scale so well, not used yet, but would be nice!
+	
+	#if config["toposcale"]["tscaleOnly"] == "FALSE":
 		
-		from topoResults import resultsCube
-		resultsCube.main(Ngrid)
+		#from topoResults import resultsCube
+		#resultsCube.main(Ngrid)
 
 #====================================================================
 #	Run SCA here for entire domain to make efficient in terms of 

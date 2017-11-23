@@ -28,9 +28,9 @@ def main(Ngrid, config):
 	#https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
 	
 		df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
-		df['Tair'] = df['Tair'] + config['da']['tscale'] #additative
-		df['LW'] = df['LW'] * config['da']['lwscale']##multiplicative
-		df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
+		#df['Tair'] = df['Tair'] + config['da']['tscale'] #additative
+		#df['LW'] = df['LW'] * config['da']['lwscale']##multiplicative
+		#df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
 
 		#write meteo
 		df.to_csv( s +"/meteo0001.txt", index = False)
