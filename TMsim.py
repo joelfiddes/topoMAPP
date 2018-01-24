@@ -81,7 +81,7 @@ def main(Ngrid, config):
 	sim_dirs = glob.glob(gridpath +"/S*")
 	nsims = len(sim_dirs)
 	if nsims == config["toposub"]["samples"]:
-		file = open(gridpath + “/RUNSUCCESS”,”w”) 
+		file = open(gridpath + '/RUNSUCCESS','w') 
 		file.close() 
 
 #====================================================================
