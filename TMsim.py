@@ -80,7 +80,7 @@ def main(Ngrid, config):
 	# count sim dirs produce SUCCES file if complete
 	sim_dirs = glob.glob(gridpath +"/S*")
 	nsims = len(sim_dirs)
-	if nsims = config["toposub"]["samples"]:
+	if nsims == config["toposub"]["samples"]:
 		file = open(gridpath + “/RUNSUCCESS”,”w”) 
 		file.close() 
 
