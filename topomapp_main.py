@@ -249,7 +249,7 @@ for Ngrid in grid_dirs:
 	# skip to next iteration if results exist
 	fname1 = gridpath + "/RUNSUCCESS"
 	#fname2 = gridpath + "/surfaceResults"
-	if os.path.isfile(fname2) == True: #and os.path.isfile(fname2) == True:
+	if os.path.isfile(fname1) == True: #and os.path.isfile(fname2) == True:
 		logging.info( "Results already exist (RUNSUCCESS file found) for " + Ngrid +" skipping to next grid" )
 		continue
 
