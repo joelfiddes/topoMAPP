@@ -13,7 +13,7 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	TOPOSUB: Toposub.R contains hardcoded "normal" parameters 
 	#====================================================================
-	fname1 = gridpath + "landform.tif"
+	fname1 = gridpath + "/landform.tif"
 	if os.path.isfile(fname1) == False: #NOT ROBUST
 
 
