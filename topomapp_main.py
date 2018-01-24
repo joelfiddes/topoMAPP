@@ -296,7 +296,7 @@ for Ngrid in grid_dirs:
 		subprocess.check_output(cmd)
 
 		#need to run loop of five requests at set dates (can be fixed for now)
-		mydates=["2000-08-12","2004-08-12","2008-08-12","2012-08-12"]#,"2016-08-12"]
+		mydates=["2001-08-12","2004-08-12","2008-08-12","2012-08-12"]#,"2016-08-12"]
 		for date in mydates:
 			# call bash script that does grep type stuff to update values in options file
 			cmd = ["./DA/updateOptions.sh" , date , date, config["modis"]["options_file_NDVI"], ndvi_wd]

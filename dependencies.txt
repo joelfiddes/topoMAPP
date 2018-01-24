@@ -15,12 +15,17 @@ require(plotKML)
 require(gdata)
 require(foreach)
 require(doParallel)
+require(xml2)
+require(insol)
 
 #python
 pip install retrying
 pip install joblib
 pip install PyShp
 pip install shapely
+pip install configobj
+pip install https://software.ecmwf.int/wiki/download/attachments/56664858/ecmwf-api-client-python.tgz
+pip install python-dateutil
 
 #Linux
 
@@ -40,6 +45,6 @@ Curl (required by package curl)
 
 
 #accounts (credential files required)
-NASA data: DEM, MODIS: https://urs.earthdata.nasa.gov/profile
-ERA-data: https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets
+NASA data: DEM, MODIS: https://urs.earthdata.nasa.gov/profile. [~/.netrc]
+ERA-data: https://software.ecmwf.int/wiki/display/WEBAPI/Access+ECMWF+Public+Datasets [~/.ecmwfapirc]
 

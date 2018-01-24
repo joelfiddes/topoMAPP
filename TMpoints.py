@@ -25,13 +25,26 @@ def main(wd, Ngrid, config):
 	#====================================================================
 	#	run toposcale
 	#====================================================================
-	fname1 = gridpath + "/tPoint.txt"
-	if os.path.isfile(fname1) == False: #NOT ROBUST
+
+
+ 	fname1 = gridpath + "/tPoint.txt"
+ 	fname2 = gridpath + "/rPoint.txt"
+ 	fname3 = gridpath + "/uPoint.txt"
+ 	fname4 = gridpath + "/vPoint.txt"
+ 	fname5 = gridpath + "/lwPoint.txt"
+ 	fname6 = gridpath + "/sol.txt"
+ 	fname7 = gridpath + "/pSurf_lapse.txt"
+	
+	if os.path.isfile(fname1) == True and os.path.isfile(fname2) == True and os.path.isfile(fname3) == True and os.path.isfile(fname4) == True and os.path.isfile(fname5) == True and os.path.isfile(fname6) == True and os.path.isfile(fname7) == True: #NOT ROBUST
+		
+		logging.info( "TopoSCALE already run: " + os.path.basename(os.path.normpath(Ngrid)) )
+	
+	else:
+
 		logging.info( "TopoSCALE: " + os.path.basename(os.path.normpath(Ngrid)) )
 		import TMtoposcale
 		TMtoposcale.main(wd, Ngrid, config)
-	else:
-		logging.info( "TopoSCALE already run: " + os.path.basename(os.path.normpath(Ngrid)) )
+
 	#====================================================================
 	#	setup and run simulations
 	#====================================================================

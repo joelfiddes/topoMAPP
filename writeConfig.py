@@ -81,7 +81,8 @@ config["geotop"]["num_cores"] =2
 #=================================================================
 config["modis"] = {}
 config["modis"]["getMODISSCA"] = "TRUE"
-
+config["modis"]["startDateSCA"]="2010-09-01"
+config["modis"]["endDateSCA"] = "2015-09-01"
 
 #=================================================================
 # ENSEMBLE

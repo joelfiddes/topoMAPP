@@ -11,7 +11,7 @@ def main( config , shp):
 	if not os.path.exists(sca_wd):
 		os.makedirs(sca_wd)
 
-	cmd = ["./DA/updateOptions.sh" , config["main"]["startDate"] , config["main"]["endDate"] , config["modis"]["options_file_SCA"], sca_wd]
+	cmd = ["./DA/updateOptions.sh" , config["modis"]["startDateSCA"] , config["modis"]["endDateSCA"] , config["modis"]["options_file_SCA"], sca_wd]
 	subprocess.check_output( cmd)
 
 	# run MODIStsp tool	

@@ -30,6 +30,7 @@ Key functions:
 - stdout redirected to file stdout.log in ./topomapp src code directory
 
 ## Dependencies
+- Detailed in dependencies.txt
 - Linux 16.04 (probably works on 14.04 too)
 - GDAL > v.2 
 - CDO
