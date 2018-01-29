@@ -4,13 +4,15 @@
 *Project in active development - not ready for running out the box, provided as is with no guarantee of stability.*
 
 This modelling framework combines previously published tools TopoSUB and TopoSCALE with ensemble and data assimilation methods. The tool can be run in 3 modes:
-- NORM
-- ENSEMBLE
-- DA
+- NORM: single run
+- ENSEMBLE: multiple run ensemble constructed from random draws from defined distribution of parameters to perturb.
+- DA: batch particle filter data assimilation using MODIS SCA data.
 
 and at 2 spatial geometries:
 - AOI / bbox
 - point
+
+Additionally, TopoSCALE can be run independently if you just require meteotimeseries for a set of points.
 
 Key functions:
 - Automated handling of all download requirements

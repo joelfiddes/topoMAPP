@@ -2,7 +2,7 @@
 ssh -X fiddes@wessel.uio.no	
 
 #R packages
-install.packages(c("raster", "horizon","rgdal", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel"))
+install.packages(c("raster", "horizon","rgdal", "ncdf4", "Hmisc", "MODIStsp", "plotKML", "gdata", "foreach", "doParallel", "xml2", "insol"))
 
 #test successful
 require(raster)
@@ -26,18 +26,20 @@ pip install shapely
 pip install configobj
 pip install https://software.ecmwf.int/wiki/download/attachments/56664858/ecmwf-api-client-python.tgz
 pip install python-dateutil
+pip install pandas
 
 #Linux
-
+# check status
 dpkg -l gdal-bin r-base python cdo curl netcdf-bin
 
 
-gdal-bin
+sudo apt-get install  gdal-bin
 #gdal-config (sudo apt install libgdal-dev)
-R
-python
-cdo 
-pip
+sudo apt-get install r-base
+sudo apt-get install  python
+sudo apt-get install cdo 
+sudo apt-get install pip
+sudo apt-get install libgtk-3-dev
 
 #for MODIStsp
 Cairo >= 1.0.0, ATK >= 1.10.0, Pango >= 1.10.0, GTK+ >= 2.8.0, GLib >= 2.8.0 (required by package RGtk2)

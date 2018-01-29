@@ -70,7 +70,8 @@ nc=nc_open(infilePLEVEL)
 time = ncvar_get( nc,'time')
 time2=time
 z <- time2*60*60 #make seconds
-origin=substr(nc$dim$time$units,13,20)
+#origin=substr(nc$dim$time$units,13,20)
+origin = unlist(strsplit(nc$dim$time$units, " "))[[3]]
 datesPl<-ISOdatetime(origin,0,0,0,0,0,tz='UTC') + z #dates sequence
 save(datesPl, file=paste(outRootPl, '/dates', sep=''))
 #write.table(dates,paste(outRootPl, '/dates', sep=''), sep=',', row.names=F, col.names=F)
@@ -141,7 +142,8 @@ step=step
 nc=nc_open(infileSURF)
 time = ncvar_get( nc,'time')
 #origin =unlist(strsplit(nc$dim$time$units,'hours since '))[2]
-origin=substr(nc$dim$time$units,13,20)
+#origin=substr(nc$dim$time$units,13,20)
+origin = unlist(strsplit(nc$dim$time$units, " "))[[3]]
 
 z <- time*60*60 #make seconds
 dates<-ISOdatetime(origin,0,0,0,0,0,tz='UTC') + z #dates sequence
