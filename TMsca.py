@@ -16,7 +16,7 @@ def main( config , shp):
 
 	# run MODIStsp tool	
 	from DA import getMODIS as gmod
-	gmod.main("FALSE" , config["modis"]["options_file_SCA"], shp ) #  able to run non-interactively now
+	gmod.main(config["modis"]["options_file_SCA"], shp ) #  able to run non-interactively now
 
 # calling main
 if __name__ == '__main__':

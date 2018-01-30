@@ -23,12 +23,12 @@ Attributes:
 Todo:
 
 """
-path2script = "./rsrc/getMODIS_SCA.R"
+path2script = "./rsrc/getMODIS.R"
 
 # main
-def main(gui , options_file ,shp):
+def main(options_file ,shp):
     """Main entry point for the script."""
-    run_rscript_fileout(path2script,[gui , options_file, shp])
+    run_rscript_fileout(path2script,[options_file, shp])
 
 # functions
 def run_rscript_stdout(path2script , args):
@@ -51,10 +51,9 @@ def run_rscript_fileout(path2script , args):
 # calling main
 if __name__ == '__main__':
     import sys
-    gui          = sys.argv[1]
-    options_file = sys.argv[2]
+    options_file = sys.argv[1]
     shp = sys.argv[2]
-    main(gui , options_file, shp)
+    main(options_file, shp)
 
 
 
