@@ -51,7 +51,7 @@ sourceDir <- function(path) {
 	}
 }
 
-sourceDir(path="./functions/")
+sourceDir(path="./modistsp_functions/")
 
 # read in MODIS product descriptions file
 prodopts_file = "./functions/MODIStsp_ProdOpts.RData"                  
