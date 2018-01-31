@@ -250,8 +250,8 @@ for Ngrid in grid_dirs:
 	fname1 = gridpath + "/RUNSUCCESS"
 	#fname2 = gridpath + "/surfaceResults"
 	if os.path.isfile(fname1) == True: #and os.path.isfile(fname2) == True:
-		logging.info( "Results already exist (RUNSUCCESS file found) for " + Ngrid +" skipping to next grid and removing this one." )
-		shutil.rmtree(gridpath)
+		logging.info( "Results already exist (RUNSUCCESS file found) for " + Ngrid +" skipping to next grid" )
+		
 		continue
 
 	logging.info( "")
@@ -264,6 +264,8 @@ for Ngrid in grid_dirs:
 		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
 		if(len(numPoints) == 0):
 			logging.info( "Grid box contains no points, skip to next grid")
+			import shutil
+			shutil.rmtree(gridpath)
 			continue
 
 # more elegant to define new grid_dirs based on this analysis but hard to pass output of Rscript in python. len9nuPoints) counts characters so while ==0 tells us no point is present > 0 does not tell us how many points there are.
