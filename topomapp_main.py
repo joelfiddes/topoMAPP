@@ -265,7 +265,7 @@ for Ngrid in grid_dirs:
 		if(len(numPoints) == 0):
 			logging.info( "Grid box contains no points, skip to next grid")
 			import shutil
-			shutil.rmtree(gridpath)
+			shutil.rmtree(wd,gridpath)
 			continue
 
 # more elegant to define new grid_dirs based on this analysis but hard to pass output of Rscript in python. len9nuPoints) counts characters so while ==0 tells us no point is present > 0 does not tell us how many points there are.
