@@ -78,12 +78,19 @@ def main(Ngrid, config):
 		print "[INFO]: " + str(Ngrid) + " has been removed because it contained no points. Now processing grid" + str(Ngrid) + "+1"
 
 	# count sim dirs produce SUCCES file if complete
-	sim_dirs = glob.glob(gridpath +"/S*")
-	nsims = len(sim_dirs)
-	if nsims == config["toposub"]["samples"]:
-		file = open(gridpath + '/RUNSUCCESS','w') 
-		file.close() 
+	if config["main"]["runtype"] == "bbox":
+		sim_dirs = glob.glob(gridpath +"/S*")
+		nsims = len(sim_dirs)
+		if nsims == config["toposub"]["samples"]:
+			file = open(gridpath + '/RUNSUCCESS','w') 
+			file.close() 
 
+	if config["main"]["runtype"] == "points":
+		sim_dirs = glob.glob(gridpath +"/S*")
+		nsims = len(sim_dirs)
+		if nsims == nsims: # need a check here
+			file = open(gridpath + '/RUNSUCCESS','w') 
+			file.close() 
 #====================================================================
 #	Calling MAIN
 #====================================================================
