@@ -165,7 +165,7 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	# Merge NC timeseries (requires linux package cdo)
 	import subprocess
 	#os.chdir(eraDir)
-	cmd     = "cdo -b F64 -f nc2 mergetime " + wd + "/eraDat/interim_daily_PLEVEL* " +  wd + "/eraDat/PLEVEL.nc"
+	cmd     = "cdo -b F64 -f nc2 mergetime " + wd + "/eraDat/PLEVEL* " +  wd + "/eraDat/PLEVEL.nc"
 
 	if os.path.exists(wd + "eraDat/PLEVEL.nc"):
 	    os.remove(wd + "eraDat/PLEVEL.nc")
@@ -174,7 +174,7 @@ if os.path.isfile(fname2) == False and os.path.isfile(fname2) == False: #NOT ROB
 	logging.info("Running:" + str(cmd))
 	subprocess.check_output(cmd, shell = "TRUE")
 
-	cmd     = "cdo -b F64 -f nc2 mergetime " + wd +  "/eraDat/interim_daily_SURF* " + wd +"/eraDat/SURF.nc"
+	cmd     = "cdo -b F64 -f nc2 mergetime " + wd +  "/eraDat/SURF* " + wd +"/eraDat/SURF.nc"
 
 	if os.path.exists(wd + "eraDat/SURF.nc"):
 	    os.remove(wd + "eraDat/SURF.nc")
@@ -263,7 +263,7 @@ for Ngrid in grid_dirs:
 		from listpoints_make import findGridsWithPoints
 		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
 		if(len(numPoints) == 0):
-			logging.info( "Grid box contains no points, skip to next grid")
+			logging.info( "Grid box contains no points, skip to next grid and remove: " + Ngrid)
 			import shutil
 			shutil.rmtree(gridpath)
 			continue

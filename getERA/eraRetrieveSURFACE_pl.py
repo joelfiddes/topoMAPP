@@ -67,14 +67,14 @@ def retrieve_interim(config,eraDir, latNorth,latSouth,lonEast,lonWest):
         firstDate = "%04d%02d%02d" % (year, month, 1)
         numberOfDays = calendar.monthrange(year, month)[1]
         lastDate = "%04d%02d%02d" % (year, month, numberOfDays)
-        target = eraDir + "/interim_daily_SURF_%04d%02d.nc" % (year, month)
+        target = eraDir + "/SURF_%04d%02d.nc" % (year, month)
         requestDates = (firstDate + "/TO/" + lastDate)
         
         requestDatesVec.append(requestDates)
         targetVec.append(target)  
 
     # find files that already downloaded if any with exact matches (in case of restarts)
-    dataExists = glob.glob(eraDir +"/interim_daily_SURF_??????.nc")
+    dataExists = glob.glob(eraDir +"/SURF_??????.nc")
 
     # list only files that dont exist
     targetVecNew = [x for x in targetVec if x not in dataExists]

@@ -68,7 +68,7 @@ def retrieve_interim(strtDate,endDate,latNorth,latSouth,lonEast,lonWest,grd,eraD
             startDate = "%04d%02d%02d" % (year, month, 1)
             numberOfDays = calendar.monthrange(year, month)[1]
             lastDate = "%04d%02d%02d" % (year, month, numberOfDays)
-            target = eraDir + "/interim_daily_PLEVEL_%04d%02d.nc" % (year, month)
+            target = eraDir + "/PLEVEL_%04d%02d.nc" % (year, month)
             requestDates = (startDate + "/TO/" + lastDate)
 
             # check if exists
