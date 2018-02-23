@@ -46,7 +46,7 @@ if( length(list.files(pattern="MOD*")) >0) {
 	names(MOD)<- MOD.names
 	#MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
-save(MOD, "MOD")
+save(MOD, file = "MOD")
 print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
 if( length(list.files(pattern="MYD*")) >0) {
 	print(paste0(length(list.files(pattern="MYD*")), " MYD files found"))
@@ -64,7 +64,7 @@ if( length(list.files(pattern="MYD*")) >0) {
 	names(MYD)<- MYD.names
 	#MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 }
-save(MYD, "MYD")
+save(MYD, file ="MYD")
 print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
 
 # Fill missing layers in each stack
@@ -140,7 +140,7 @@ for (i in 1:nlayers(MOD.layerfill)){
 MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)
 print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
-save(MOD.fill, "MOD.fill")
+save(MOD.fill, file ="MOD.fill")
 
 #count NA
 MOD.na <- length(which(is.na(values(MOD.layerfill))) )
