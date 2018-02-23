@@ -47,7 +47,7 @@ if( length(list.files(pattern="MOD*")) >0) {
 	#MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
 save(MOD, file = "MOD")
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 if( length(list.files(pattern="MYD*")) >0) {
 	print(paste0(length(list.files(pattern="MYD*")), " MYD files found"))
 	MYD=stack(list.files(pattern="MYD*"))
@@ -65,7 +65,7 @@ if( length(list.files(pattern="MYD*")) >0) {
 	#MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 }
 save(MYD, file ="MYD")
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 
 # Fill missing layers in each stack
 
@@ -77,7 +77,7 @@ myd.root = substr(list.files(pattern='MYD*'),1,12)[1]
 mod.date <- as.Date(mod.ts, format="%Y_%j") 
 myd.date <- as.Date(myd.ts, format="%Y_%j")
 
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # hypothetical complete range of MOD or MYD
 mod.range <- seq(min(mod.date), max(mod.date), by = 1) 
 myd.range <- seq(min(mod.date), max(mod.date), by = 1) 
@@ -92,14 +92,14 @@ mod.miss = all.range[!all.range %in% mod.date]
 myd.miss = all.range[!all.range %in% myd.date]
 MOD.miss.ind <- which(all.range == mod.miss)
 MYD.miss.ind <- which(all.range == myd.miss)
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # index of existing layers
 mod.nomiss = all.range[all.range %in% mod.date]
 myd.nomiss = all.range[all.range %in% myd.date]
 MOD.nomiss.ind <- which(all.range %in% mod.nomiss)
 MYD.nomiss.ind <- which(all.range == myd.nomiss)
 
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # index of myd layers that correspond to missing mod layers
 myd.missmod.ind <- which(myd.date %in% mod.miss)
 
@@ -113,7 +113,7 @@ if (length(myd.missmod.ind ) == 0){
 print("No MOD date gaps found")
 	}
 
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # index of mod layers that correspond to missing myd layers
 mod.missmyd.ind <- which(mod.date %in% myd.miss)
 
@@ -128,7 +128,7 @@ if (length(mod.missmyd.ind ) == 0){
 	print("No MYD date gaps found")
 	}
 
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # MOD Na cells filled with MYD data if exists :  Replace ‘NA’ values in the first Raster object (‘x’) with the values of the second (‘y’), and so forth for  additional Rasters. 
 
 #implement as loop to avoid large datset problems that existed
@@ -139,7 +139,7 @@ for (i in 1:nlayers(MOD.layerfill)){
 }
 MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 save(MOD.fill, file ="MOD.fill")
 
 #count NA
@@ -166,7 +166,7 @@ print(paste0("orig NAs in MOD=",round(oldNa,2),"% New NAs in filled MOD=",round(
 
 #==================OUTPUTS==============================
 rstack <- MOD.fill
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 # Combine timeseries
 #MOD[MOD > 100]  <- NA
 #MYD[MYD > 100]  <- NA
@@ -187,7 +187,7 @@ for(i in 1: length( names(rstack)))
 }
 
 setwd(wd)
-print(sort( sapply(ls(),function(x){format(object.size(get(x)),units='Mb')})) )
+
 
 #====================================================================
 # convert ndsi to fsca
