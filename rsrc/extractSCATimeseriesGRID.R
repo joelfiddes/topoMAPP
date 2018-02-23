@@ -33,21 +33,36 @@ setwd(sca_wd)
 if( length(list.files(pattern="MOD*")) >0) {
 	print(paste0(length(list.files(pattern="MOD*")), " MOD files found"))
 	MOD=stack(list.files(pattern="MOD*"))
+	print("MOD stack complete")
 	MOD.names = names(MOD) # explicitly capture names to avoid loss
-	MOD [MOD >100]<-NA# filter non-ndsi values
+	#MOD [MOD >100]<-NA# filter non-ndsi values - this was hanging for some unknown reason, changed to simple loop
+
+	for ( i in 1:dim(MOD)[3] ) {
+		MOD[[i]][MOD[[i]] > 100]<-NA
+		print(i)
+	}
+
+	print("MOD filter complete")
 	names(MOD)<- MOD.names
-	MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
+	#MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
 
 
 if( length(list.files(pattern="MYD*")) >0) {
 	print(paste0(length(list.files(pattern="MYD*")), " MYD files found"))
 	MYD=stack(list.files(pattern="MYD*"))
-
+	print("MYD stack complete")
 	MYD.names = names(MYD)
-	MYD [MYD >100]<-NA # filter non-ndsi values
+	#MYD [MYD >100]<-NA # filter non-ndsi values  - this was hanging for some unknown reason, changed to simple loop
+
+	for ( i in 1:dim(MYD)[3] ) {
+		MYD[[i]][MYD[[i]] > 100]<-NA
+		print(i)
+	}
+
+	print("MYD filter complete")
 	names(MYD)<- MYD.names
-	MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
+	#MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 }
 
 
@@ -116,6 +131,7 @@ if (length(mod.missmyd.ind ) == 0){
 rstack = stack()
 for (i in 1:nlayers(MOD.layerfill)){
 	rstack  = stack(rstack,  cover(MOD.layerfill[[i]], MYD.layerfill[[i]]))
+	print(paste0("filled layer: " ,i)
 }
 MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)
