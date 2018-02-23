@@ -131,7 +131,7 @@ if (length(mod.missmyd.ind ) == 0){
 rstack = stack()
 for (i in 1:nlayers(MOD.layerfill)){
 	rstack  = stack(rstack,  cover(MOD.layerfill[[i]], MYD.layerfill[[i]]))
-	print(paste0("filled layer: " ,i)
+	print(paste0("filled layer: " ,i))
 }
 MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)
