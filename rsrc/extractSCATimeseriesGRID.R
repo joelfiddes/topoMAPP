@@ -160,7 +160,7 @@ print(paste0("orig NAs in MOD=",round(oldNa,2),"% New NAs in filled MOD=",round(
 
 
 #==================OUTPUTS==============================
-rstack <- MOD_cf
+rstack <- MOD.fill
 
 # Combine timeseries
 #MOD[MOD > 100]  <- NA
