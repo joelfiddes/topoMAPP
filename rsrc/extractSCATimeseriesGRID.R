@@ -46,7 +46,7 @@ if( length(list.files(pattern="MOD*")) >0) {
 	names(MOD)<- MOD.names
 	#MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
-save(MOD, file = "MOD")
+
 
 if( length(list.files(pattern="MYD*")) >0) {
 	print(paste0(length(list.files(pattern="MYD*")), " MYD files found"))
@@ -64,7 +64,7 @@ if( length(list.files(pattern="MYD*")) >0) {
 	names(MYD)<- MYD.names
 	#MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 }
-save(MYD, file ="MYD")
+
 
 
 # Fill missing layers in each stack
