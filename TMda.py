@@ -70,7 +70,7 @@ def main(config):
 			fname2 = wd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, year, str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
+				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")

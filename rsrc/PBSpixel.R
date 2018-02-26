@@ -17,10 +17,10 @@ cores = as.numeric(args[9])
 DSTART = as.numeric(args[10])
 DEND = as.numeric(args[11])
 year = as.numeric(args[12])
-startdaLong = args(13)
-enddaLong = args(14)
-start = args(15)
-end = args(16)
+startdaLong = args[13]
+enddaLong = args[14]
+start = args[15]
+end = args[16]
 # ======== code ===================
 
 # rstack and ensembRes are both now cut to the hydro year in the "year" loop
@@ -37,14 +37,14 @@ startda <- substr(startdaLong, 1, 10)
 endda <- substr(enddaLong, 1, 10)
 
 # cut temporal length of dates vector to startda/endda
-startda.index <- which(obsTS==startda)
-endda.index <- which(obsTS==endda)
+startda.index <- which(obsTS$x==startda)
+endda.index <- which(obsTS$x==endda)
 
 # subset rstack temporally 
 rstack = rstack[[startda.index:endda.index]]
 
 # analyse missing days
-actualDays <- seq(as.Date(startda) ,as.Date(endDa), 1)
+actualDays <- seq(as.Date(startda) ,as.Date(endda), 1)
 NactualDays <- length(actualDays)
 
 # check for missing dates in fsca timeseries (not NA but actual missing timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R version - fill with dummy NA layers
@@ -122,7 +122,7 @@ totalTS <- seq(as.Date(start) ,as.Date(end), 1)
 start.index <- which(totalTS== startda)
 end.index <- which(totalTS== endda)
 ensembRes <- ensembRes[start.index:end.index,,]
-print(paste0("ensembRes cut to: ", startda, "to", endda))
+print(paste0("ensembRes cut to: ", startda, " to ", endda))
 
 # convert swe to sca
 ensembRes[ensembRes<=sdThresh]<-0
