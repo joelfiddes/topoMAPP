@@ -11,6 +11,7 @@ from dateutil.relativedelta import *
 # cut multi year timeseries to single year blocks
 def main(config):
 
+	config = ConfigObj(config)
 	# define variable
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# full path to contains all the modis data # ~/nas/sim/snow/sca_poly/Snow_Cov_Daily_500m_v5
 	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
@@ -42,7 +43,7 @@ def main(config):
 	end = datetime.strptime(dates[1], "%Y-%m-%d")
 	dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y"), None) for _ in xrange((end - start).days)).keys()
 	nHydroYrs = len(dateList) -1
-	logging.info("----- Total simulation period = "+ dates + " with" +nHydroYrs+ "hydro years-----")
+	logging.info("----- Total simulation period = "+ str(dates) + " with" +str(nHydroYrs)+ "hydro years-----")
 
 
 	for year in range(len(dateList)-1):
@@ -65,11 +66,11 @@ def main(config):
 				logging.info( fname+ " exists")
 
 			# compute HX and weights for each da hydro year
-			fname1 = wd + "/wmat_"+grid+year+".rd"
-			fname2 = wd + "/HX_"+grid+year+".rd"
+			fname1 = wd + "/wmat_"+grid+str(year)+".rd"
+			fname2 = wd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, year, str(start1), str(end1), config["main"]["startDate"], [config["main"]["endDate"]]
+				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, year, str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")
