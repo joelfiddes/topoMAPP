@@ -41,17 +41,19 @@ def main(config):
 	end = datetime.strptime(dates[1], "%Y-%m-%d")
 	dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y"), None) for _ in xrange((end - start).days)).keys()
 	nHydroYrs = len(dateList) -1
+	logging.info("----- Total simulation period = "+ dates + " with" +nHydroYrs+ "hydro years-----")
+
 
 	for year in range(len(dateList)-1):
 
 		start1 = start+relativedelta(years=+year) # 1 sept
 		end1 = start+relativedelta(years=+(year+1)) # exactly 1 year later
-		logging.info("DA period = "+ str(start1)+" to " +str(end1))
+		logging.info("----- Now calculating DA period = "+ str(start1)+" to " +str(end1) + "-----")
 
 		for grid in initgrids:
-			logging.info("----- DA run grid " +str(grid)+ "-----")
+			logging.info("-- DA run grid " +str(grid)+ "--")
 			
-			# compute results matrix
+			# compute results matrix only once for entire timeseries - subsequent da years read in existing file
 			fname = wd + "/ensembRes_"+grid+".rd"
 			if os.path.isfile(fname) == False:
 				# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
@@ -61,12 +63,12 @@ def main(config):
 			else:
 				logging.info( fname+ " exists")
 
-			# compute HX and weights
-			fname1 = wd + "/wmat_"+grid+".rd"
-			fname2 = wd + "/HX_"+grid+".rd"
+			# compute HX and weights for each da hydro year
+			fname1 = wd + "/wmat_"+grid+year+".rd"
+			fname2 = wd + "/HX_"+grid+year+".rd"
 			if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND]
+				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, year, str(start1), str(end1), config["main"]["startDate"], [config["main"]["endDate"]]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")

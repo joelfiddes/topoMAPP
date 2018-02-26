@@ -16,53 +16,96 @@ R=as.numeric(args[8])
 cores = as.numeric(args[9])
 DSTART = as.numeric(args[10])
 DEND = as.numeric(args[11])
+year = as.numeric(args[12])
+startdaLong = args(13)
+enddaLong = args(14)
+start = args(15)
+end = args(16)
 # ======== code ===================
 
+# rstack and ensembRes are both now cut to the hydro year in the "year" loop
+print(paste0("Running PBSpixel from ", startdaLong, " to " ,enddaLong))
 
 
-
-# readin
+# readin data
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 rstack = brick(paste0(sca_wd,"/fsca_stack.tif"))
 obsTS = read.csv(paste0(sca_wd,"/fsca_dates.csv"))
 
+# remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)
+startda <- substr(startdaLong, 1, 10) 
+endda <- substr(enddaLong, 1, 10)
+
+# cut temporal length of dates vector to startda/endda
+startda.index <- which(obsTS==startda)
+endda.index <- which(obsTS==endda)
+
+# subset rstack temporally 
+rstack = rstack[[startda.index:endda.index]]
+
+# analyse missing days
+actualDays <- seq(as.Date(startda) ,as.Date(endDa), 1)
+NactualDays <- length(actualDays)
+
+# check for missing dates in fsca timeseries (not NA but actual missing timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R version - fill with dummy NA layers
+if (nlayers(rstack) != NactualDays ){
+	obsTScut <- obsTS$x[startda.index:endda.index] 
+	missDates.index <-	which( ! ( as.character( actualDays )  %in%  as.character(obsTScut) ) )
+	missDates <- actualDays[ which( ! ( as.character(actualDays)  %in%  as.character(obsTScut) ) ) ]
+
+	print(paste0("missing dates found:", missDates, " filling missing datestamps now"))
+
+	#create NA layer for insertion
+	insertLyr =rstack[[1]]
+	insertLyr[insertLyr <1000] <- NA
+
+	# name layers by date
+	names(rstack) <- obsTScut
+
+	# make stack of dummy layes and name
+	insertStack  <- stack(replicate(length(missDates), insertLyr))
+	names(insertStack) <- missDates
+	mergeStack = stack (rstack, insertStack)
+	rstack = mergeStack[[order(names(mergeStack))]]
+	print("rstack missing datestamps filled")
+
+}
+
 # crop rstack to landform as landform represent individual grid and rstack the entire domain - these are not necessarily the same
 fscacrop = paste0(wd,"/fsca_crop.tif")
-if(!file.exists(fscacrop)){
-	print("crop /fsca_stack.tif with landform.tif")
-	rstack = crop(rstack, landform)
-	writeRaster(rstack, fscacrop, overwrite=TRUE)
-	print("crop done")
-}else{
-print(paste0(fscacrop, " already exists."))
-	rstack <- stack(fscacrop)
-}
+	if(!file.exists(fscacrop)){
+		print("crop /fsca_stack.tif with landform.tif")
+		rstack = crop(rstack, landform)
+		writeRaster(rstack, fscacrop, overwrite=TRUE)
+		print("crop done")
+	}else{
+		print(paste0(fscacrop, " already exists."))
+		rstack <- stack(fscacrop)
+	}
 
 # read andwrite dates here
 dates <- read.csv(paste0(sca_wd,"/fsca_dates.csv"))
 write.csv(dates, paste0(wd,"/fsca_dates.csv"), row.names=FALSE)
 
 # output
-outfile1 = paste0("wmat_",grid,".rd") #"wmat_trunc20.rd" "HX.rd"#
-outfile2 = paste0("HX_",grid,".rd")
-
-
+outfile1 = paste0("wmat_",grid,year,".rd") #"wmat_trunc20.rd" "HX.rd"#
+outfile2 = paste0("HX_",grid,year,".rd")
 
 pixTS = paste0(wd,"/pixTS_",grid)
-if(!file.exists(pixTS)){
+	if(!file.exists(pixTS)){
 
-# pixel based timeseries 
-print("extract pixel based timeseries from rstack")
-t1= Sys.time()
-pixTS = extract( rstack , 1:ncell(rstack) )
-t2= Sys.time-t1
-print(paste0("done in: ", t2))
-save(pixTS, file = paste0(wd,"/pixTS_",grid))
+		# pixel based timeseries 
+		print("extract pixel based timeseries from rstack")
+		t1= Sys.time()
+		pixTS = extract( rstack , 1:ncell(rstack) )
+		t2= Sys.time-t1
+		print(paste0("done in: ", t2))
+		save(pixTS, file = paste0(wd,"/pixTS_",grid))
 
-}else{
-print(paste0(pixTS, " already exists."))
-	load(paste0(wd,"/pixTS_",grid))
-}
+	}else{
+		print(paste0(pixTS, " already exists."))
+		load(paste0(wd,"/pixTS_",grid))
+	}
 
 
 
@@ -73,6 +116,13 @@ npix = ncell( rstack)
 
 #readin ensemble results matrix
 load(paste0(wd, "/ensembRes_",grid,".rd"))
+
+# subset temporally
+totalTS <- seq(as.Date(start) ,as.Date(end), 1)
+start.index <- which(totalTS== startda)
+end.index <- which(totalTS== endda)
+ensembRes <- ensembRes[start.index:end.index,,]
+print(paste0("ensembRes cut to: ", startda, "to", endda))
 
 # convert swe to sca
 ensembRes[ensembRes<=sdThresh]<-0
