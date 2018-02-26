@@ -26,7 +26,7 @@ for (i in 1: nens){ #python index
 rstStack=stack(rstStack, rst)
 ensembRes = as.array(rstStack)
 }
-save(ensembRes, file = paste0(wd, "/ensembRes.rd"))
+save(ensembRes, file = paste0(wd, "/ensembRes_"+grid+".rd"))
 
 #keep ensembRes swe
 # ensembRes_swe <- ensembRes

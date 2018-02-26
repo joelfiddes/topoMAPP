@@ -13,8 +13,8 @@ DEND = as.numeric(args[7])
 shp=shapefile(valshp)
 rstack = brick(paste0(wd,"fsca_crop.tif"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
-load( paste0(wd,"/HX.rd"))
-load( paste0(wd,"/wmat.rd"))
+load( paste0(wd,"/HX_",grid,".rd"))
+load( paste0(wd,"/wmat_",grid,".rd"))
 
 # settings
 ndays=nlayers(rstack)
@@ -39,7 +39,7 @@ pix=na.omit(pixIDS[,1])
 #	PLOT
 #====================================================================
 
-pdf(paste0(wd,"/fSCA.pdf"), height=8, width=5)
+pdf(paste0(wd,"/fSCA_",grid,".pdf"), height=8, width=5)
 rmsvec=c()
 
 plotdim = ceiling(sqrt(length(pix)))

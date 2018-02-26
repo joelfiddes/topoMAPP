@@ -128,6 +128,10 @@ if (length(mod.missmyd.ind ) == 0){
 	print("No MYD date gaps found")
 	}
 
+# release memory
+rm(MOD)
+rm(MYD)
+gc()
 
 # MOD Na cells filled with MYD data if exists :  Replace ‘NA’ values in the first Raster object (‘x’) with the values of the second (‘y’), and so forth for  additional Rasters. 
 
@@ -141,6 +145,7 @@ MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)
 
 save(MOD.fill, file ="MOD.fill")
+
 
 #count NA
 MOD.na <- length(which(is.na(values(MOD.layerfill))) )

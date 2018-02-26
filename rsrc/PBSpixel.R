@@ -40,8 +40,8 @@ dates <- read.csv(paste0(sca_wd,"/fsca_dates.csv"))
 write.csv(dates, paste0(wd,"/fsca_dates.csv"), row.names=FALSE)
 
 # output
-outfile1 = "wmat.rd" #"wmat_trunc20.rd" "HX.rd"#
-outfile2 = "HX.rd"
+outfile1 = paste0("wmat_",grid,".rd") #"wmat_trunc20.rd" "HX.rd"#
+outfile2 = paste0("HX_",grid,".rd")
 # pixel based timeseries 
 pixTS = extract( rstack , 1:ncell(rstack) )
 
@@ -49,7 +49,7 @@ pixTS = extract( rstack , 1:ncell(rstack) )
 npix = ncell( rstack)
 
 #readin ensemble results matrix
-load(paste0(wd, "/ensembRes.rd"))
+load(paste0(wd, "/ensembRes_",grid,".rd"))
 
 # convert swe to sca
 ensembRes[ensembRes<=sdThresh]<-0
@@ -74,7 +74,7 @@ deltaZ=range/resol
 #meltList <- list()
 meltPeriod=c()
 for (i in 1:resol){
-
+print(i)
 mStart= minZ+ (deltaZ*(i-1))
 mEnd = mStart+deltaZ
 
@@ -101,7 +101,7 @@ pixEle = getValues( rstack_ele)
 #===============================================================================
 #	Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 #===============================================================================
-
+system("rm doparlog.txt")
 t1=Sys.time()
 cl <- makeCluster(cores) # create a cluster with 2 cores
 registerDoParallel(cl) # register the cluster
@@ -237,7 +237,10 @@ wmat = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
 	w=PBS(HX[obsind,],obs[obsind],R)
 	#wmat = cbind(wmat,w)
 	#y=as.vector(HX)
-	
+	sink("doparlog.txt", append=TRUE)
+cat(paste("Starting iteration",i,"\n"))
+cat(paste("% complete:",(i/npix)*100,"\n"))
+sink()
 
 }
 

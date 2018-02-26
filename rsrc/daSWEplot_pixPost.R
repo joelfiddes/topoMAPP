@@ -13,13 +13,13 @@ shp=shapefile(valshp)
 rstack = brick(paste0(wd,"fsca_crop.tif"))
 
 #	Load ensemble results matrix
-load(paste0(wd, "/ensembRes.rd"))
+load(paste0(wd, "/ensembRes_",grid,".rd"))
 
 #	Load sample weights
 #load(paste0(wd,"/sampleWeights.rd"))
 
 # load pixel weights
-load(paste0(wd,"/wmat.rd"))
+load(paste0(wd,"/wmat_",grid,".rd"))
 
 # rmse func
 rmse <- function(error)

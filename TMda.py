@@ -7,7 +7,7 @@ import os
 def main(config):
 
 	# define variable
-	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# contains all the modis data
+	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# full path to contains all the modis data # ~/nas/sim/snow/sca_poly/Snow_Cov_Daily_500m_v5
 	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
 	priorwd = "/home/joel/sim/wfj_interim2/"
 	initgrids = str(1)
@@ -33,7 +33,7 @@ def main(config):
 		logging.info("----- DA run grid " +str(grid)+ "-----")
 		
 		# compute results matrix
-		fname = wd + "/ensembRes.rd"
+		fname = wd + "/ensembRes_"+grid+".rd"
 		if os.path.isfile(fname) == False:
 			# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
 			logging.info( "compute results matrix")
@@ -43,8 +43,8 @@ def main(config):
 			logging.info( fname+ " exists")
 
 		# compute HX and weights
-		fname1 = wd + "/wmat.rd"
-		fname2 = wd + "/HX.rd"
+		fname1 = wd + "/wmat_"+grid+".rd"
+		fname2 = wd + "/HX_"+grid+".rd"
 		if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
 			logging.info( "run PBS")
 			cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND]
@@ -53,7 +53,7 @@ def main(config):
 			logging.info( fname1+ "and" +fname2+ " exists")
 
 		# compute sampleWeights
-		fname = wd + "/sampleWeights.rd"
+		fname = wd + "/sampleWeights_"+grid+".rd"
 		if os.path.isfile(fname) == False:	
 			logging.info( "calc sample weights")
 			cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores ] 

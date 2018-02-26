@@ -15,7 +15,7 @@ cores = args[8]
  
 
 # load files
-load( paste0(wd,"wmat.rd"))
+load( paste0(wd,"wmat_",grid,".rd"))
 rstack = brick(paste0(wd,"fsca_crop.tif"))
 obsTS = read.csv(paste0(wd,"fsca_dates.csv"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
@@ -68,7 +68,7 @@ sampleWeights[[i]] <- ensemble_weights
 }
 
 #list has Nclust items each with up to nens long (ragged)
-save(sampleWeights, file = paste0(wd,"sampleWeights.rd"))
+save(sampleWeights, file = paste0(wd,"sampleWeights_",grid,".rd"))
 
 
 

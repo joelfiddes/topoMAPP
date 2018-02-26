@@ -12,10 +12,10 @@ landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 shp=shapefile(valshp)
 
 #	Load ensemble results matrix
-load(paste0(wd, "/ensembRes.rd"))
+load(paste0(wd, "/ensembRes_",grid,".rd"))
 
 #	Load sample weights
-load(paste0(wd,"/sampleWeights.rd"))
+load(paste0(wd,"/sampleWeights_",grid,".rd"))
 
 # rmse func
 rmse <- function(error)

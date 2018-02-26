@@ -15,7 +15,7 @@ DSTART = as.numeric(args[8])
 DEND = as.numeric(args[9])
 
 # load files
-load( paste0(wd,"wmat.rd"))
+load( paste0(wd,"wmat_",grid,".rd"))
 rstack = brick(paste0(wd,"fsca_crop.tif"))
 obsTS = read.csv(paste0(wd,"fsca_dates.csv"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
@@ -28,7 +28,7 @@ npix = ncell( rstack)
 #====================================================================
 #	Load ensemble results matrix
 #====================================================================
-load(paste0(wd, "/ensembRes.rd"))
+load(paste0(wd, "/ensembRes_",grid,".rd"))
 
 # convert swe > sdThresh to snowcover = TRUE/1
 ensembRes[ ensembRes <= sdThresh ] <- 0
