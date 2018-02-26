@@ -3,6 +3,9 @@ from configobj import ConfigObj
 import logging
 import subprocess
 import os
+from datetime import datetime, timedelta
+from collections import OrderedDict
+from dateutil.relativedelta import *
 
 # assume start and end date are always 1 Sept (hydro years)
 # cut multi year timeseries to single year blocks
@@ -32,9 +35,7 @@ def main(config):
 	logging.info("----- START data assimilation-----")
 
 	# Identify hydro years (1 Sept -> 31 Aug)
-	from datetime import datetime, timedelta
-	from collections import OrderedDict
-	from dateutil.relativedelta import *
+
 
 	dates = [config["main"]["startDate"], config["main"]["endDate"]]
 	start = datetime.strptime(dates[0], "%Y-%m-%d")
