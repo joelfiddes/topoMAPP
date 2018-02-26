@@ -26,12 +26,15 @@ landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 rstack = brick(paste0(sca_wd,"/fsca_stack.tif"))
 obsTS = read.csv(paste0(sca_wd,"/fsca_dates.csv"))
 
-# crop rstack to landform as landform represent grid and rstack the domain not necessarily the same
+# crop rstack to landform as landform represent individual grid and rstack the entire domain - these are not necessarily the same
 fscacrop = paste0(wd,"/fsca_crop.tif")
 if(!file.exists(fscacrop)){
+	print("crop /fsca_stack.tif with landform.tif")
 	rstack = crop(rstack, landform)
 	writeRaster(rstack, fscacrop, overwrite=TRUE)
+	print("crop done")
 }else{
+print(paste0(fscacrop, " already exists."))
 	rstack <- stack(fscacrop)
 }
 
@@ -42,8 +45,28 @@ write.csv(dates, paste0(wd,"/fsca_dates.csv"), row.names=FALSE)
 # output
 outfile1 = paste0("wmat_",grid,".rd") #"wmat_trunc20.rd" "HX.rd"#
 outfile2 = paste0("HX_",grid,".rd")
+
+
+
+pixTS = paste0(wd,"/pixTS_",grid)
+if(!file.exists(pixTS)){
+
 # pixel based timeseries 
+print("extract pixel based timeseries from rstack")
+t1= Sys.time()
 pixTS = extract( rstack , 1:ncell(rstack) )
+t2= Sys.time-t1
+print(paste0("done in: ", t2))
+save(pixTS, file = paste0(wd,"/pixTS_",grid))
+
+}else{
+print(paste0(pixTS, " already exists."))
+	load(paste0(wd,"/pixTS_",grid))
+}
+
+
+
+
 
 # total number of MODIS pixels
 npix = ncell( rstack)
@@ -60,6 +83,8 @@ ensembRes[ensembRes>sdThresh]<-1
 
 resol=5
 
+print(paste0("Computing ",resol, " melt period elevation bands"))
+t1= Sys.time()
  #get high pixels subset
 dem = raster(paste0(priorwd,"/predictors/ele.tif"))
 elegrid = crop(dem, landform)
@@ -74,13 +99,13 @@ deltaZ=range/resol
 #meltList <- list()
 meltPeriod=c()
 for (i in 1:resol){
-print(i)
+print(paste0("compute band: ", i))
 mStart= minZ+ (deltaZ*(i-1))
 mEnd = mStart+deltaZ
 
 pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
-x=rstack[pix]
-meanMelt = apply(x, FUN="mean", MARGIN=2)
+x=rstack[pix] # mega slow function 
+meanMelt = apply(x, FUN="mean", MARGIN=2, na.rm=T)
 
 vec <- meanMelt
 rvec=rev(vec)
@@ -96,8 +121,13 @@ meltPeriod=rbind(meltPeriod, mp)
 df = data.frame(meltPeriod)
 names(df) <- c("ele1", "ele2", "start", "end")
 
+
 # pixel based timeseries 
 pixEle = getValues( rstack_ele)
+
+t2= Sys.time-t1
+print(paste0("done in: ", t2))
+
 #===============================================================================
 #	Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 #===============================================================================

@@ -4,6 +4,8 @@ import logging
 import subprocess
 import os
 
+# assume start and end date are always 1 Sept (hydro years)
+# cut multi year timeseries to single year blocks
 def main(config):
 
 	# define variable
@@ -29,57 +31,74 @@ def main(config):
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	logging.info("----- START data assimilation-----")
 
-	for grid in initgrids:
-		logging.info("----- DA run grid " +str(grid)+ "-----")
-		
-		# compute results matrix
-		fname = wd + "/ensembRes_"+grid+".rd"
-		if os.path.isfile(fname) == False:
-			# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
-			logging.info( "compute results matrix")
-			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , wd , grid, nens , Nclust , sdThresh, file, param]
+	# Identify hydro years (1 Sept -> 31 Aug)
+	from datetime import datetime, timedelta
+	from collections import OrderedDict
+	from dateutil.relativedelta import *
+
+	dates = [config["main"]["startDate"], config["main"]["endDate"]]
+	start = datetime.strptime(dates[0], "%Y-%m-%d")
+	end = datetime.strptime(dates[1], "%Y-%m-%d")
+	dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y"), None) for _ in xrange((end - start).days)).keys()
+	nHydroYrs = len(dateList) -1
+
+	for year in range(len(dateList)-1):
+
+		start1 = start+relativedelta(years=+year) # 1 sept
+		end1 = start+relativedelta(years=+(year+1)) # exactly 1 year later
+		logging.info("DA period = "+ str(start1)+" to " +str(end1))
+
+		for grid in initgrids:
+			logging.info("----- DA run grid " +str(grid)+ "-----")
+			
+			# compute results matrix
+			fname = wd + "/ensembRes_"+grid+".rd"
+			if os.path.isfile(fname) == False:
+				# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
+				logging.info( "compute results matrix")
+				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , wd , grid, nens , Nclust , sdThresh, file, param]
+				subprocess.check_output(cmd)
+			else:
+				logging.info( fname+ " exists")
+
+			# compute HX and weights
+			fname1 = wd + "/wmat_"+grid+".rd"
+			fname2 = wd + "/HX_"+grid+".rd"
+			if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
+				logging.info( "run PBS")
+				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND]
+				subprocess.check_output(cmd)
+			else:
+				logging.info( fname1+ "and" +fname2+ " exists")
+
+			# compute sampleWeights
+			fname = wd + "/sampleWeights_"+grid+".rd"
+			if os.path.isfile(fname) == False:	
+				logging.info( "calc sample weights")
+				cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores ] 
+				subprocess.check_output(cmd)	
+			else:
+				logging.info( fname+ " exists")
+
+			# SCA plots	
+			logging.info( "plot SCA")
+			cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND ] 
 			subprocess.check_output(cmd)
-		else:
-			logging.info( fname+ " exists")
 
-		# compute HX and weights
-		fname1 = wd + "/wmat_"+grid+".rd"
-		fname2 = wd + "/HX_"+grid+".rd"
-		if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
-			logging.info( "run PBS")
-			cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND]
+			# SWE plot
+			logging.info( "plot swe")
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp]
 			subprocess.check_output(cmd)
-		else:
-			logging.info( fname1+ "and" +fname2+ " exists")
 
-		# compute sampleWeights
-		fname = wd + "/sampleWeights_"+grid+".rd"
-		if os.path.isfile(fname) == False:	
-			logging.info( "calc sample weights")
-			cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores ] 
-			subprocess.check_output(cmd)	
-		else:
-			logging.info( fname+ " exists")
-
-		# SCA plots	
-		logging.info( "plot SCA")
-		cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND ] 
-		subprocess.check_output(cmd)
-
-		# SWE plot
-		logging.info( "plot swe")
-		cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp]
-		subprocess.check_output(cmd)
-
-		# SCA grid plot
-		logging.info( "calc SCA grid")
-		cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
-		subprocess.check_output(cmd)
+			# SCA grid plot
+			logging.info( "calc SCA grid")
+			cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
+			subprocess.check_output(cmd)
 
 
-		cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots.pdf"]
-		subprocess.check_output(cmd)
-		logging.info( "DA run complete!")
+			cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots.pdf"]
+			subprocess.check_output(cmd)
+			logging.info( "DA run complete!")
 #====================================================================
 #	Calling MAIN
 #====================================================================
