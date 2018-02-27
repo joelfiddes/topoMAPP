@@ -22,7 +22,8 @@ enddaLong = args[14]
 start = args[15]
 end = args[16]
 # ======== code ===================
-
+system("rm doparlog.txt")
+sink("doparlog.txt", append=TRUE)
 # rstack and ensembRes are both now cut to the hydro year in the "year" loop
 print(paste0("Running PBSpixel from ", startdaLong, " to " ,enddaLong))
 
@@ -189,7 +190,7 @@ print(paste0("done in: ", t2))
 #===============================================================================
 #	Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 #===============================================================================
-system("rm doparlog.txt")
+#system("rm doparlog.txt")
 t1=Sys.time()
 cl <- makeCluster(cores) # create a cluster with 2 cores
 registerDoParallel(cl) # register the cluster
@@ -325,10 +326,10 @@ wmat = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
 	w=PBS(HX[obsind,],obs[obsind],R)
 	#wmat = cbind(wmat,w)
 	#y=as.vector(HX)
-	sink("doparlog.txt", append=TRUE)
-cat(paste("Starting iteration",i,"\n"))
+	#sink("doparlog.txt", append=TRUE)
+cat(paste("Starting wmat iteration",i,"\n"))
 cat(paste("% complete:",(i/npix)*100,"\n"))
-sink()
+#sink()
 
 }
 
@@ -475,7 +476,8 @@ HX = foreach(i = 1:npix, .combine = "rbind",.packages = "raster") %dopar% {
 
 	
 	y=as.vector(HX)
-	
+	cat(paste("Finished HX iteration",i,"\n"))
+	cat(paste("% complete:",(i/npix)*100,"\n"))
 
 }
 
@@ -487,4 +489,5 @@ stopCluster(cl) # shut down the cluster
 save (HX, file = paste0(wd,outfile2))
 
 print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
-		
+
+sink()		
