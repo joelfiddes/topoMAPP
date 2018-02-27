@@ -204,6 +204,7 @@ fsca [fsca >100]<-100
 fsca [fsca <0]<-0
 writeRaster(fsca, "fsca_stack.tif", overwrite=TRUE)
 write.csv(date,"fsca_dates.csv", row.names=FALSE )
+print("MODIS fSCA processing complete")
 sink()
 
 

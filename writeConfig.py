@@ -25,10 +25,11 @@ datroot = "/home/joel/data"
 # Main
 #=================================================================
 config["main"] = {}
-config["main"]["wd"] = simroot +"/test_code"
-config["main"]["srcdir"] = srcroot +"/topoMAPP"
-config["main"]["demDir"] = datroot +"/DEM/srtm"
-config["main"]["runtype"] = "bbox" #bbox or points add toposcale only option here
+config["main"]["wd"] = simroot +"/test_code" # main work directory
+config["main"]["srcdir"] = srcroot +"/topoMAPP" # src code dir
+config["main"]["demDir"] = datroot +"/DEM/srtm" # dem write dir
+config["main"]["runtype"] = "bbox" #one of : bbox, points
+config["main"]["mode"] =# one of: NORM, ENSEMB,  DA, 
 config["main"]["startDate"] = "2015-09-01"
 config["main"]["endDate"] = "2015-09-02"
 config["main"]["shp"] = datroot +"/GCOS/wfj_poly.shp"
@@ -81,8 +82,8 @@ config["geotop"]["num_cores"] =2
 #=================================================================
 config["modis"] = {}
 config["modis"]["getMODISSCA"] = "TRUE"
-config["modis"]["startDateSCA"]="2010-09-01"
-config["modis"]["endDateSCA"] = "2015-09-01"
+#config["modis"]["startDateSCA"]="2010-09-01" # same as startDate 
+#config["modis"]["endDateSCA"] = "2015-09-01" # same as endDate
 
 #=================================================================
 # ENSEMBLE
