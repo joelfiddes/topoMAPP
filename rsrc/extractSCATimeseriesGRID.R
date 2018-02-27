@@ -21,6 +21,8 @@ sca_wd=args[2]
 #year = substr(list.files(pattern="MOD*"),13,16)
 #doy = substr(list.files(pattern="MOD*"),18,20)
 
+sink(paste0(wd,"logfile", append=TRUE))
+
 cloudThreshold <- 100 # max cloud % to be considered "cloudfree"
 
 # shpname = '/home/joel/sim/topomap_points/spatial/points.shp' 
@@ -202,7 +204,7 @@ fsca [fsca >100]<-100
 fsca [fsca <0]<-0
 writeRaster(fsca, "fsca_stack.tif", overwrite=TRUE)
 write.csv(date,"fsca_dates.csv", row.names=FALSE )
-
+sink()
 
 
 
