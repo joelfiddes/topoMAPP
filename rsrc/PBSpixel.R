@@ -116,7 +116,7 @@ pixTS = paste0(wd,"/pixTS_",grid)
 
 # total number of MODIS pixels
 npix = ncell( rstack)
-print(paste0("npix = ", npix)
+print(paste0("npix = ", npix))
 
 #readin ensemble results matrix
 load(paste0(wd, "/ensembRes_",grid,".rd"))
