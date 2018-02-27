@@ -66,23 +66,29 @@ def main(wd, Ngrid, config):
 	# Informed sampling
 	#====================================================================
 	if config["toposub"]["inform"] == "TRUE":
-		logging.info( "TopoSUB **INFORM** run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
-			# set up sim directoroes #and write metfiles
+		fname1 = gridpath + "/landformsInform.pdf"
+		if os.path.isfile(fname1) == False: #NOT ROBUST
+		
+			logging.info( "TopoSUB **INFORM** run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
-		from toposub import toposub_post1 as p1
-		p1.main(gridpath ,config['toposub']['samples'] ,config['geotop']['file1'] ,config['geotop']['targV']) #TRUE requires svf as does more computes 
+				# set up sim directoroes #and write metfiles
 
-		from toposub import toposub_pre_inform as inform
-		inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
+			from toposub import toposub_post1 as p1
+			p1.main(gridpath ,config['toposub']['samples'] ,config['geotop']['file1'] ,config['geotop']['targV']) #TRUE requires svf as does more computes 
 
-		# sample dist plots
-		src = "./rsrc/sampleDistributions.R"
-		arg1 = gridpath
-		arg2 = config['toposcale']['svfCompute']
-		arg3 = "sampDistInfm.pdf"
-		cmd = "Rscript %s %s %s %s"%(src,arg1,arg2,arg3)
-		os.system(cmd)
+			from toposub import toposub_pre_inform as inform
+			inform.main(gridpath , config['toposub']['samples'] , config['geotop']['targV'] , config['toposcale']['svfCompute']) #TRUE requires svf as does more computes 
+
+			# sample dist plots
+			src = "./rsrc/sampleDistributions.R"
+			arg1 = gridpath
+			arg2 = config['toposcale']['svfCompute']
+			arg3 = "sampDistInfm.pdf"
+			cmd = "Rscript %s %s %s %s"%(src,arg1,arg2,arg3)
+			os.system(cmd)
+		else:
+			logging.info( "TopoSUB INFORM already run: " + os.path.basename(os.path.normpath(Ngrid)) )
 
 
 	#====================================================================
@@ -93,6 +99,8 @@ def main(wd, Ngrid, config):
 		logging.info( "TopoSCALE **INFORM** run: " + os.path.basename(os.path.normpath(Ngrid)) )
 		import TMtoposcale
 		TMtoposcale.main(wd, Ngrid, config)
+		file = open(gridpath + '/RUNSUCCESS','w') 
+		file.close() 
 		
 
 

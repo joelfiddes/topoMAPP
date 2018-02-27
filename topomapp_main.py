@@ -350,6 +350,7 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 
 	logging.info( "Retrieving MODIS SCA for entire domain" )
 
+	# generate shapefile from sim domain to define MODIS download aoi
 	inRst = wd + "/spatial/eraExtent.tif"
 	outShp = wd + "/spatial/eraExtent.shp"
 	cmd = ["Rscript", "./rsrc/rst2shp.R" , inRst, outShp]
@@ -367,6 +368,7 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 	for Ngrid in grid_dirs:
 		gridpath = Ngrid
 		logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
+		sca_wd=config["main"]["wd"] + "/MODIS/SC//Snow_Cov_Daily_500m_v5/SC"
 
 	# Does grid contain points?
 	 	if config['main']['runtype'] == "points":
@@ -380,12 +382,12 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 			# extract timersies per point
 			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
 			from DA import scaTS
-			scaTS.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" ,config['main']['shp'] )
+			scaTS.main(gridpath ,sca_wd  ,config['main']['shp'] )
 
 		if config['main']['runtype'] == "bbox":
 			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
 			from DA import scaTS_GRID
-			scaTS_GRID.main(gridpath ,sca_wd + "/Snow_Cov_Daily_500m_v5/SC" )
+			scaTS_GRID.main(gridpath ,sca_wd )
 
 else:
 	logging.info( "No MODIS SCA retrieved" )
