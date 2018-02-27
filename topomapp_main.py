@@ -370,29 +370,29 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 #====================================================================
 #	Post-process SCA
 #====================================================================
-	for Ngrid in grid_dirs:
-		gridpath = Ngrid
-		logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
-		sca_wd=config["main"]["wd"] + "/MODIS/SC/eraExtent/Snow_Cov_Daily_500m_v5/SC"
+	#for Ngrid in grid_dirs:
+		#gridpath = Ngrid
+	logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
+	sca_wd=config["main"]["wd"] + "/MODIS/SC/eraExtent/Snow_Cov_Daily_500m_v5/SC"
 
-	# Does grid contain points?
-	 	if config['main']['runtype'] == "points":
-			from listpoints_make import findGridsWithPoints
-			numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
-			if(len(numPoints) == 0):
-				logging.info( "Grid box contains no points, skip to next grid")
-				continue
+# Does grid contain points?
+ 	if config['main']['runtype'] == "points":
+		from listpoints_make import findGridsWithPoints
+		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+		if(len(numPoints) == 0):
+			logging.info( "Grid box contains no points, skip to next grid")
+			continue
 
-		if config['main']['runtype'] == "points":
-			# extract timersies per point
-			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
-			from DA import scaTS
-			scaTS.main(gridpath ,sca_wd  ,config['main']['shp'] )
+	if config['main']['runtype'] == "points":
+		# extract timersies per point
+		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+		from DA import scaTS
+		scaTS.main(gridpath ,sca_wd  ,config['main']['shp'] )
 
-		if config['main']['runtype'] == "bbox":
-			logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
-			from DA import scaTS_GRID
-			scaTS_GRID.main(gridpath ,sca_wd )
+	if config['main']['runtype'] == "bbox":
+		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
+		from DA import scaTS_GRID
+		scaTS_GRID.main(wd ,sca_wd )
 
 else:
 	logging.info( "MODIS SCA not requested" )
