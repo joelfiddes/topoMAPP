@@ -338,7 +338,7 @@ wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
     sink('dopar.log', append=TRUE)
     cat(paste("Starting wmat iteration", i, "\n"))
     cat(paste("% complete:", (i/npix) * 100, "\n"))
-    #sink()
+    sink()
 
 }
 
