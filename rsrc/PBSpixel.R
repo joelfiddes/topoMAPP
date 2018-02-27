@@ -23,7 +23,7 @@ start = args[15]
 end = args[16]
 # ======== code ===================
 
-sink(paste0(wd, "da_logfile", append = TRUE)
+sink(paste0(wd, "/da_logfile"), append = TRUE)
 # rstack and ensembRes are both now cut to the hydro year in the 'year' loop
 print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 
