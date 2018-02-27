@@ -348,7 +348,7 @@ for Ngrid in grid_dirs:
 
 if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE":
 	
-	fname = gridpath + "/MODISSUCCESS"
+	fname = wd + "/MODISSUCCESS"
 	if os.path.isfile(fname) == False:
 
 		logging.info( "Retrieving MODIS SCA for entire domain" )
@@ -368,26 +368,29 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 
 
 #====================================================================
-#	Post-process SCA
+#	Post-process SCA - at domain level
 #====================================================================
+
+# individual grids are extracted and processed by da routines, PBSpixel.R
 	#for Ngrid in grid_dirs:
 		#gridpath = Ngrid
 	logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
 	sca_wd=config["main"]["wd"] + "/MODIS/SC/eraExtent/Snow_Cov_Daily_500m_v5/SC"
 
 # Does grid contain points?
- 	if config['main']['runtype'] == "points":
-		from listpoints_make import findGridsWithPoints
-		numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
-		if(len(numPoints) == 0):
-			logging.info( "Grid box contains no points, skip to next grid")
-			continue
+ 	# if config['main']['runtype'] == "points":
+		# from listpoints_make import findGridsWithPoints
+		# numPoints = findGridsWithPoints.main(wd, gridpath + "/predictors/ele.tif" , config["main"]["shp"])
+		# if(len(numPoints) == 0):
+		# 	logging.info( "Grid box contains no points, skip to next grid")
+		# 	continue
 
+	# need to test if this still works
 	if config['main']['runtype'] == "points":
 		# extract timersies per point
 		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
 		from DA import scaTS
-		scaTS.main(gridpath ,sca_wd  ,config['main']['shp'] )
+		scaTS.main(wd ,sca_wd  ,config['main']['shp'] )
 
 	if config['main']['runtype'] == "bbox":
 		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )

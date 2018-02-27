@@ -21,7 +21,7 @@ sca_wd=args[2]
 #year = substr(list.files(pattern="MOD*"),13,16)
 #doy = substr(list.files(pattern="MOD*"),18,20)
 
-sink(paste0(sca_wd,"/SCAlog", append=TRUE))
+sink(paste0(wd,"/modisprocess.log", append=TRUE))
 
 cloudThreshold <- 100 # max cloud % to be considered "cloudfree"
 
