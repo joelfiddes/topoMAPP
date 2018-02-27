@@ -335,7 +335,7 @@ wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
     w = PBS(HX[obsind, ], obs[obsind], R)
     # wmat = cbind(wmat,w) y=as.vector(HX) 
-    sink('doparlog.txt'), append=TRUE)
+    sink('doparlog.txt', append=TRUE)
     cat(paste("Starting wmat iteration", i, "\n"))
     cat(paste("% complete:", (i/npix) * 100, "\n"))
     sink()
