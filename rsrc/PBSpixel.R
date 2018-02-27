@@ -116,6 +116,7 @@ pixTS = paste0(wd,"/pixTS_",grid)
 
 # total number of MODIS pixels
 npix = ncell( rstack)
+print(paste0("npix = ", npix)
 
 #readin ensemble results matrix
 load(paste0(wd, "/ensembRes_",grid,".rd"))
@@ -178,7 +179,7 @@ if(!file.exists(df)){
 	save(df, file = paste0(wd,"/df_",grid))
 
 }else{
-	
+
 	print(paste0(df, " already exists."))
 	load(paste0(wd,"/df_",grid))
 
@@ -195,7 +196,7 @@ if(!file.exists(df)){
 pixEle = getValues( rstack_ele)
 
 t2= Sys.time()-t1
-print(paste0("done in: ", t2))
+print(paste0("Ele band computation done in: ", t2))
 
 #===============================================================================
 #	Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
