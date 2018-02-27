@@ -131,45 +131,53 @@ ensembRes[ensembRes>sdThresh]<-1
 #	Compute melt period by elevation
 #===============================================================================
 
-resol=5
+df = paste0(wd,"/df_",grid)
 
-print(paste0("Computing ",resol, " melt period elevation bands"))
-t1= Sys.time()
- #get high pixels subset
-dem = raster(paste0(priorwd,"/predictors/ele.tif"))
-elegrid = crop(dem, landform)
-r = aggregate(elegrid,res(rstack)/res(elegrid) )
-rstack_ele <- resample(r , rstack)
- 
-minZ = cellStats(elegrid, "min") -1 #add buffer to allow use of "greaterthan" on lower bound and not risk excluding a point at lowest ele.
-maxZ = cellStats(elegrid, "max")
-range=maxZ-minZ
-deltaZ=range/resol
+if(!file.exists(df)){
+	resol=5
+	print(paste0("Computing ",resol, " melt period elevation bands"))
+	t1= Sys.time()
+	 #get high pixels subset
+	dem = raster(paste0(priorwd,"/predictors/ele.tif"))
+	elegrid = crop(dem, landform)
+	r = aggregate(elegrid,res(rstack)/res(elegrid) )
+	rstack_ele <- resample(r , rstack)
+	 
+	minZ = cellStats(elegrid, "min") -1 #add buffer to allow use of "greaterthan" on lower bound and not risk excluding a point at lowest ele.
+	maxZ = cellStats(elegrid, "max")
+	range=maxZ-minZ
+	deltaZ=range/resol
 
-#meltList <- list()
-meltPeriod=c()
-for (i in 1:resol){
-print(paste0("compute band: ", i))
-mStart= minZ+ (deltaZ*(i-1))
-mEnd = mStart+deltaZ
+	#meltList <- list()
+	meltPeriod=c()
+	for (i in 1:resol){
+	print(paste0("compute band: ", i))
+	mStart= minZ+ (deltaZ*(i-1))
+	mEnd = mStart+deltaZ
 
-pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
-x=rstack[pix] # mega slow function 
-meanMelt = apply(x, FUN="mean", MARGIN=2, na.rm=T)
+	pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
+	x=rstack[pix] # mega slow function 
+	meanMelt = apply(x, FUN="mean", MARGIN=2, na.rm=T)
 
-vec <- meanMelt
-rvec=rev(vec)
-lastdata = which(rvec>0)[1] # last non-zero value
-lastdataindex = length(vec) - lastdata+1
-firstnodata = lastdataindex+1
-lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
-start=lastdateover95 
-end=firstnodata
-mp = c(mStart,mEnd,start,end)
-meltPeriod=rbind(meltPeriod, mp)
-}
-df = data.frame(meltPeriod)
-names(df) <- c("ele1", "ele2", "start", "end")
+	vec <- meanMelt
+	rvec=rev(vec)
+	lastdata = which(rvec>0)[1] # last non-zero value
+	lastdataindex = length(vec) - lastdata+1
+	firstnodata = lastdataindex+1
+	lastdateover95 = length(vec) - which (rvec >(max(rvec, na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below 100%
+	start=lastdateover95 
+	end=firstnodata
+	mp = c(mStart,mEnd,start,end)
+	meltPeriod=rbind(meltPeriod, mp)
+	}
+	df = data.frame(meltPeriod)
+	names(df) <- c("ele1", "ele2", "start", "end")
+	save(df, file = paste0(wd,"/df_",grid))
+}else{
+		print(paste0(df, " already exists."))
+		load(paste0(wd,"/df_",grid))
+		}
+
 
 
 # pixel based timeseries 

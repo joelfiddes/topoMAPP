@@ -43,7 +43,7 @@ def main(config):
 	end = datetime.strptime(dates[1], "%Y-%m-%d")
 	dateList = OrderedDict(((start + timedelta(_)).strftime(r"%Y"), None) for _ in xrange((end - start).days)).keys()
 	nHydroYrs = len(dateList) -1
-	logging.info("----- Total simulation period = "+ str(dates) + " with" +str(nHydroYrs)+ "hydro years-----")
+	logging.info("----- Total simulation period = "+ str(dates) + " with " +str(nHydroYrs)+ " hydro years-----")
 
 
 	for year in range(len(dateList)-1):
