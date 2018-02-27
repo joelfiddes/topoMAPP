@@ -374,7 +374,6 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 # individual grids are extracted and processed by da routines, PBSpixel.R
 	#for Ngrid in grid_dirs:
 		#gridpath = Ngrid
-	logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
 	sca_wd=config["main"]["wd"] + "/MODIS/SC/eraExtent/Snow_Cov_Daily_500m_v5/SC"
 
 # Does grid contain points?
@@ -388,12 +387,12 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 	# need to test if this still works
 	if config['main']['runtype'] == "points":
 		# extract timersies per point
-		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )	
+		logging.info( "Process MODIS SCA points)	
 		from DA import scaTS
 		scaTS.main(wd ,sca_wd  ,config['main']['shp'] )
 
 	if config['main']['runtype'] == "bbox":
-		logging.info( "Process MODIS SCA: " + os.path.basename(os.path.normpath(Ngrid)) )
+		logging.info( "Process MODIS SCA bbox")
 		from DA import scaTS_GRID
 		scaTS_GRID.main(wd ,sca_wd )
 
