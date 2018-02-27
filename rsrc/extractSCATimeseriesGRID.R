@@ -44,7 +44,7 @@ if( length(list.files(pattern="MOD*")) >0) {
 		print(i)
 	}
 
-	print("MOD filter complete")
+	print("MOD value filter (>100 <-NA) complete")
 	names(MOD)<- MOD.names
 	#MOD_MEAN <- cellStats(MOD, 'mean') #fSCA for whole domain
 }
@@ -62,7 +62,7 @@ if( length(list.files(pattern="MYD*")) >0) {
 		print(i)
 	}
 
-	print("MYD filter complete")
+	print("MYD value filter (>100 <- NA) complete")
 	names(MYD)<- MYD.names
 	#MYD_MEAN <- cellStats(MYD, 'mean') #fSCA for whole domain
 }
@@ -141,7 +141,7 @@ gc()
 rstack = stack()
 for (i in 1:nlayers(MOD.layerfill)){
 	rstack  = stack(rstack,  cover(MOD.layerfill[[i]], MYD.layerfill[[i]]))
-	print(paste0("filled layer: " ,i))
+	print(paste0("filled layer: " ,i, " of ",nlayers(MOD.layerfill) ))
 }
 MOD.fill <- rstack
 names(MOD.fill) <- names(MOD.layerfill)

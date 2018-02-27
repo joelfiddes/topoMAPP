@@ -346,7 +346,8 @@ for Ngrid in grid_dirs:
 #	no duplicate hdf downloads
 #====================================================================
 
-if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE":
+# only available for grids (code for points is implemented but not useful at moment and probably needs fixing)
+if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE" and config['main']['runtype'] == "bbox":
 	
 	fname = wd + "/MODISSUCCESS"
 	if os.path.isfile(fname) == False:
@@ -384,20 +385,23 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 		# 	logging.info( "Grid box contains no points, skip to next grid")
 		# 	continue
 
-	# need to test if this still works
-	if config['main']['runtype'] == "points":
-		# extract timersies per point
-		logging.info( "Process MODIS SCA points")	
-		from DA import scaTS
-		scaTS.main(wd ,sca_wd  ,config['main']['shp'] )
-
-	if config['main']['runtype'] == "bbox":
+	# POINTS CODE IMPLEMENTED HERE:
+	# if config['main']['runtype'] == "points":
+	# 	# extract timersies per point
+	# 	logging.info( "Process MODIS SCA points")	
+	# 	from DA import scaTS
+	# 	scaTS.main(wd ,sca_wd  ,config['main']['shp'] )
+	fname = wd + "/fsca_stack.tif"
+	if config['main']['runtype'] == "bbox" and os.path.isfile(fname) == False:
 		logging.info( "Process MODIS SCA bbox")
 		from DA import scaTS_GRID
 		scaTS_GRID.main(wd ,sca_wd )
+	else:
+		logging.info( "MODIS fSCA already processed")
+
 
 else:
-	logging.info( "MODIS SCA not requested" )
+	logging.info( "MODIS SCA not requested or available for modes tscalonly and points" )
 #====================================================================
 #	Run ensemble
 #====================================================================
