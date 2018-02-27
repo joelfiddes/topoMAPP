@@ -387,7 +387,7 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 	# need to test if this still works
 	if config['main']['runtype'] == "points":
 		# extract timersies per point
-		logging.info( "Process MODIS SCA points)	
+		logging.info( "Process MODIS SCA points")	
 		from DA import scaTS
 		scaTS.main(wd ,sca_wd  ,config['main']['shp'] )
 
