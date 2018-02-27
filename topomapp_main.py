@@ -345,19 +345,25 @@ for Ngrid in grid_dirs:
 #	Run SCA here for entire domain to make efficient in terms of 
 #	no duplicate hdf downloads
 #====================================================================
-fname = gridpath + "/MODISSUCCESS"
-if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE" and os.path.isfile(fname) == False:
 
-	logging.info( "Retrieving MODIS SCA for entire domain" )
+if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE":
+	
+	fname = gridpath + "/MODISSUCCESS"
+	if os.path.isfile(fname) == False:
 
-	# generate shapefile from sim domain to define MODIS download aoi
-	inRst = wd + "/spatial/eraExtent.tif"
-	outShp = wd + "/spatial/eraExtent.shp"
-	cmd = ["Rscript", "./rsrc/rst2shp.R" , inRst, outShp]
-	subprocess.check_output(cmd)
+		logging.info( "Retrieving MODIS SCA for entire domain" )
 
-	import TMsca
-	TMsca.main(config, shp = outShp )
+		# generate shapefile from sim domain to define MODIS download aoi
+		inRst = wd + "/spatial/eraExtent.tif"
+		outShp = wd + "/spatial/eraExtent.shp"
+		cmd = ["Rscript", "./rsrc/rst2shp.R" , inRst, outShp]
+		subprocess.check_output(cmd)
+
+		import TMsca
+		TMsca.main(config, shp = outShp )
+
+	else:
+		logging.info( "MODIS data already retrieved" )
 
 
 
@@ -389,7 +395,7 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 			scaTS_GRID.main(gridpath ,sca_wd )
 
 else:
-	logging.info( "MODIS SCA already retrieved or not requested" )
+	logging.info( "MODIS SCA not requested" )
 #====================================================================
 #	Run ensemble
 #====================================================================
