@@ -210,7 +210,7 @@ cl <- makeCluster(cores)  # create a cluster with 2 cores
 registerDoParallel(cl)  # register the cluster
 
 
-writeLines(c(""), "dopar.log")
+#writeLines(c(""), "dopar.log")
 
 wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
@@ -336,9 +336,11 @@ wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
     w = PBS(HX[obsind, ], obs[obsind], R)
     # wmat = cbind(wmat,w) y=as.vector(HX) 
     sink('dopar.log', append=TRUE)
-    cat(paste("Starting wmat iteration", i, "\n"))
-    cat(paste("% complete:", (i/npix) * 100, "\n"))
+    cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
+    #cat(paste("% complete:", (i/npix) * 100, "\n"))
     sink()
+
+
 
 }
 
