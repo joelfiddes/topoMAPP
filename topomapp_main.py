@@ -358,9 +358,6 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 
 	import TMsca
 	TMsca.main(config, shp = outShp )
-else:
-	logging.info( "MODIS SCA already retrieved or not requested" )
-
 
 
 
@@ -392,7 +389,7 @@ else:
 			scaTS_GRID.main(gridpath ,sca_wd )
 
 else:
-	logging.info( "No MODIS SCA retrieved" )
+	logging.info( "MODIS SCA already retrieved or not requested" )
 #====================================================================
 #	Run ensemble
 #====================================================================
