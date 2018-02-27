@@ -373,7 +373,7 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 	for Ngrid in grid_dirs:
 		gridpath = Ngrid
 		logging.info( "Postprocessing MODIS SCA : " + os.path.basename(os.path.normpath(Ngrid)) )
-		sca_wd=config["main"]["wd"] + "/MODIS/SC//Snow_Cov_Daily_500m_v5/SC"
+		sca_wd=config["main"]["wd"] + "/MODIS/SC/eraExtent/Snow_Cov_Daily_500m_v5/SC"
 
 	# Does grid contain points?
 	 	if config['main']['runtype'] == "points":
