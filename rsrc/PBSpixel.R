@@ -37,51 +37,53 @@ obsTS = read.csv(paste0(sca_wd,"/fsca_dates.csv"))
 startda <- substr(startdaLong, 1, 10) 
 endda <- substr(enddaLong, 1, 10)
 
-# cut temporal length of dates vector to startda/endda
-startda.index <- which(obsTS$x==startda)
-endda.index <- which(obsTS$x==endda)
-
-# subset rstack temporally 
-rstack = rstack[[startda.index:endda.index]]
-
-# analyse missing days
-actualDays <- seq(as.Date(startda) ,as.Date(endda), 1)
-NactualDays <- length(actualDays)
-
-# check for missing dates in fsca timeseries (not NA but actual missing timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R version - fill with dummy NA layers
-if (nlayers(rstack) != NactualDays ){
-	obsTScut <- obsTS$x[startda.index:endda.index] 
-	missDates.index <-	which( ! ( as.character( actualDays )  %in%  as.character(obsTScut) ) )
-	missDates <- actualDays[ which( ! ( as.character(actualDays)  %in%  as.character(obsTScut) ) ) ]
-
-	print(paste0("missing dates found:", missDates, " filling missing datestamps now"))
-
-	#create NA layer for insertion
-	insertLyr =rstack[[1]]
-	insertLyr[insertLyr <1000] <- NA
-
-	# name layers by date
-	names(rstack) <- obsTScut
-
-	# make stack of dummy layes and name
-	insertStack  <- stack(replicate(length(missDates), insertLyr))
-	names(insertStack) <- missDates
-	mergeStack = stack (rstack, insertStack)
-	rstack = mergeStack[[order(names(mergeStack))]]
-	print("rstack missing datestamps filled")
-
-}
-
-# crop rstack to landform as landform represent individual grid and rstack the entire domain - these are not necessarily the same
 fscacrop = paste0(wd,"/fsca_crop.tif")
-	if(!file.exists(fscacrop)){
-		print("crop /fsca_stack.tif with landform.tif")
-		rstack = crop(rstack, landform)
-		writeRaster(rstack, fscacrop, overwrite=TRUE)
-		print("crop done")
-	}else{
-		print(paste0(fscacrop, " already exists."))
-		rstack <- stack(fscacrop)
+if(!file.exists(fscacrop)){
+
+	# cut temporal length of dates vector to startda/endda
+	startda.index <- which(obsTS$x==startda)
+	endda.index <- which(obsTS$x==endda)
+
+	# subset rstack temporally 
+	rstack = rstack[[startda.index:endda.index]]
+
+	# analyse missing days
+	actualDays <- seq(as.Date(startda) ,as.Date(endda), 1)
+	NactualDays <- length(actualDays)
+
+	# check for missing dates in fsca timeseries (not NA but actual missing timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R version - fill with dummy NA layers
+	if (nlayers(rstack) != NactualDays ){
+		obsTScut <- obsTS$x[startda.index:endda.index] 
+		missDates.index <-	which( ! ( as.character( actualDays )  %in%  as.character(obsTScut) ) )
+		missDates <- actualDays[ which( ! ( as.character(actualDays)  %in%  as.character(obsTScut) ) ) ]
+
+		print(paste0("missing dates found:", missDates, " filling missing datestamps now"))
+
+		#create NA layer for insertion
+		insertLyr =rstack[[1]]
+		insertLyr[insertLyr <1000] <- NA
+
+		# name layers by date
+		names(rstack) <- obsTScut
+
+		# make stack of dummy layes and name
+		insertStack  <- stack(replicate(length(missDates), insertLyr))
+		names(insertStack) <- missDates
+		mergeStack = stack (rstack, insertStack)
+		rstack = mergeStack[[order(names(mergeStack))]]
+		print("rstack missing datestamps filled")
+
+	}
+
+	# crop rstack to landform as landform represent individual grid and rstack the entire domain - these are not necessarily the same
+
+	print("crop /fsca_stack.tif with landform.tif")
+	rstack = crop(rstack, landform)
+	writeRaster(rstack, fscacrop, overwrite=TRUE)
+	print("crop done")
+}else{
+	print(paste0(fscacrop, " already exists."))
+	rstack <- stack(fscacrop)
 	}
 
 # read andwrite dates here
@@ -138,7 +140,7 @@ if(!file.exists(df)){
 	resol=5
 	print(paste0("Computing ",resol, " melt period elevation bands"))
 	
-	 #get high pixels subset
+	 # resample dem to rstack res (MODIS)
 	dem = raster(paste0(priorwd,"/predictors/ele.tif"))
 	elegrid = crop(dem, landform)
 	r = aggregate(elegrid,res(rstack)/res(elegrid) )
@@ -174,9 +176,17 @@ if(!file.exists(df)){
 	df = data.frame(meltPeriod)
 	names(df) <- c("ele1", "ele2", "start", "end")
 	save(df, file = paste0(wd,"/df_",grid))
+
 }else{
-		print(paste0(df, " already exists."))
-		load(paste0(wd,"/df_",grid))
+	
+	print(paste0(df, " already exists."))
+	load(paste0(wd,"/df_",grid))
+
+	# resample dem to rstack res (MODIS)
+	dem = raster(paste0(priorwd,"/predictors/ele.tif"))
+	elegrid = crop(dem, landform)
+	r = aggregate(elegrid,res(rstack)/res(elegrid) )
+	rstack_ele <- resample(r , rstack)
 		}
 
 
