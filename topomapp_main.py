@@ -345,8 +345,8 @@ for Ngrid in grid_dirs:
 #	Run SCA here for entire domain to make efficient in terms of 
 #	no duplicate hdf downloads
 #====================================================================
-
-if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE":
+fname = gridpath + "/MODISSUCCESS"
+if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"] == "FALSE" and os.path.isfile(fname) == False:
 
 	logging.info( "Retrieving MODIS SCA for entire domain" )
 
@@ -358,6 +358,8 @@ if config["modis"]["getMODISSCA"] == "TRUE" and config["toposcale"]["tscaleOnly"
 
 	import TMsca
 	TMsca.main(config, shp = outShp )
+else:
+	logging.info( "MODIS SCA already retrieved or not requested" )
 
 
 

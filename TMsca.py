@@ -19,6 +19,10 @@ def main( config , shp):
 	from DA import getMODIS as gmod
 	gmod.main(config["modis"]["options_file_SCA"], shp ) #  able to run non-interactively now
 
+	# write success file
+	file = open(gridpath + '/MODISSUCCESS','w') 
+	file.close() 
+
 # calling main
 if __name__ == '__main__':
 	import sys
