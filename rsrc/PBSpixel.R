@@ -131,13 +131,13 @@ ensembRes[ensembRes>sdThresh]<-1
 #===============================================================================
 #	Compute melt period by elevation
 #===============================================================================
-
+t1= Sys.time()
 df = paste0(wd,"/df_",grid)
 
 if(!file.exists(df)){
 	resol=5
 	print(paste0("Computing ",resol, " melt period elevation bands"))
-	t1= Sys.time()
+	
 	 #get high pixels subset
 	dem = raster(paste0(priorwd,"/predictors/ele.tif"))
 	elegrid = crop(dem, landform)
@@ -184,7 +184,7 @@ if(!file.exists(df)){
 # pixel based timeseries 
 pixEle = getValues( rstack_ele)
 
-t2= Sys.time-t1
+t2= Sys.time()-t1
 print(paste0("done in: ", t2))
 
 #===============================================================================
