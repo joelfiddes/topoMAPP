@@ -209,7 +209,7 @@ print(t2)
 # ===============================================================================
 # system('rm doparlog.txt')
 t1 = Sys.time()
-cl <- makeCluster(cores)  # create a cluster with 2 cores
+cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
 registerDoParallel(cl)  # register the cluster
 
 

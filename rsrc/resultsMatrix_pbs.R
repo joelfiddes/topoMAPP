@@ -11,10 +11,10 @@ param=args[7]
 #			get results matrix
 #===============================================================================
 library(raster)
-
+sink(paste0(wd, "/da_logfile"), append = TRUE)
 rstStack=stack()
 for (i in 1: nens){ #python index
-
+print(i)
 	resMat=c()
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
@@ -26,8 +26,8 @@ for (i in 1: nens){ #python index
 rstStack=stack(rstStack, rst)
 ensembRes = as.array(rstStack)
 }
-save(ensembRes, file = paste0(wd, "/ensembRes_"+grid+".rd"))
-
+save(ensembRes, file = paste0(wd, "/ensembRes_",grid,".rd"))
+sink()
 #keep ensembRes swe
 # ensembRes_swe <- ensembRes
 
