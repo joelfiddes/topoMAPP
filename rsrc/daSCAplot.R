@@ -8,13 +8,14 @@ nens = as.numeric(args[4])
 valshp=args[5]
 DSTART = as.numeric(args[6])
 DEND = as.numeric(args[7])
+year = args[8]
 
 #readin
 shp=shapefile(valshp)
-rstack = brick(paste0(wd,"fsca_crop.tif"))
+rstack = brick(paste0(wd,"fsca_crop",grid,year,".tif"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
-load( paste0(wd,"/HX_",grid,".rd"))
-load( paste0(wd,"/wmat_",grid,".rd"))
+load( paste0(wd,"/HX_",grid,year,".rd"))
+load( paste0(wd,"/wmat_",grid,year,".rd"))
 
 # settings
 ndays=nlayers(rstack)

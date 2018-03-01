@@ -6,11 +6,12 @@ priorwd = args[2]
 grid = as.numeric(args[3])
 nens = as.numeric(args[4])
 valshp=args[5]
+year=args[6]
 
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 shp=shapefile(valshp)
-rstack = brick(paste0(wd,"fsca_crop.tif"))
+rstack = brick(paste0(wd,"fsca_crop",grid,year,".tif"))
 
 #	Load ensemble results matrix
 load(paste0(wd, "/ensembRes_",grid,".rd"))

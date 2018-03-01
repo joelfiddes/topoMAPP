@@ -86,18 +86,18 @@ def main(config):
 
 			# SCA plots	
 			logging.info( "plot SCA")
-			cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND ] 
+			cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year) ] 
 			subprocess.check_output(cmd)
 
 			# SWE plot
 			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp]
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year)]
 			subprocess.check_output(cmd)
 
 			# SCA grid plot
-			logging.info( "calc SCA grid")
-			cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
-			subprocess.check_output(cmd)
+			logging.info( "calc SCA grid= OFF")
+			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
+			#subprocess.check_output(cmd)
 
 
 			cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots.pdf"]
