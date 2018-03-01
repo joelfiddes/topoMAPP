@@ -48,6 +48,10 @@ if (!file.exists(fscacrop)) {
     print(paste0("subset rstack temporally:", startda.index,"to",endda.index))
     rstack = rstack[[startda.index:endda.index]]
 
+    # subset dates vector to current year
+    obsTScut <- obsTS$x[startda.index:endda.index]
+    write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
+
     # analyse missing days
     actualDays <- seq(as.Date(startda), as.Date(endda), 1)
     NactualDays <- length(actualDays)
@@ -56,7 +60,7 @@ if (!file.exists(fscacrop)) {
     # timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R
     # version - fill with dummy NA layers
     if (nlayers(rstack) != NactualDays) {
-        obsTScut <- obsTS$x[startda.index:endda.index]
+        
         missDates.index <- which(!(as.character(actualDays) %in% as.character(obsTScut)))
         missDates <- actualDays[which(!(as.character(actualDays) %in% as.character(obsTScut)))]
 
@@ -90,7 +94,7 @@ if (!file.exists(fscacrop)) {
     rstack <- stack(fscacrop)
 }
 
-# read andwrite dates here
+# read and cut and write dates here
 #dates <- read.csv(paste0(sca_wd, "/fsca_dates.csv"))
 #write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
 
