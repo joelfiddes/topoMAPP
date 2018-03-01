@@ -37,7 +37,7 @@ obsTS = read.csv(paste0(sca_wd, "/fsca_dates.csv"))
 startda <- substr(startdaLong, 1, 10)
 endda <- substr(enddaLong, 1, 10)
 
-fscacrop = paste0(wd, "/fsca_crop.tif")
+fscacrop = paste0(wd, "/fsca_crop",grid,year,".tif")
 if (!file.exists(fscacrop)) {
 
     # cut temporal length of dates vector to startda/endda
@@ -45,6 +45,7 @@ if (!file.exists(fscacrop)) {
     endda.index <- which(obsTS$x == endda)
 
     # subset rstack temporally
+    print(paste0("subset rstack temporally:", startda.index,"to",endda.index))
     rstack = rstack[[startda.index:endda.index]]
 
     # analyse missing days
@@ -80,7 +81,7 @@ if (!file.exists(fscacrop)) {
     # crop rstack to landform as landform represent individual grid and rstack the
     # entire domain - these are not necessarily the same
 
-    print("crop /fsca_stack.tif with landform.tif")
+    print("crop /fsca_stack.tif (",nlayers(rstack)," layers) with landform.tif")
     rstack = crop(rstack, landform)
     writeRaster(rstack, fscacrop, overwrite = TRUE)
     print("crop done")
@@ -90,8 +91,8 @@ if (!file.exists(fscacrop)) {
 }
 
 # read andwrite dates here
-dates <- read.csv(paste0(sca_wd, "/fsca_dates.csv"))
-write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
+#dates <- read.csv(paste0(sca_wd, "/fsca_dates.csv"))
+#write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
 
 # output
 outfile1 = paste0("wmat_", grid, year, ".rd")  #'wmat_trunc20.rd' 'HX.rd'#
@@ -104,8 +105,8 @@ if (!file.exists(pixTS)) {
     print("extract pixel based timeseries from rstack")
     t1 = Sys.time()
     pixTS = extract(rstack, 1:ncell(rstack))
-    t2 = Sys.time - t1
-    print(paste0("done in: ", t2))
+    t2 = Sys.time() - t1
+    print(t2)
     save(pixTS, file = paste0(wd, "/pixTS_", grid))
 
 } else {
@@ -135,10 +136,12 @@ print(paste0("ensembRes cut to: ", startda, " to ", endda))
 ensembRes[ensembRes <= sdThresh] <- 0
 ensembRes[ensembRes > sdThresh] <- 1
 # ===============================================================================
-# Compute melt period by elevation
+# Compute melt period for year n by elevation
 # ===============================================================================
 t1 = Sys.time()
 df = paste0(wd, "/df_", grid)
+
+# subset rstack temporally
 
 if (!file.exists(df)) {
     resol = 5
@@ -199,8 +202,8 @@ if (!file.exists(df)) {
 pixEle = getValues(rstack_ele)
 
 t2 = Sys.time() - t1
-print(paste0("Ele band computation done in: ", t2))
-
+print("Ele band computation done in: ")
+print(t2)
 # ===============================================================================
 # Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 # ===============================================================================
