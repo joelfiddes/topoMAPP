@@ -17,7 +17,7 @@ year=args[9]
 
 # load files
 load( paste0(wd,"wmat_",grid,year,".rd"))
-rstack = brick(paste0(wd,"fsca_crop.tif"))
+rstack = brick(paste0(wd,"fsca_crop",grid,year,".tif"))
 obsTS = read.csv(paste0(wd,"fsca_dates.csv"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 
