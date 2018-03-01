@@ -50,7 +50,7 @@ if (!file.exists(fscacrop)) {
 
     # subset dates vector to current year
     obsTScut <- obsTS$x[startda.index:endda.index]
-    write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
+    write.csv(obsTScut, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
 
     # analyse missing days
     actualDays <- seq(as.Date(startda), as.Date(endda), 1)
