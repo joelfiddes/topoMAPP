@@ -85,7 +85,7 @@ if (!file.exists(fscacrop)) {
     # crop rstack to landform as landform represent individual grid and rstack the
     # entire domain - these are not necessarily the same
 
-    print("crop /fsca_stack.tif (",nlayers(rstack)," layers) with landform.tif")
+    print(paste0("crop /fsca_stack.tif (",nlayers(rstack)," layers) with landform.tif"))
     rstack = crop(rstack, landform)
     writeRaster(rstack, fscacrop, overwrite = TRUE)
     print("crop done")
