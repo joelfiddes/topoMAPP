@@ -45,7 +45,7 @@ if (!file.exists(fscacrop)) {
     endda.index <- which(obsTS$x == endda)
 
     # subset rstack temporally
-    print(paste0("subset rstack temporally:", startda.index,"to",endda.index))
+    print(paste0("subset rstack temporally:", startda,"to",endda))
     rstack = rstack[[startda.index:endda.index]]
 
     # subset dates vector to current year
