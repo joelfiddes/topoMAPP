@@ -19,8 +19,8 @@ DEND = as.numeric(args[11])
 year = as.numeric(args[12])
 startdaLong = args[13]
 enddaLong = args[14]
-start = args[15]
-end = args[16]
+startSim = args[15]
+endSim = args[16]
 # ======== code ===================
 
 sink(paste0(wd, "/da_logfile"), append = TRUE)
@@ -130,7 +130,7 @@ print(paste0("npix = ", npix))
 load(paste0(wd, "/ensembRes_", grid, ".rd"))
 
 # subset temporally
-totalTS <- seq(as.Date(start), as.Date(end), 1)
+totalTS <- seq(as.Date(startSim), as.Date(endSim), 1)
 start.index <- which(totalTS == startda)
 end.index <- which(totalTS == endda)
 ensembRes <- ensembRes[start.index:end.index, , ]
@@ -214,7 +214,7 @@ print(t2)
 
 if (!file.exists(paste0(wd,"/",outfile1))) {
 
-    # system('rm doparlog.txt')
+     system('rm dopar.log')
     t1 = Sys.time()
     cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
@@ -346,7 +346,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
         # wmat = cbind(wmat,w) y=as.vector(HX) 
         # sink("dopar.log", append=TRUE)
         # cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
-        print(paste("% complete WMAT:", (i/npix) * 100, "\n"))
+        print(paste("% complete WMAT:", (i/npix) * 100))
         # sink()
 
         w = PBS(HX[obsind, ], obs[obsind], R)
@@ -370,7 +370,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 # ===============================================================================
 if (!file.exists(paste0(wd,"/",outfile2))) {
     t1 = Sys.time()
-    cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores,  outfile="dopar.log")  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 
@@ -492,7 +492,7 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
 
         }
 
-        print(paste("% HX complete:", (i/npix) * 100, "\n"))
+        print(paste("% HX complete:", (i/npix) * 100))
         y = as.vector(HX)
 
         # sink('doparlog2.txt', append=TRUE)
@@ -514,4 +514,3 @@ save(HX, file = paste0(wd, outfile2))
 }
 print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
 
-sink()
