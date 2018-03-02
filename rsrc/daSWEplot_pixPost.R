@@ -11,7 +11,7 @@ startdaLong = args[7]
 enddaLong = args[8]
 startSim = args[9]
 endSim = args[10]
-valDat = args(11)
+valDat = args[11]
 # write to log
 sink(paste0(wd, "/da_logfile"), append = TRUE)
 
