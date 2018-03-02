@@ -211,298 +211,307 @@ print(t2)
 # ===============================================================================
 # Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 # ===============================================================================
-# system('rm doparlog.txt')
-t1 = Sys.time()
-cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
-registerDoParallel(cl)  # register the cluster
+
+if (!file.exists(outfile1)) {
+
+    # system('rm doparlog.txt')
+    t1 = Sys.time()
+    cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
+    registerDoParallel(cl)  # register the cluster
 
 
-#writeLines(c(""), "dopar.log")
+    #writeLines(c(""), "dopar.log")
 
-wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
+    wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
 
-    print(i)
-    ele = pixEle[i]
-    lb = which(df$ele1 < ele)
-    ub = which(df$ele2 >= ele)
-    class = which(lb %in% ub)
-    meltp = df[class, ]
-    start = meltp$start
-    end = meltp$end
+        print(i)
+        ele = pixEle[i]
+        lb = which(df$ele1 < ele)
+        ub = which(df$ele2 >= ele)
+        class = which(lb %in% ub)
+        meltp = df[class, ]
+        start = meltp$start
+        end = meltp$end
 
-    # Extract pixel based timesries of MODIS obs and scale
-    obs = pixTS[i, ]/100
+        # Extract pixel based timesries of MODIS obs and scale
+        obs = pixTS[i, ]/100
 
-    # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
-    # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
-    # lastdataindex+1 lastdateover95 = length(vec) - which (rvec >(max(rvec,
-    # na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below
-    # 100% start=lastdateover95 end=firstnodata
+        # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
+        # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
+        # lastdataindex+1 lastdateover95 = length(vec) - which (rvec >(max(rvec,
+        # na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below
+        # 100% start=lastdateover95 end=firstnodata
 
-    if (!is.na(start) & !is.na(end) & start >= end) {
+        if (!is.na(start) & !is.na(end) & start >= end) {
 
-    }
-
-    if (is.na(start)) {
-        start = DSTART  #lastdateover95
-    }
-
-    if (is.na(end)) {
-        end = DEND  #firstnodata
-    }
-
-    # set default here TRIAL start = DSTART end = DEND
-
-    # identify missing dates and reset start end index
-    obsind = which(!is.na(obs) == TRUE)
-
-    # cut to start end points (melt season )
-    obsind <- obsind[obsind >= start & obsind <= end]
-
-    # if less than two obs are present then PBS fails, this function steps forward
-    # though pixels already processed until at least 2 obs are found
-    n = 1
-    while (length(obsind) < 2) {
-
-        obs <- pixTS[i + n, ]/100
-        obsind <- which(!is.na(obs) == TRUE)
-        obsind <- obsind[obsind >= start & obsind <= end]
-        n <- n + 1
-        print(n)
-        print(i + n)
-        if (n > 20) {
-            start = DSTART  #lastdateover95
-            end = DEND  #firstnodata
-            next
         }
 
-        # if algorithm, reaches last pixel search then goes backwards
-        if ((i + n) == npix) {
+        if (is.na(start)) {
+            start = DSTART  #lastdateover95
+        }
 
-            n = 1
-            while (length(obsind) < 2) {
+        if (is.na(end)) {
+            end = DEND  #firstnodata
+        }
 
-                obs <- pixTS[i - n, ]/100
-                obsind <- which(!is.na(obs) == T)
-                obsind <- obsind[obsind >= start & obsind <= end]
-                n <- n + 1
-                print(n)
-                print(i - n)
+        # set default here TRIAL start = DSTART end = DEND
 
+        # identify missing dates and reset start end index
+        obsind = which(!is.na(obs) == TRUE)
+
+        # cut to start end points (melt season )
+        obsind <- obsind[obsind >= start & obsind <= end]
+
+        # if less than two obs are present then PBS fails, this function steps forward
+        # though pixels already processed until at least 2 obs are found
+        n = 1
+        while (length(obsind) < 2) {
+
+            obs <- pixTS[i + n, ]/100
+            obsind <- which(!is.na(obs) == TRUE)
+            obsind <- obsind[obsind >= start & obsind <= end]
+            n <- n + 1
+            print(n)
+            print(i + n)
+            if (n > 20) {
+                start = DSTART  #lastdateover95
+                end = DEND  #firstnodata
+                next
+            }
+
+            # if algorithm, reaches last pixel search then goes backwards
+            if ((i + n) == npix) {
+
+                n = 1
+                while (length(obsind) < 2) {
+
+                    obs <- pixTS[i - n, ]/100
+                    obsind <- which(!is.na(obs) == T)
+                    obsind <- obsind[obsind >= start & obsind <= end]
+                    n <- n + 1
+                    print(n)
+                    print(i - n)
+
+                }
             }
         }
+
+        # MODIS pixel,i mask
+        singlecell = rasterFromCells(rstack[[1]], i, values = TRUE)
+
+        # extract smallpix using mask
+        smlPix = crop(landform, singlecell)
+
+        # compute sample IDs that occur in MODIS pixel,i, this is ragged and varies
+        # tri+-modally (sample of 4609) between eg.289, 272,256 (based on an experiment)
+        sampids = values(smlPix)
+
+
+        # ensemble loop init HX
+        HX = c()
+        for (j in 1:nens) {
+
+            print(j)
+            # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
+            nsmlpix <- length(which(!is.na(sampids) == TRUE))
+
+
+            # get unique sim ids
+            simindexs <- unique(sampids[!is.na(sampids)])
+
+            # number of unique samples in pixel
+            nSamp <- length(simindexs)
+
+            # number of NA's in pixel
+            nNA = length(which(is.na(sampids) == TRUE))
+
+            # extract vector of each sample sca that occurs in pixel
+            mat <- ensembRes[, simindexs, j]
+
+            # mat <- mat[1:length(obs),] # this has to be replaced by correct date matching
+
+            # count occurance of each in sample
+            tab <- as.data.frame(table(sampids))
+            tabmat <- t(mat) * tab$Freq
+
+            # fSCA for pixel i and ensemble j
+            fsca = colSums(tabmat)/nsmlpix
+
+            # append to ensemble matrix
+            HX = cbind(HX, fsca)
+
+        }
+
+        # wmat = cbind(wmat,w) y=as.vector(HX) 
+        # sink("dopar.log", append=TRUE)
+        # cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
+        # #cat(paste("% complete:", (i/npix) * 100, "\n"))
+        # sink()
+
+        w = PBS(HX[obsind, ], obs[obsind], R)
+
     }
 
-    # MODIS pixel,i mask
-    singlecell = rasterFromCells(rstack[[1]], i, values = TRUE)
+    t2 = Sys.time() - t1
 
-    # extract smallpix using mask
-    smlPix = crop(landform, singlecell)
+    stopCluster(cl)  # shut down the cluster
 
-    # compute sample IDs that occur in MODIS pixel,i, this is ragged and varies
-    # tri+-modally (sample of 4609) between eg.289, 272,256 (based on an experiment)
-    sampids = values(smlPix)
+    # write.csv(result, paste0(wd,'wmat.csv'))
+    save(wmat, file = paste0(wd, outfile1))
 
-
-    # ensemble loop init HX
-    HX = c()
-    for (j in 1:nens) {
-
-        print(j)
-        # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
-        nsmlpix <- length(which(!is.na(sampids) == TRUE))
-
-
-        # get unique sim ids
-        simindexs <- unique(sampids[!is.na(sampids)])
-
-        # number of unique samples in pixel
-        nSamp <- length(simindexs)
-
-        # number of NA's in pixel
-        nNA = length(which(is.na(sampids) == TRUE))
-
-        # extract vector of each sample sca that occurs in pixel
-        mat <- ensembRes[, simindexs, j]
-
-        # mat <- mat[1:length(obs),] # this has to be replaced by correct date matching
-
-        # count occurance of each in sample
-        tab <- as.data.frame(table(sampids))
-        tabmat <- t(mat) * tab$Freq
-
-        # fSCA for pixel i and ensemble j
-        fsca = colSums(tabmat)/nsmlpix
-
-        # append to ensemble matrix
-        HX = cbind(HX, fsca)
-
-    }
-
-    # wmat = cbind(wmat,w) y=as.vector(HX) 
-    sink("dopar.log", append=TRUE)
-    cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
-    #cat(paste("% complete:", (i/npix) * 100, "\n"))
-    sink()
-
-    w = PBS(HX[obsind, ], obs[obsind], R)
+    print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
+} else {
+    print(paste0(outfile1, " already exists."))
 
 }
-
-t2 = Sys.time() - t1
-
-stopCluster(cl)  # shut down the cluster
-
-# write.csv(result, paste0(wd,'wmat.csv'))
-save(wmat, file = paste0(wd, outfile1))
-
-print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
-
 # ===============================================================================
 # Run pixel calcs in parallel - get HX
 # ===============================================================================
+if (!file.exists(outfile2)) {
+    t1 = Sys.time()
+    cl <- makeCluster(cores, outfile="dopar2.log")  # create a cluster with 2 cores
+    registerDoParallel(cl)  # register the cluster
 
-t1 = Sys.time()
-cl <- makeCluster(cores)  # create a cluster with 2 cores
-registerDoParallel(cl)  # register the cluster
-system("rm doparlog2.txt")
 
 
-HX = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
+    HX = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
-    print(i)
-    ele = pixEle[i]
-    lb = which(df$ele1 < ele)
-    ub = which(df$ele2 >= ele)
-    class = which(lb %in% ub)
-    meltp = df[class, ]
-    start = meltp$start
-    end = meltp$end
-    # Extract pixel based timesries of MODIS obs and scale
-    obs = pixTS[i, ]/100
+        print(i)
+        ele = pixEle[i]
+        lb = which(df$ele1 < ele)
+        ub = which(df$ele2 >= ele)
+        class = which(lb %in% ub)
+        meltp = df[class, ]
+        start = meltp$start
+        end = meltp$end
+        # Extract pixel based timesries of MODIS obs and scale
+        obs = pixTS[i, ]/100
 
-    # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
-    # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
-    # lastdataindex+1 lastdateover95 = length(vec) - which (rvec >(max(rvec,
-    # na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below
-    # 100% start=lastdateover95 end=firstnodata
+        # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
+        # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
+        # lastdataindex+1 lastdateover95 = length(vec) - which (rvec >(max(rvec,
+        # na.rm=TRUE)*0.95))[1] # last date over 95% of max value accounts for max below
+        # 100% start=lastdateover95 end=firstnodata
 
-    if (!is.na(start) & !is.na(end) & start >= end) {
-        # start=DSTART#lastdateover95 end=DEND#firstnodata
-    }
-
-    if (is.na(start)) {
-        start = DSTART  #lastdateover95
-    }
-
-    if (is.na(end)) {
-        end = DEND  #firstnodata
-    }
-
-    # identify missing dates and reset start end index
-    obsind = which(!is.na(obs) == TRUE)
-
-    # cut to start end points (melt season )
-    obsind <- obsind[obsind >= start & obsind <= end]
-
-    # if less than two obs are present then PBS fails, this function steps forward
-    # though pixels already processed until at least 2 obs are found
-    n = 1
-    while (length(obsind) < 2) {
-
-        obs <- pixTS[i + n, ]/100
-        obsind <- which(!is.na(obs) == TRUE)
-        obsind <- obsind[obsind >= start & obsind <= end]
-        n <- n + 1
-        print(n)
-        print(i + n)
-        if (n > 20) {
-            start = DSTART  #lastdateover95
-            end = DEND  #firstnodata
-            next
+        if (!is.na(start) & !is.na(end) & start >= end) {
+            # start=DSTART#lastdateover95 end=DEND#firstnodata
         }
 
-        # if algorithm, reaches last pixel search then goes backwards
-        if ((i + n) == npix) {
+        if (is.na(start)) {
+            start = DSTART  #lastdateover95
+        }
 
-            n = 1
-            while (length(obsind) < 2) {
+        if (is.na(end)) {
+            end = DEND  #firstnodata
+        }
 
-                obs <- pixTS[i - n, ]/100
-                obsind <- which(!is.na(obs) == T)
-                obsind <- obsind[obsind >= start & obsind <= end]
-                n <- n + 1
-                print(n)
-                print(i - n)
+        # identify missing dates and reset start end index
+        obsind = which(!is.na(obs) == TRUE)
 
+        # cut to start end points (melt season )
+        obsind <- obsind[obsind >= start & obsind <= end]
+
+        # if less than two obs are present then PBS fails, this function steps forward
+        # though pixels already processed until at least 2 obs are found
+        n = 1
+        while (length(obsind) < 2) {
+
+            obs <- pixTS[i + n, ]/100
+            obsind <- which(!is.na(obs) == TRUE)
+            obsind <- obsind[obsind >= start & obsind <= end]
+            n <- n + 1
+            print(n)
+            print(i + n)
+            if (n > 20) {
+                start = DSTART  #lastdateover95
+                end = DEND  #firstnodata
+                next
+            }
+
+            # if algorithm, reaches last pixel search then goes backwards
+            if ((i + n) == npix) {
+
+                n = 1
+                while (length(obsind) < 2) {
+
+                    obs <- pixTS[i - n, ]/100
+                    obsind <- which(!is.na(obs) == T)
+                    obsind <- obsind[obsind >= start & obsind <= end]
+                    n <- n + 1
+                    print(n)
+                    print(i - n)
+
+                }
             }
         }
+
+        # MODIS pixel,i mask
+        singlecell = rasterFromCells(rstack[[1]], i, values = TRUE)
+
+        # extract smallpix using mask
+        smlPix = crop(landform, singlecell)
+
+        # compute sample IDs that occur in MODIS pixel,i, this is ragged and varies
+        # tri+-modally (sample of 4609) between eg.289, 272,256 (based on an experiment)
+        sampids = values(smlPix)
+
+
+        # ensemble loop init HX
+        HX = c()
+        for (j in 1:nens) {
+
+            print(j)
+            # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
+            nsmlpix <- length(which(!is.na(sampids) == TRUE))
+
+
+            # get unique sim ids
+            simindexs <- unique(sampids[!is.na(sampids)])
+
+            # number of unique samples in pixel
+            nSamp <- length(simindexs)
+
+            # number of NA's in pixel
+            nNA = length(which(is.na(sampids) == TRUE))
+
+            # extract vector of each sample sca that occurs in pixel
+            mat <- ensembRes[, simindexs, j]
+
+            # mat <- mat[1:length(obs),] # this has to be replaced by correct date matching
+
+            # count occurance of each in sample
+            tab <- as.data.frame(table(sampids))
+            tabmat <- t(mat) * tab$Freq
+
+            # fSCA for pixel i and ensemble j
+            fsca = colSums(tabmat)/nsmlpix
+
+            # append to ensemble matrix
+            HX = cbind(HX, fsca)
+
+        }
+
+
+        y = as.vector(HX)
+
+        # sink('doparlog2.txt', append=TRUE)
+        # cat(paste("Starting wmat iteration", i, "\n"))
+        # cat(paste("% complete:", (i/npix) * 100, "\n"))
+        # sink()
+
     }
 
-    # MODIS pixel,i mask
-    singlecell = rasterFromCells(rstack[[1]], i, values = TRUE)
+    t2 = Sys.time() - t1
 
-    # extract smallpix using mask
-    smlPix = crop(landform, singlecell)
+    stopCluster(cl)  # shut down the cluster
 
-    # compute sample IDs that occur in MODIS pixel,i, this is ragged and varies
-    # tri+-modally (sample of 4609) between eg.289, 272,256 (based on an experiment)
-    sampids = values(smlPix)
-
-
-    # ensemble loop init HX
-    HX = c()
-    for (j in 1:nens) {
-
-        print(j)
-        # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
-        nsmlpix <- length(which(!is.na(sampids) == TRUE))
-
-
-        # get unique sim ids
-        simindexs <- unique(sampids[!is.na(sampids)])
-
-        # number of unique samples in pixel
-        nSamp <- length(simindexs)
-
-        # number of NA's in pixel
-        nNA = length(which(is.na(sampids) == TRUE))
-
-        # extract vector of each sample sca that occurs in pixel
-        mat <- ensembRes[, simindexs, j]
-
-        # mat <- mat[1:length(obs),] # this has to be replaced by correct date matching
-
-        # count occurance of each in sample
-        tab <- as.data.frame(table(sampids))
-        tabmat <- t(mat) * tab$Freq
-
-        # fSCA for pixel i and ensemble j
-        fsca = colSums(tabmat)/nsmlpix
-
-        # append to ensemble matrix
-        HX = cbind(HX, fsca)
-
-    }
-
-
-    y = as.vector(HX)
-
-    sink('doparlog2.txt', append=TRUE)
-    cat(paste("Starting wmat iteration", i, "\n"))
-    cat(paste("% complete:", (i/npix) * 100, "\n"))
-    sink()
-
-}
-
-t2 = Sys.time() - t1
-
-stopCluster(cl)  # shut down the cluster
 
 # write.csv(result, paste0(wd,'wmat.csv'))
 save(HX, file = paste0(wd, outfile2))
-
+} else {
+    print(paste0(outfile2, " already exists."))
+}
 print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
 
 sink()
