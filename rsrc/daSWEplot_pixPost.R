@@ -7,7 +7,10 @@ grid = as.numeric(args[3])
 nens = as.numeric(args[4])
 valshp=args[5]
 year=args[6]
-
+startdaLong = args[7]
+enddaLong = args[8]
+startSim = args[9]
+endSim = args[10]
 # write to log
 sink(paste0(wd, "/da_logfile"), append = TRUE)
 
@@ -18,6 +21,14 @@ rstack = brick(paste0(wd,"fsca_crop",grid,year,".tif"))
 
 #	Load ensemble results matrix
 load(paste0(wd, "/ensembRes_",grid,".rd"))
+
+# subset temporally
+startda <- substr(startdaLong, 1, 10) # remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)
+endda <- substr(enddaLong, 1, 10)
+totalTS <- seq(as.Date(startSim), as.Date(endSim), 1)
+start.index <- which(totalTS == startda)
+end.index <- which(totalTS == endda)
+ensembRes <- ensembRes[start.index:end.index, , ]
 
 #	Load sample weights
 #load(paste0(wd,"/sampleWeights.rd"))

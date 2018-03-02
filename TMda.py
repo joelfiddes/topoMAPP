@@ -91,7 +91,7 @@ def main(config):
 
 			# SWE plot
 			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year)]
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
 			subprocess.check_output(cmd)
 
 			# SCA grid plot

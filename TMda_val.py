@@ -84,7 +84,7 @@ def main(config):
 			fname = wd + "/sampleWeights_"+grid+".rd"
 			if os.path.isfile(fname) == False:	
 				logging.info( "calc sample weights")
-				cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores, str(year) ] 
+				cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores, str(year)] 
 				subprocess.check_output(cmd)	
 			else:
 				logging.info( fname+ " exists")
@@ -96,7 +96,7 @@ def main(config):
 
 			# SWE plot
 			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_val.R", wd,priorwd ,grid ,nens, valshp, str(year)]
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_val.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"] ]
 			subprocess.check_output(cmd)
 
 			# SCA grid plot

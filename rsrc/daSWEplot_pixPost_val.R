@@ -7,10 +7,15 @@ grid = as.numeric(args[3])
 nens = as.numeric(args[4])
 valshp=args[5]
 year=args[6]
+startdaLong = args[7]
+enddaLong = args[8]
+startSim = args[9]
+endSim = args[10]
 
 # write to log
 sink(paste0(wd, "/da_logfile"), append = TRUE)
-
+print(startSim)
+print(endSim)
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 shp=shapefile(valshp)
@@ -24,6 +29,14 @@ load(paste0(wd, "/ensembRes_",grid,".rd"))
 
 # load pixel weights
 load(paste0(wd,"/wmat_",grid,year,".rd"))
+
+# subset temporally
+startda <- substr(startdaLong, 1, 10)# remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)
+endda <- substr(enddaLong, 1, 10)
+totalTS <- seq(as.Date(startSim), as.Date(endSim), 1)
+start.index <- which(totalTS == startda)
+end.index <- which(totalTS == endda)
+ensembRes <- ensembRes[start.index:end.index, , ]
 
 # rmse func
 rmse <- function(error)
