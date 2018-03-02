@@ -21,12 +21,14 @@ startdaLong = args[13]
 enddaLong = args[14]
 startSim = args[15]
 endSim = args[16]
+valIndex = as.numeric(args[17])
 # ======== code ===================
 
 sink(paste0(wd, "/da_logfile"), append = TRUE)
 # rstack and ensembRes are both now cut to the hydro year in the 'year' loop
 print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
-
+print(str(valIndex))
+npix=c(767,1142,1318)
 
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
@@ -123,7 +125,7 @@ if (!file.exists(pixTS)) {
 
 
 # total number of MODIS pixels
-npix = ncell(rstack)
+#npix = ncell(rstack)
 print(paste0("npix = ", npix))
 
 # readin ensemble results matrix
@@ -222,7 +224,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 
     #writeLines(c(""), "dopar.log")
 
-    wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
+    wmat = foreach(i = npix, .combine = "rbind", .packages = "raster") %dopar% {
 
 
         #print(i)
@@ -360,7 +362,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
     # write.csv(result, paste0(wd,'wmat.csv'))
     save(wmat, file = paste0(wd, outfile1))
 
-    print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
+    print(paste0("wmat calc took: ", t2, " to process ", npix, " MODIS pixels"))
 } else {
     print(paste0(outfile1, " already exists."))
 
@@ -375,7 +377,7 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
 
 
 
-    HX = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
+    HX = foreach(i = npix, .combine = "rbind", .packages = "raster") %dopar% {
 
         #print(i)
         ele = pixEle[i]
@@ -512,6 +514,6 @@ save(HX, file = paste0(wd, outfile2))
 } else {
     print(paste0(outfile2, " already exists."))
 }
-print(paste0("Weights calc took: ", t2, " to process ", npix, " MODIS pixels"))
+print(paste0("HX calc took: ", t2, " to process ", npix, " MODIS pixels"))
 
 sink()

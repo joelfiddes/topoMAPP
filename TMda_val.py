@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# this _val version accepts vector of pixel numbers corresponding to val points then does computations only at these points to speed up analysis
+
 from configobj import ConfigObj
 import logging
 import subprocess
@@ -10,6 +12,8 @@ from dateutil.relativedelta import *
 # assume start and end date are always 1 Sept (hydro years)
 # cut multi year timeseries to single year blocks
 def main(config):
+
+	valIndex = str([767,1142,1318]) # this is a grid dependent vecor of pixel IDS corresponding to validation points
 
 	config = ConfigObj(config)
 	# define variable
@@ -55,6 +59,7 @@ def main(config):
 		for grid in initgrids:
 			logging.info("-- DA run grid " +str(grid)+ "--")
 			
+			# Results matrix remains same in val mode
 			# compute results matrix only once for entire timeseries - subsequent da years read in existing file
 			fname = wd + "/ensembRes_"+grid+".rd"
 			if os.path.isfile(fname) == False:
@@ -70,7 +75,7 @@ def main(config):
 			fname2 = wd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False or os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
+				cmd = ["Rscript",  "./rsrc/PBSpixel_val.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valIndex]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")
@@ -86,12 +91,12 @@ def main(config):
 
 			# SCA plots	
 			logging.info( "plot SCA")
-			cmd = ["Rscript",  "./rsrc/daSCAplot.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year) ] 
+			cmd = ["Rscript",  "./rsrc/daSCAplot_val.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year) ] 
 			subprocess.check_output(cmd)
 
 			# SWE plot
 			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year)]
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_val.R", wd,priorwd ,grid ,nens, valshp, str(year)]
 			subprocess.check_output(cmd)
 
 			# SCA grid plot

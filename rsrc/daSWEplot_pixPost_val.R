@@ -47,8 +47,9 @@ values(rtest) <- 1: ncell(rtest)
 posits.pix = na.omit(extract(rtest, shp))
 #er <- ensembRes[,posits.pix,]
 print (paste0("validationpixels =", posits.pix))
-wpix <- wmat[posits.pix,] # pixel weights
 
+#wpix <- wmat[posits.pix,] # pixel weights
+wpix <- wmat # pixel weights - WE TALE ALL WMAT NOW AS CONTAINS ONLY VAL POINT PIXELS
 
 
 #===============================================================================
