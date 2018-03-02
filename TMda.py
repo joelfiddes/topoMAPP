@@ -29,7 +29,7 @@ def main(config):
 	R=str(0.016)
 	file="surface" # separate key word [val? linked?]
 	param = "snow_water_equivalent.mm." # separate key word [val? linked?]
-
+	valDat = "/home/joel/mnt/nas/data/GCOS/"
 	#	Logging
 	logging.basicConfig(level=logging.DEBUG, filename=wd+"/da_logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
@@ -91,7 +91,7 @@ def main(config):
 
 			# SWE plot
 			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
+			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat]
 			subprocess.check_output(cmd)
 
 			# SCA grid plot

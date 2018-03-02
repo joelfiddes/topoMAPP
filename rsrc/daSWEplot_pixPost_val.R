@@ -11,6 +11,7 @@ startdaLong = args[7]
 enddaLong = args[8]
 startSim = args[9]
 endSim = args[10]
+valDat = args(11)
 
 # write to log
 sink(paste0(wd, "/da_logfile"), append = TRUE)
@@ -51,7 +52,7 @@ posits.fg = intersect(shp,landform)
 stat = posits.fg$STAT_AB
 Nval = length(stat)
 # read in data
-myfilenames = paste0("/home/joel/mnt/nas/data/GCOS/sp_",stat,".txt")
+myfilenames = paste0(valDat, "/sp_",stat,".txt")
 myList <- lapply(myfilenames, read.csv) 
 
 # pix weights at MODIS
