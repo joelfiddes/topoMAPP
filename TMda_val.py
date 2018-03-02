@@ -13,8 +13,6 @@ from dateutil.relativedelta import *
 # cut multi year timeseries to single year blocks
 def main(config):
 
-	valIndex = str([767,1142,1318]) # this is a grid dependent vecor of pixel IDS corresponding to validation points
-
 	config = ConfigObj(config)
 	# define variable
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# full path to contains all the modis data # ~/nas/sim/snow/sca_poly/Snow_Cov_Daily_500m_v5
@@ -34,6 +32,8 @@ def main(config):
 	file="surface" # separate key word [val? linked?]
 	param = "snow_water_equivalent.mm." # separate key word [val? linked?]
 	valDat = "/home/joel/mnt/nas/data/GCOS/"
+
+
 	#	Logging
 	logging.basicConfig(level=logging.DEBUG, filename=wd+"/da_logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
@@ -75,7 +75,7 @@ def main(config):
 			fname2 = wd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False or os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel_val.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valIndex]
+				cmd = ["Rscript",  "./rsrc/PBSpixel_val.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valshp]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")

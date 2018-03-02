@@ -214,9 +214,9 @@ print(t2)
 
 if (!file.exists(paste0(wd,"/",outfile1))) {
 
-     system('rm dopar.log')
+     system(paste0('rm ',wd, '/dopar.log'))
     t1 = Sys.time()
-    cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores, outfile=paste0(wd, '/dopar.log'))  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 
@@ -370,7 +370,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 # ===============================================================================
 if (!file.exists(paste0(wd,"/",outfile2))) {
     t1 = Sys.time()
-    cl <- makeCluster(cores,  outfile="dopar.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores,  outfile=paste0(wd, '/dopar.log'))  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 

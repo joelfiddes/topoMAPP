@@ -21,19 +21,22 @@ startdaLong = args[13]
 enddaLong = args[14]
 startSim = args[15]
 endSim = args[16]
-valIndex = as.numeric(args[17])
+valshp=args[17]
 # ======== code ===================
 
+# setup logs
 sink(paste0(wd, "/da_logfile"), append = TRUE)
+
 # rstack and ensembRes are both now cut to the hydro year in the 'year' loop
 print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
-print(str(valIndex))
-npix=c(767,1142,1318)
 
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
 rstack = brick(paste0(sca_wd, "/fsca_stack.tif"))
 obsTS = read.csv(paste0(sca_wd, "/fsca_dates.csv"))
+shp=shapefile(valshp)
+
+
 
 # remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)
 startda <- substr(startdaLong, 1, 10)
@@ -95,6 +98,13 @@ if (!file.exists(fscacrop)) {
     print(paste0(fscacrop, " already exists."))
     rstack <- stack(fscacrop)
 }
+
+# get pixel ids of val data
+rtest <- rstack[[1]]
+values(rtest) <- 1: ncell(rtest)
+npix = sort(na.omit(extract(rtest, shp)))
+print(paste0("Validation data at pixels: ", npix))
+
 
 # read and cut and write dates here
 #dates <- read.csv(paste0(sca_wd, "/fsca_dates.csv"))
@@ -216,9 +226,9 @@ print(t2)
 
 if (!file.exists(paste0(wd,"/",outfile1))) {
 
-     system('rm dopar.log')
+     system(paste0('rm ',wd, '/dopar.log'))
     t1 = Sys.time()
-    cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores, outfile=paste0(wd, '/dopar.log'))  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 
@@ -372,7 +382,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 # ===============================================================================
 if (!file.exists(paste0(wd,"/",outfile2))) {
     t1 = Sys.time()
-    cl <- makeCluster(cores,  outfile="dopar.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores,  outfile=paste0(wd, '/dopar.log'))  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 
