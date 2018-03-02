@@ -212,7 +212,7 @@ print(t2)
 # Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 # ===============================================================================
 
-if (!file.exists(outfile1)) {
+if (!file.exists(paste0(wd,"/",outfile1))) {
 
     # system('rm doparlog.txt')
     t1 = Sys.time()
@@ -368,7 +368,7 @@ if (!file.exists(outfile1)) {
 # ===============================================================================
 # Run pixel calcs in parallel - get HX
 # ===============================================================================
-if (!file.exists(outfile2)) {
+if (!file.exists(paste0(wd,"/",outfile1))) {
     t1 = Sys.time()
     cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
