@@ -68,7 +68,7 @@ def main(config):
 			# compute HX and weights for each da hydro year
 			fname1 = wd + "/wmat_"+grid+str(year)+".rd"
 			fname2 = wd + "/HX_"+grid+str(year)+".rd"
-			if os.path.isfile(fname1) == False | os.path.isfile(fname2) == False:
+			if os.path.isfile(fname1) == False or os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
 				cmd = ["Rscript",  "./rsrc/PBSpixel.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"]]
 				subprocess.check_output(cmd)

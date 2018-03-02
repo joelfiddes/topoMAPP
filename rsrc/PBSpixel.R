@@ -225,7 +225,7 @@ if (!file.exists(outfile1)) {
     wmat = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
 
-        print(i)
+        #print(i)
         ele = pixEle[i]
         lb = which(df$ele1 < ele)
         ub = which(df$ele2 >= ele)
@@ -272,8 +272,8 @@ if (!file.exists(outfile1)) {
             obsind <- which(!is.na(obs) == TRUE)
             obsind <- obsind[obsind >= start & obsind <= end]
             n <- n + 1
-            print(n)
-            print(i + n)
+            #print(n)
+            #print(i + n)
             if (n > 20) {
                 start = DSTART  #lastdateover95
                 end = DEND  #firstnodata
@@ -290,8 +290,8 @@ if (!file.exists(outfile1)) {
                     obsind <- which(!is.na(obs) == T)
                     obsind <- obsind[obsind >= start & obsind <= end]
                     n <- n + 1
-                    print(n)
-                    print(i - n)
+                    #print(n)
+                    #print(i - n)
 
                 }
             }
@@ -312,7 +312,7 @@ if (!file.exists(outfile1)) {
         HX = c()
         for (j in 1:nens) {
 
-            print(j)
+            #print(j)
             # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
             nsmlpix <- length(which(!is.na(sampids) == TRUE))
 
@@ -346,7 +346,7 @@ if (!file.exists(outfile1)) {
         # wmat = cbind(wmat,w) y=as.vector(HX) 
         # sink("dopar.log", append=TRUE)
         # cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
-        # #cat(paste("% complete:", (i/npix) * 100, "\n"))
+        print(paste("% complete WMAT:", (i/npix) * 100, "\n"))
         # sink()
 
         w = PBS(HX[obsind, ], obs[obsind], R)
@@ -370,14 +370,14 @@ if (!file.exists(outfile1)) {
 # ===============================================================================
 if (!file.exists(outfile2)) {
     t1 = Sys.time()
-    cl <- makeCluster(cores, outfile="dopar2.log")  # create a cluster with 2 cores
+    cl <- makeCluster(cores, outfile="dopar.log")  # create a cluster with 2 cores
     registerDoParallel(cl)  # register the cluster
 
 
 
     HX = foreach(i = 1:npix, .combine = "rbind", .packages = "raster") %dopar% {
 
-        print(i)
+        #print(i)
         ele = pixEle[i]
         lb = which(df$ele1 < ele)
         ub = which(df$ele2 >= ele)
@@ -421,8 +421,8 @@ if (!file.exists(outfile2)) {
             obsind <- which(!is.na(obs) == TRUE)
             obsind <- obsind[obsind >= start & obsind <= end]
             n <- n + 1
-            print(n)
-            print(i + n)
+            #print(n)
+            #print(i + n)
             if (n > 20) {
                 start = DSTART  #lastdateover95
                 end = DEND  #firstnodata
@@ -461,7 +461,7 @@ if (!file.exists(outfile2)) {
         HX = c()
         for (j in 1:nens) {
 
-            print(j)
+            #print(j)
             # number of smallpix in MODIS pixel nsmlpix <- length(sampids)
             nsmlpix <- length(which(!is.na(sampids) == TRUE))
 
@@ -492,7 +492,7 @@ if (!file.exists(outfile2)) {
 
         }
 
-
+        print(paste("% HX complete:", (i/npix) * 100, "\n"))
         y = as.vector(HX)
 
         # sink('doparlog2.txt', append=TRUE)
