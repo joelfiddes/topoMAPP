@@ -105,7 +105,7 @@ def main(config):
 			#subprocess.check_output(cmd)
 
 
-			  cmd = ["convert" , wd+"*plots.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
+			cmd = ["convert" , wd+"*plots.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
 
 			subprocess.check_output(cmd)
 			logging.info( "DA run complete!")

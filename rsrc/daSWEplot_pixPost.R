@@ -230,6 +230,9 @@ d2=format(d, '%d/%m/%Y %H:%M') #geotop format
 # used to get time index - just use first sim 
 dat = read.table(paste0(priorwd,"/grid",grid,"/S00001/out/surface.txt"), sep=',', header=TRUE)
 
+# cut to year
+dat =dat[start.index:end.index,1]
+
 #index of sim data in obs
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
 
