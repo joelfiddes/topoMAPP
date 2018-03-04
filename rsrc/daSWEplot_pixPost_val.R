@@ -98,7 +98,7 @@ wpix <- wmat # pixel weights - WE TALE ALL WMAT NOW AS CONTAINS ONLY VAL POINT P
 
 # generic plot pars
 lwd=3
-pdf(paste0(wd,"/swe_pix.pdf"), height=8, width=5)
+pdf(paste0(wd,"/swe_pix_plot.pdf"), height=8, width=5)
 
 par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
 par(mfrow=c(3,1))
@@ -232,6 +232,9 @@ d2=format(d, '%d/%m/%Y %H:%M') #geotop format
 
 # used to get time index - just use first sim 
 dat = read.table(paste0(priorwd,"/grid",grid,"/S00001/out/surface.txt"), sep=',', header=TRUE)
+
+# cut to year
+dat =dat[start.index:end.index]
 
 #index of sim data in obs
 obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)

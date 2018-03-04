@@ -45,7 +45,7 @@ print(pix)
 #	PLOT
 #====================================================================
 
-pdf(paste0(wd,"/fSCA_",grid,year,".pdf"), height=8, width=5)
+pdf(paste0(wd,"/fSCA_",grid,year,"_plot.pdf"), height=8, width=5)
 rmsvec=c()
 
 plotdim = ceiling(sqrt(length(pix)))
