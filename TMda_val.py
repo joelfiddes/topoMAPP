@@ -105,9 +105,14 @@ def main(config):
 			#subprocess.check_output(cmd)
 
 
-			cmd = ["convert" , wd+"*plots.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
-
+			cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
 			subprocess.check_output(cmd)
+
+			mydir = wd+"/plots"
+			if not os.path.exists(mydir):
+				os.makedirs(mydir)
+
+			os.rename(wd+"da_plots"+grid+str(year)+".pdf" , wd+"/plots/da_plots"+grid+str(year)+".pdf")	
 			logging.info( "DA run complete!")
 #====================================================================
 #	Calling MAIN
