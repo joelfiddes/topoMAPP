@@ -14,28 +14,28 @@ from dateutil.relativedelta import *
 def main(config):
 
 	config = ConfigObj(config)
+	valshp =  "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp"
+	valMode="TRUE" #parse as arg
+
 	# define variable
-	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# full path to contains all the modis data # ~/nas/sim/snow/sca_poly/Snow_Cov_Daily_500m_v5
-	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
-	priorwd = "/home/joel/sim/wfj_interim2/"
+	wd = config["main"]["wd"]
+	ensWd = wd+"_ensemble"
+	nens = config["ensemble"]["members"]
+	Nclust=config["toposub"]["samples"]
+	cores = config["geotop"]["num_cores"]
+	valDat = config["main"]["datDir"] 
+	
 
-	nens = str(50)
-	Nclust=str(150)
-
-
-	cores = str(4)
+	# Fixed params - add to DA part of config
 	sdThresh = str(13) # mm threshold of swe to sca conversion
 	DSTART = str(210) # default start of melt in case algorithm fails
 	DEND = str(350) # default end of melt in case algorithm fails
-	valshp = "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp"
 	R=str(0.016)
 	file="surface" # separate key word [val? linked?]
 	param = "snow_water_equivalent.mm." # separate key word [val? linked?]
-	valDat = "/home/joel/mnt/nas/data/GCOS/"
-	valMode="TRUE" #string
-
+	
 	#	Logging
-	logging.basicConfig(level=logging.DEBUG, filename=wd+"/da_logfile", filemode="a+",
+	logging.basicConfig(level=logging.DEBUG, filename=ensWd+"/da_logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	logging.info("----- START data assimilation-----")
 
@@ -62,67 +62,67 @@ def main(config):
 			
 			# Results matrix remains same in val mode
 			# compute results matrix only once for entire timeseries - subsequent da years read in existing file
-			fname = wd + "/ensembRes_"+grid+".rd"
+			fname = ensWd + "/ensembRes_"+grid+".rd"
 			if os.path.isfile(fname) == False:
 				# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
 				logging.info( "compute results matrix")
-				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , wd , grid, nens , Nclust , sdThresh, file, param]
+				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , ensWd , grid, nens , Nclust , sdThresh, file, param]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname+ " exists")
 
 			# compute HX and weights for each da hydro year
-			fname1 = wd + "/wmat_"+grid+str(year)+".rd"
-			fname2 = wd + "/HX_"+grid+str(year)+".rd"
+			fname1 = ensWd + "/wmat_"+grid+str(year)+".rd"
+			fname2 = ensWd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False or os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel_merge.R" , wd , priorwd , sca_wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valshp, valMode]
+				cmd = ["Rscript",  "./rsrc/PBSpixel_merge.R" , ensWd , wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valshp, valMode]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")
 
 			# compute sampleWeights
-			fname = wd + "/sampleWeights_"+grid+".rd"
-			if os.path.isfile(fname) == False:	
-				logging.info( "calc sample weights")
-				cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", wd , priorwd , grid , nens , Nclust , sdThresh , R , cores, str(year)] 
-				subprocess.check_output(cmd)	
-			else:
-				logging.info( fname+ " exists")
+			# fname = ensWd + "/sampleWeights_"+grid+".rd"
+			# if os.path.isfile(fname) == False:	
+			# 	logging.info( "calc sample weights")
+			# 	cmd = ["Rscript",  "./rsrc/PBSpix2samp_test.R", ensWd , wd , grid , nens , Nclust , sdThresh , R , cores, str(year)] 
+			# 	subprocess.check_output(cmd)	
+			# else:
+			# 	logging.info( fname+ " exists")
 
 			# SCA plots	
-			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot SCA")
-				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year), valMode ] 
+				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valshp, DSTART, DEND, str(year), valMode ] 
 				subprocess.check_output(cmd)
 			else:
 				logging.info( "skip sca plot routine")
 
 			# SWE plot
-			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot swe")
-				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
+				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
 				subprocess.check_output(cmd)
 			else:
 				logging.info("skip swe plot")
 
 			# SCA grid plot
 			logging.info( "calc SCA grid= OFF")
-			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
+			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  ensWd , wd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
 			#subprocess.check_output(cmd)
 
-			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
-				cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
+				cmd = ["convert" , ensWd+"*.pdf" ,  ensWd+"da_plots"+grid+str(year)+".pdf"]
 				subprocess.check_output(cmd)
 
-				mydir = wd+"/plots"
+				mydir = ensWd+"/plots"
 				if not os.path.exists(mydir):
 					os.makedirs(mydir)
 
-				os.rename(wd+"da_plots"+grid+str(year)+".pdf" , wd+"/plots/da_plots"+grid+str(year)+".pdf")	
+				os.rename(ensWd+"da_plots"+grid+str(year)+".pdf" , ensWd+"/plots/da_plots"+grid+str(year)+".pdf")	
 			else:
 				logging.info("skip pdf merge")
 			

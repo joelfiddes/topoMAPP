@@ -26,6 +26,7 @@ datroot = "/home/joel/data"
 #=================================================================
 config["main"] = {}
 config["main"]["wd"] = simroot +"/test_code" # main work directory
+config["main"]["datDir"]
 config["main"]["srcdir"] = srcroot +"/topoMAPP" # src code dir
 config["main"]["demDir"] = datroot +"/DEM/srtm" # dem write dir
 config["main"]["runtype"] = "bbox" #one of : bbox, points

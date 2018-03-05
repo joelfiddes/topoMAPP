@@ -7,22 +7,21 @@ require(raster)
 args = commandArgs(trailingOnly = TRUE)
 wd = args[1]
 priorwd = args[2]
-sca_wd = args[3]
-grid = as.numeric(args[4])
-nens = as.numeric(args[5])
-Nclust = as.numeric(args[6])
-sdThresh = as.numeric(args[7])
-R = as.numeric(args[8])
-cores = as.numeric(args[9])
-DSTART = as.numeric(args[10])
-DEND = as.numeric(args[11])
-year = as.numeric(args[12])
-startdaLong = args[13]
-enddaLong = args[14]
-startSim = args[15]
-endSim = args[16]
-valshp=args[17]
-valMode=args[18]
+grid = as.numeric(args[3])
+nens = as.numeric(args[4])
+Nclust = as.numeric(args[5])
+sdThresh = as.numeric(args[6])
+R = as.numeric(args[7])
+cores = as.numeric(args[8])
+DSTART = as.numeric(args[9])
+DEND = as.numeric(args[10])
+year = as.numeric(args[11])
+startdaLong = args[12]
+enddaLong = args[13]
+startSim = args[14]
+endSim = args[15]
+valshp=args[16]
+valMode=args[17]
 # ======== code ===================
 
 # setup logs
@@ -33,8 +32,8 @@ print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
-rstack = brick(paste0(sca_wd, "/fsca_stack.tif"))
-obsTS = read.csv(paste0(sca_wd, "/fsca_dates.csv"))
+rstack = brick(paste0(wd, "/fsca_stack.tif"))
+obsTS = read.csv(paste0(wd, "/fsca_dates.csv"))
 
 
 
@@ -56,7 +55,7 @@ if (!file.exists(fscacrop)) {
 
     # subset dates vector to current year
     obsTScut <- obsTS$x[startda.index:endda.index]
-    write.csv(obsTScut, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
+    write.csv(obsTScut, paste0(wd, "/fsca_dates_",year,".csv"), row.names = FALSE)
 
     # analyse missing days
     actualDays <- seq(as.Date(startda), as.Date(endda), 1)
@@ -119,7 +118,7 @@ if (valMode == "TRUE"){
 }
 
 # read and cut and write dates here
-#dates <- read.csv(paste0(sca_wd, "/fsca_dates.csv"))
+#dates <- read.csv(paste0(wd, "/fsca_dates.csv"))
 #write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
 
 # output
