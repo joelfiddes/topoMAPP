@@ -14,7 +14,7 @@ library(raster)
 sink(paste0(wd, "/da_logfile"), append = TRUE)
 rstStack=stack()
 for (i in 1: nens){ #python index
-print(i)
+print(paste0("processing ensemble ", i, " of ", nens ))
 	resMat=c()
 	for (j in 1: Nclust){ 
 		simindex=paste0('S',formatC(j, width=5,flag='0'))
