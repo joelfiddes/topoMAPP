@@ -113,15 +113,19 @@ def main(config):
 			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  wd , priorwd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
 			#subprocess.check_output(cmd)
 
+			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			if os.path.isfile(fname) == False:
+				cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
+				subprocess.check_output(cmd)
 
-			cmd = ["convert" , wd+"*.pdf" ,  wd+"da_plots"+grid+str(year)+".pdf"]
-			subprocess.check_output(cmd)
+				mydir = wd+"/plots"
+				if not os.path.exists(mydir):
+					os.makedirs(mydir)
 
-			mydir = wd+"/plots"
-			if not os.path.exists(mydir):
-				os.makedirs(mydir)
-
-			os.rename(wd+"da_plots"+grid+str(year)+".pdf" , wd+"/plots/da_plots"+grid+str(year)+".pdf")	
+				os.rename(wd+"da_plots"+grid+str(year)+".pdf" , wd+"/plots/da_plots"+grid+str(year)+".pdf")	
+			else:
+				logging.info( fname+ " exists")
+			
 			logging.info( "DA run complete!")
 #====================================================================
 #	Calling MAIN
