@@ -61,7 +61,15 @@ if (valMode == "TRUE"){
 	# HX and wmat only contain val pixels there they are indexed by 
 	# "which(pix==i)" rather than absolute pixel IDS (these would be out of range)
 	# prior
-	HXvec = HX[which(pix==i), ]
+
+	# handle 1-D HX resulting from single valpoint - this only applies to HX due to explicit vector() call in PBSpixel. wmat alway has dimensions even if only dim=1.
+	if (is.vector(HX)== TRUE){
+		HXvec = HX
+	}
+	
+	if (is.vector(HX)== FALSE){
+		HXvec = HX[which(pix==i), ]
+	}
 	prior =matrix(HXvec , nrow=ndays, ncol=nens)
 
 	# posterior
