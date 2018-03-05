@@ -18,7 +18,7 @@ def main(config):
 	sca_wd = "/home/joel/sim/MODIS_ALPS_DA"# full path to contains all the modis data # ~/nas/sim/snow/sca_poly/Snow_Cov_Daily_500m_v5
 	wd = "/home/joel/sim/wfj_interim2_ensemble_v1/"
 	priorwd = "/home/joel/sim/wfj_interim2/"
-	initgrids = str(1)
+
 	nens = str(50)
 	Nclust=str(150)
 
@@ -39,9 +39,10 @@ def main(config):
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	logging.info("----- START data assimilation-----")
 
+	# grids to loop over
+	initgrids = config["main"]["initGrid"]
+	
 	# Identify hydro years (1 Sept -> 31 Aug)
-
-
 	dates = [config["main"]["startDate"], config["main"]["endDate"]]
 	start = datetime.strptime(dates[0], "%Y-%m-%d")
 	end = datetime.strptime(dates[1], "%Y-%m-%d")
@@ -90,14 +91,22 @@ def main(config):
 				logging.info( fname+ " exists")
 
 			# SCA plots	
-			logging.info( "plot SCA")
-			cmd = ["Rscript",  "./rsrc/daSCAplot_val.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year) ] 
-			subprocess.check_output(cmd)
+			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			if os.path.isfile(fname) == False:
+				logging.info( "plot SCA")
+				cmd = ["Rscript",  "./rsrc/daSCAplot_val.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year) ] 
+				subprocess.check_output(cmd)
+			else:
+				logging.info( fname+ " exists")
 
 			# SWE plot
-			logging.info( "plot swe")
-			cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_val.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat ]
-			subprocess.check_output(cmd)
+			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
+			if os.path.isfile(fname) == False:
+				logging.info( "plot swe")
+				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_val.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat ]
+				subprocess.check_output(cmd)
+			else:
+				logging.info( fname+ " exists")
 
 			# SCA grid plot
 			logging.info( "calc SCA grid= OFF")

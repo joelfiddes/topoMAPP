@@ -98,7 +98,7 @@ wpix <- wmat # pixel weights - WE TALE ALL WMAT NOW AS CONTAINS ONLY VAL POINT P
 
 # generic plot pars
 lwd=3
-pdf(paste0(wd,"/swe_pix_plot.pdf"), height=8, width=5)
+pdf(paste0(wd,"/swe_pix.pdf"), height=8, width=5)
 
 par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
 par(mfrow=c(3,1))

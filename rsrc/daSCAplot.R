@@ -40,7 +40,7 @@ pix=na.omit(pixIDS[,1])
 #	PLOT
 #====================================================================
 
-pdf(paste0(wd,"/fSCA_",grid,year,".pdf"), height=8, width=5)
+pdf(paste0(wd,"/fSCA_plot.pdf"), height=8, width=5)
 rmsvec=c()
 
 plotdim = ceiling(sqrt(length(pix)))
