@@ -22,7 +22,7 @@ enddaLong = args[14]
 startSim = args[15]
 endSim = args[16]
 valshp=args[17]
-valMode=arg[18]
+valMode=args[18]
 # ======== code ===================
 
 # setup logs

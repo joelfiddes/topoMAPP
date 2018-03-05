@@ -16,8 +16,7 @@ valMode = args[12]
 
 # write to log
 sink(paste0(wd, "/da_logfile"), append = TRUE)
-print(startSim)
-print(endSim)
+
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 shp=shapefile(valshp)
@@ -61,7 +60,7 @@ rtest <- rstack[[1]]
 values(rtest) <- 1: ncell(rtest)
 posits.pix = na.omit(extract(rtest, shp))
 #er <- ensembRes[,posits.pix,]
-print (paste0("validationpixels =", posits.pix))
+print (paste0("Validation pixel IDs =", posits.pix))
 
 
 if (valMode == "TRUE"){

@@ -40,7 +40,7 @@ pix=sort(na.omit(pixIDS[,1]))
 #i= 1428#402#1883 #402, 1428, 8014
 
 print(paste0("Number of validation pixels found = ", length(pix)))
-print(paste0("Pixel IDs = ", pix))
+print(paste0("Validation pixel IDs = ", pix))
 #====================================================================
 #	PLOT
 #====================================================================

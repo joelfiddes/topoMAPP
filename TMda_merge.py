@@ -97,7 +97,7 @@ def main(config):
 				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", wd ,priorwd,grid ,nens ,valshp, DSTART, DEND, str(year), valMode ] 
 				subprocess.check_output(cmd)
 			else:
-				logging.info( fname+ " exists")
+				logging.info( "skip sca plot routine")
 
 			# SWE plot
 			fname = wd+"/plots/da_plots"+grid+str(year)+".pdf"
@@ -106,7 +106,7 @@ def main(config):
 				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", wd,priorwd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
 				subprocess.check_output(cmd)
 			else:
-				logging.info( fname+ " exists")
+				logging.info("skip swe plot")
 
 			# SCA grid plot
 			logging.info( "calc SCA grid= OFF")
@@ -124,7 +124,7 @@ def main(config):
 
 				os.rename(wd+"da_plots"+grid+str(year)+".pdf" , wd+"/plots/da_plots"+grid+str(year)+".pdf")	
 			else:
-				logging.info( fname+ " exists")
+				logging.info("skip pdf merge")
 			
 			logging.info( "DA run complete!")
 #====================================================================
