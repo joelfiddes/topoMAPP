@@ -91,8 +91,13 @@ def main(config):
 			# else:
 			# 	logging.info( fname+ " exists")
 
+			# make plot dir
+			mydir = ensWd+"/plots"
+			if not os.path.exists(mydir):
+					os.makedirs(mydir)
+
 			# SCA plots	
-			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
+			fname = ensWd+"/plots/fSCA_plot"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot SCA")
 				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valshp, DSTART, DEND, str(year), valMode ] 
@@ -101,7 +106,7 @@ def main(config):
 				logging.info( "skip sca plot routine")
 
 			# SWE plot
-			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
+			fname = ensWd+"/plots/swe_pix"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot swe")
 				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
@@ -114,18 +119,16 @@ def main(config):
 			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  ensWd , wd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
 			#subprocess.check_output(cmd)
 
-			fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
-			if os.path.isfile(fname) == False:
-				cmd = ["convert" , ensWd+"*.pdf" ,  ensWd+"da_plots"+grid+str(year)+".pdf"]
-				subprocess.check_output(cmd)
+			# fname = ensWd+"/plots/da_plots"+grid+str(year)+".pdf"
+			# if os.path.isfile(fname) == False:
+			# 	cmd = ["convert" , ensWd+"*.pdf" ,  ensWd+"da_plots"+grid+str(year)+".pdf"]
+			# 	subprocess.check_output(cmd)
 
-				mydir = ensWd+"/plots"
-				if not os.path.exists(mydir):
-					os.makedirs(mydir)
 
-				os.rename(ensWd+"da_plots"+grid+str(year)+".pdf" , ensWd+"/plots/da_plots"+grid+str(year)+".pdf")	
-			else:
-				logging.info("skip pdf merge")
+
+			# 	os.rename(ensWd+"da_plots"+grid+str(year)+".pdf" , ensWd+"/plots/da_plots"+grid+str(year)+".pdf")	
+			# else:
+			# 	logging.info("skip pdf merge")
 			
 			logging.info( "DA run complete!")
 #====================================================================

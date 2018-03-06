@@ -380,7 +380,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
     # write.csv(result, paste0(wd,'wmat.csv'))
     save(wmat, file = paste0(wd, outfile1))
 
-    print(paste0("wmat calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels"))
+    print(paste0("wmat calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels")))
 } else {
     print(paste0(outfile1, " already exists."))
 
@@ -512,7 +512,7 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
 
         }
 
-        print(paste("% HX complete:", (i/npix[length(npix)]  * 100))
+        print(paste("% HX complete:", (i/npix[length(npix)]  * 100)))
         y = as.vector(HX)
 
         # sink('doparlog2.txt', append=TRUE)
