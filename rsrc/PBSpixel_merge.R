@@ -32,8 +32,8 @@ print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
-rstack = brick(paste0(wd, "/fsca_stack.tif"))
-obsTS = read.csv(paste0(wd, "/fsca_dates.csv"))
+rstack = brick(paste0(priorwd, "/fsca_stack.tif"))
+obsTS = read.csv(paste0(priorwd, "/fsca_dates.csv"))
 
 
 
@@ -366,7 +366,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
         # wmat = cbind(wmat,w) y=as.vector(HX) 
         # sink("dopar.log", append=TRUE)
         # cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
-        print(paste("% complete WMAT:", (i/npix) * 100))
+        print(paste("% complete WMAT:", (i/npix[length(npix)] * 100))
         # sink()
 
         w = PBS(HX[obsind, ], obs[obsind], R)
@@ -380,7 +380,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
     # write.csv(result, paste0(wd,'wmat.csv'))
     save(wmat, file = paste0(wd, outfile1))
 
-    print(paste0("wmat calc took: ", t2, " to process ", npix, " MODIS pixels"))
+    print(paste0("wmat calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels"))
 } else {
     print(paste0(outfile1, " already exists."))
 
@@ -512,7 +512,7 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
 
         }
 
-        print(paste("% HX complete:", (i/npix) * 100))
+        print(paste("% HX complete:", (i/npix[length(npix)]  * 100))
         y = as.vector(HX)
 
         # sink('doparlog2.txt', append=TRUE)
@@ -532,6 +532,6 @@ save(HX, file = paste0(wd, outfile2))
 } else {
     print(paste0(outfile2, " already exists."))
 }
-print(paste0("HX calc took: ", t2, " to process ", npix, " MODIS pixels"))
+print(paste0("HX calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels"))
 
 sink()

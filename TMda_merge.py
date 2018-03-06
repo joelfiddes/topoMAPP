@@ -11,21 +11,22 @@ from dateutil.relativedelta import *
 
 # assume start and end date are always 1 Sept (hydro years)
 # cut multi year timeseries to single year blocks
-def main(config):
+# valShp only required if valMode = TRUE. This specifies set of MODIS pixels to run particle filter on (based on point locations), not whole domain 
 
+def main(config):
+#def main(config, valshp = None, valMode = "FALSE"):
 	config = ConfigObj(config)
 	valshp =  "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp"
-	valMode="TRUE" #parse as arg
+	valMode="FALSE" #parse as arg
 
 	# define variable
 	wd = config["main"]["wd"]
-	ensWd = wd+"_ensemble"
+	ensWd = wd.rstrip('//')+"_ensemble/"
 	nens = config["ensemble"]["members"]
 	Nclust=config["toposub"]["samples"]
 	cores = config["geotop"]["num_cores"]
 	valDat = config["main"]["datDir"] 
 	
-
 	# Fixed params - add to DA part of config
 	sdThresh = str(13) # mm threshold of swe to sca conversion
 	DSTART = str(210) # default start of melt in case algorithm fails
