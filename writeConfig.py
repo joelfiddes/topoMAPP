@@ -92,7 +92,8 @@ config["modis"]["getMODISSCA"] = "TRUE"
 config["ensemble"] = {}
 config["ensemble"]["run"] = "FALSE"
 config["ensemble"]["members"] = 100
-
+config["ensemble"]["valMode"]= "FALSE"
+config["ensemble"]["valShp"]=""
 #=================================================================
 #
 # Dont normally touch

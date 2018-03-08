@@ -244,7 +244,6 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 
     wmat = foreach(i = npix, .combine = "rbind", .packages = "raster") %dopar% {
 
-
         #print(i)
         ele = pixEle[i]
         lb = which(df$ele1 < ele)
@@ -366,7 +365,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
         # wmat = cbind(wmat,w) y=as.vector(HX) 
         # sink("dopar.log", append=TRUE)
         # cat(paste("% complete:", (i/npix) * 100,"  -  Starting wmat iteration", i, "\n"))
-        print(paste("% complete WMAT:", (i/npix[length(npix)] * 100))
+        print(paste("% complete WMAT:", (i/npix[length(npix)] * 100)))
         # sink()
 
         w = PBS(HX[obsind, ], obs[obsind], R)

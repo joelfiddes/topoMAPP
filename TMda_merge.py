@@ -14,10 +14,10 @@ from dateutil.relativedelta import *
 # valShp only required if valMode = TRUE. This specifies set of MODIS pixels to run particle filter on (based on point locations), not whole domain 
 
 def main(config):
-#def main(config, valshp = None, valMode = "FALSE"):
+#def main(config, valShp = None, valMode = "FALSE"):
 	config = ConfigObj(config)
-	valshp =  "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp"
-	valMode="FALSE" #parse as arg
+	valShp =  "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp" # tske from config
+	valMode="FALSE" # take from config
 
 	# define variable
 	wd = config["main"]["wd"]
@@ -77,7 +77,7 @@ def main(config):
 			fname2 = ensWd + "/HX_"+grid+str(year)+".rd"
 			if os.path.isfile(fname1) == False or os.path.isfile(fname2) == False:
 				logging.info( "run PBS")
-				cmd = ["Rscript",  "./rsrc/PBSpixel_merge.R" , ensWd , wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valshp, valMode]
+				cmd = ["Rscript",  "./rsrc/PBSpixel_merge.R" , ensWd , wd , grid , nens , Nclust , sdThresh , R , cores, DSTART , DEND, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valShp, valMode]
 				subprocess.check_output(cmd)
 			else:
 				logging.info( fname1+ "and" +fname2+ " exists")
@@ -100,7 +100,7 @@ def main(config):
 			fname = ensWd+"/plots/fSCA_plot"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot SCA")
-				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valshp, DSTART, DEND, str(year), valMode ] 
+				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valShp, DSTART, DEND, str(year), valMode ] 
 				subprocess.check_output(cmd)
 			else:
 				logging.info( "skip sca plot routine")
@@ -109,7 +109,7 @@ def main(config):
 			fname = ensWd+"/plots/swe_pix"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot swe")
-				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valshp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
+				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valShp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
 				subprocess.check_output(cmd)
 			else:
 				logging.info("skip swe plot")

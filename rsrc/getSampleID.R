@@ -13,10 +13,13 @@ require(raster)
 # PARAMETERS/ARGS
 #====================================================================
 args = commandArgs(trailingOnly=TRUE)
-landform=args[1]
+wd=args[1]
 points=args[2]
 
-lf= raster(landform)
+lf= raster(paste0(wd,"/landform.tif"))
 shp = shapefile(points)
-IDS = extract(lf, shp)
-cat(as.numeric(IDS))
+#IDS = extract(lf, shp)
+IDS = na.omit(extract(lf, shp))
+long = formatC(IDS, flag="0", width=5)
+paths = paste0(wd,"S",long)
+cat((paths))

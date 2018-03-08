@@ -40,7 +40,7 @@ def main(config, ensembRun):
 		os.system(cmd)
 
 	# currently only supports cop[ying of one grid
-	if ensembRun == True:
+	if ensembRun == True & config["ensemble"]["valMode"] == "FALSE":
 		#if config["main"]["initGrid"] == "*" # could use this for supporting copitying of all files
 		# copies grids can be one or all
 		
@@ -51,6 +51,27 @@ def main(config, ensembRun):
 
 		# copy sim dirs only
 		src = config["main"]["initDir"] + "/grid" + config["main"]["initGrid"] +"/S*"
+		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
+		cmd = "cp -r  %s %s"%(src,dst)
+		os.system(cmd)
+
+	if ensembRun == True & config["ensemble"]["valMode"] == "TRUE":
+
+		# function that maps valshp points to sample ids and returns full path to sample dir as list
+		cmd = "Rscript ./rsrc/getSampleID.R " + config['main']['wd'] + "/grid" + config["main"]["initGrid"] + " " + config["ensemble"]["valShp"]
+		a = subprocess.check_output(cmd, shell = "TRUE")
+		b = a.split()
+		# b is now list of src to send to cp command
+		
+		logging.info("In VALMODE, only copying samples: " + str(b)
+			
+		# make new dierectory
+		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
+		cmd = "mkdir  %s"%(dst)
+		os.system(cmd)
+
+		# copy sim dirs only
+		src = b
 		dst = config['main']['wd'] + "/grid" + config["main"]["initGrid"]
 		cmd = "cp -r  %s %s"%(src,dst)
 		os.system(cmd)
