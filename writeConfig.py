@@ -93,7 +93,7 @@ config["ensemble"] = {}
 config["ensemble"]["run"] = "FALSE"
 config["ensemble"]["members"] = 100
 config["ensemble"]["valMode"]= "FALSE"
-config["ensemble"]["valShp"]=""
+config["ensemble"]["valShp"]="/home/joel/nas/data/GCOS/metadata_easy.shp"
 #=================================================================
 #
 # Dont normally touch

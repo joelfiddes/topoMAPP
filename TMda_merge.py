@@ -16,8 +16,8 @@ from dateutil.relativedelta import *
 def main(config):
 #def main(config, valShp = None, valMode = "FALSE"):
 	config = ConfigObj(config)
-	valShp =  "/home/joel/mnt/nas/data/GCOS/metadata_easy.shp" # tske from config
-	valMode="FALSE" # take from config
+	valShp =  config["ensemble"]["valShp"] #"/home/joel/nas/data/GCOS/metadata_easy.shp" # tske from config
+	valMode= config["ensemble"]["valMode"] #"TRUE" # take from config
 
 	# define variable
 	wd = config["main"]["wd"]

@@ -379,7 +379,7 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
     # write.csv(result, paste0(wd,'wmat.csv'))
     save(wmat, file = paste0(wd, outfile1))
 
-    print(paste0("wmat calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels")))
+    print(paste0("wmat calc took: ", t2, " to process ", npix[length(npix)], " MODIS pixels"))
 } else {
     print(paste0(outfile1, " already exists."))
 
