@@ -16,9 +16,10 @@ rstStack=stack()
 for (i in 1: nens){ #python index
 print(paste0("processing ensemble ", i, " of ", nens ))
 	resMat=c()
-	for (j in 1: Nclust){ 
-		simindex=paste0('S',formatC(j, width=5,flag='0'))
-		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", simindex,"/out/",file,".txt"), sep=',', header=T)
+	simpaths =list.files(paste0(wd,"ensemble",i-1,"/grid",grid), pattern="S*")
+	for (j in simpaths){ 
+		#simindex=paste0('S',formatC(j, width=5,flag='0'))
+		dat = read.table(paste0(wd,"ensemble",i-1,"/grid",grid,"/", j,"/out/",file,".txt"), sep=',', header=T)
 		tv <- dat[param]
 		resMat = cbind(resMat,tv[,1]) # this index collapse 1 column dataframe to vector
 		rst=raster(resMat)
