@@ -59,7 +59,7 @@ def main(config, ensembRun):
 	if ensembRun == True and config["ensemble"]["valMode"] == "TRUE":
 
 		# function that maps valshp points to sample ids and returns full path to sample dir as list
-		cmd = "Rscript ./rsrc/getSampleID.R " + config['main']['initDir'] + "/grid" + config["main"]["initGrid"] + " " + config["ensemble"]["valShp"]
+		cmd = "Rscript ./rsrc/getSampleID.R " + config['main']['initDir'] + "/grid" + config["main"]["initGrid"] + " " + config["ensemble"]["valShp"]+ " " + config["main"]["initDir"]+"/fsca_stack.tif" 
 		a = subprocess.check_output(cmd, shell = "TRUE")
 		b = a.split()
 		# b is now list of src to send to cp command

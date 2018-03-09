@@ -15,7 +15,7 @@ require(raster)
 args = commandArgs(trailingOnly=TRUE)
 wd=args[1]
 points=args[2]
-rst=args[3]
+rst=args[3] # "fsca_stack.tif"
 
 lf= raster(paste0(wd,"/landform.tif"))
 shp = shapefile(points)
@@ -24,8 +24,7 @@ IDS = na.omit(extract(lf, shp))
 #long = formatC(IDS, flag="0", width=5)
 #paths = paste0(wd,"/S",long)
 cat((paths))
-
-#rst= "fsca_stack.tif"
+ 
 rstack = brick(rst)
 rstack = crop(rstack, lf)
 rtest <- rstack[[1]]
