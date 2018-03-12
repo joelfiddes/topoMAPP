@@ -192,7 +192,6 @@ low.vec = c(low.vec, med$y)
 
 high.vec = c()
 for ( i in 1: ndays){
-
 mu = ensembRes[ i, sample, ]
 wfill = wpix[ j, ]
 df = data.frame(mu, wfill )
@@ -207,11 +206,6 @@ high.vec = c(high.vec, med$y)
 # PRIOR
 
 # MEDIAN
-id=samples[j]
-
-sample= id
-ndays = length(ensembRes[ , 1, 1])
-
 median.prior = c()
 for ( i in 1: ndays){
 
@@ -230,8 +224,7 @@ median.prior = c(median.prior, med$y)
 # 5%
 
 
-sample= id
-ndays = length(ensembRes[ , 1, 1])
+
 
 low.prior = c()
 for ( i in 1: ndays){
@@ -248,8 +241,7 @@ low.prior = c(low.prior, med$y)
 # 95%
 
 
-sample= id
-ndays = length(ensembRes[ , 1, 1])
+
 
 high.prior = c()
 for ( i in 1: ndays){
