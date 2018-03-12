@@ -23,7 +23,7 @@ shp = shapefile(points)
 IDS = na.omit(extract(lf, shp))
 #long = formatC(IDS, flag="0", width=5)
 #paths = paste0(wd,"/S",long)
-cat((paths))
+#cat((paths))
  
 rstack = brick(rst)
 rstack = crop(rstack, lf)

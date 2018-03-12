@@ -24,6 +24,7 @@ valshp=args[16]
 valMode=args[17]
 # ======== code ===================
 
+print(paste0("valMode:", valMode)
 # setup logs
 sink(paste0(wd, "/da_logfile"), append = TRUE)
 
@@ -34,9 +35,6 @@ print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
 rstack = brick(paste0(priorwd, "/fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd, "/fsca_dates.csv"))
-
-
-
 
 # remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)
 startda <- substr(startdaLong, 1, 10)
@@ -345,6 +343,11 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
             # number of NA's in pixel
             nNA = length(which(is.na(sampids) == TRUE))
 
+            if (valMode == "TRUE"){
+                simindexs = order(sort(simindexs))
+                sampids = sort(sampids)
+            }
+
             # extract vector of each sample sca that occurs in pixel
             mat <- ensembRes[, simindexs, j]
 
@@ -494,6 +497,10 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
             # number of NA's in pixel
             nNA = length(which(is.na(sampids) == TRUE))
 
+            if (valMode == "TRUE"){
+            simindexs = order(sort(simindexs))
+            sampids = sort(sampids)
+            }
             # extract vector of each sample sca that occurs in pixel
             mat <- ensembRes[, simindexs, j]
 

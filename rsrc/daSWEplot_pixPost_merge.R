@@ -122,6 +122,44 @@ ndays = length(ensembRes[ , 1, 1])
 
 print(sample)
 print(posits.pix[j])
+
+# in valMode nedd to index sample correctly, sample id != sample index inthis case. ensembleRes matrix contains all samples across all pixels
+if (valMode == "TRUE"){
+lf <- landform
+IDS = na.omit(extract(lf, shp))
+#long = formatC(IDS, flag="0", width=5)
+#paths = paste0(wd,"/S",long)
+#cat((paths))
+ 
+
+rstack = crop(rstack, lf)
+rtest <- rstack[[1]]
+values(rtest) <- 1: ncell(rtest)
+
+# index of modis pixels containing val points
+npix = sort(na.omit(extract(rtest, shp)))
+
+# loop thgrough pixels
+
+idVec= c()
+for ( i in npix ) {
+# MODIS pixel,i mask
+singlecell = rasterFromCells(rstack[[1]], i, values = TRUE)
+
+ # extract smallpix using mask
+smlPix = crop(lf, singlecell)
+
+# IDs of sims contained in Modis pixel (around 324, can vary a bit)
+sampids = values(smlPix)
+id =  unique(sampids)
+idVec = c(idVec, id)
+}
+print(idVec)
+# sort so sequntial as ordered in ensemRes.Rd. Extract index of sample and assign to variable sample.
+sample = which(sort(idVec) == sample)
+
+}
+
 median.vec = c()
 for ( i in 1: ndays){
 
@@ -190,7 +228,7 @@ median.prior = c(median.prior, med$y)
 
 
 # 5%
-id=samples[j]
+
 
 sample= id
 ndays = length(ensembRes[ , 1, 1])
@@ -208,7 +246,7 @@ low.prior = c(low.prior, med$y)
 }
 
 # 95%
-id=samples[j]
+
 
 sample= id
 ndays = length(ensembRes[ , 1, 1])
@@ -254,7 +292,7 @@ val = valdat$SWE.mm[simIndexVal]
 # plot prior,post, obs
 # plot prior,post, obs
 plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j])) # prior
-for (i in 1:nens){lines(ensembRes[,id,i], col='grey')}
+for (i in 1:nens){lines(ensembRes[,sample,i], col='grey')}
 
 # 90 percentile and median prior
 y = c(low.prior ,rev(high.prior))

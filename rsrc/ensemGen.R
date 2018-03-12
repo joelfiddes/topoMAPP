@@ -54,6 +54,13 @@ pdf(paste0(wd,"/ensembleDistributions.pdf"))
 dev.off()
 
 
+# correlated random vars
+# https://stats.stackexchange.com/questions/38856/how-to-generate-correlated-random-numbers-given-means-variances-and-degree-of
+# r package http://stat.ethz.ch/R-manual/R-patched/library/MASS/html/mvrnorm.html
+# https://stats.stackexchange.com/questions/114979/r-random-sampling-for-multivariate-normal-and-log-normal-distributions
+# 
+# check
+# plot(tbias,lwbias)
 
 
 
