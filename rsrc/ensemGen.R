@@ -77,12 +77,14 @@ mean_vec[2] <- norm.mean
 
 #https://stats.stackexchange.com/questions/82261/generating-correlated-distributions-with-a-certain-mean-and-standard-deviation
 cormat = matrix(cordat, 4,4)
-covmat <- sweep(sweep(cormat, 1L, sd, "*"), 2L, sd_vec, "*") 
+
+# convert cor2cov matrix: https://stackoverflow.com/questions/39843162/conversion-between-covariance-matrix-and-correlation-matrix/39843276#39843276
+covmat <- sweep(sweep(cormat, 1L, sd_vec, "*"), 2L, sd_vec, "*") 
 
 # check for posite definiteness of covariance matrix
 stopifnot( eigen( covmat )$values > 0 )
 
-# empirical = true gives exact correlations in result
+# empirical = true gives exact correlations in result eg https://stats.stackexchange.com/questions/82261/generating-correlated-distributions-with-a-certain-mean-and-standard-deviation
 res = mvrnorm(n=100, m=mean_vec, Sigma=covmat, empirical = TRUE)
 
 #lognorm transform on P
