@@ -61,7 +61,7 @@ def main(config):
 		for grid in initgrids:
 			logging.info("-- DA run grid " +str(grid)+ "--")
 			
-			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , ensWd , grid, nens , Nclust , sdThresh, file="ground", param="X100.00000"]
+			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs_GST.R" , ensWd , grid, nens , Nclust , sdThresh, file="ground", param="X100.000000"]
 			subprocess.check_output(cmd)
 			# Results matrix remains same in val mode
 			# compute results matrix only once for entire timeseries - subsequent da years read in existing file
@@ -71,9 +71,6 @@ def main(config):
 				# retrives swe results from all ensemble memebers and writes a 3d matrix (T,samples,ensembles)
 				logging.info( "compute results matrix")
 				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , ensWd , grid, nens , Nclust , sdThresh, file, param]
-				subprocess.check_output(cmd)
-
-				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs.R" , ensWd , grid, nens , Nclust , sdThresh, file="ground", param="X100.00000"]
 				subprocess.check_output(cmd)
 
 			else:
@@ -116,7 +113,7 @@ def main(config):
 			fname = ensWd+"/plots/gst_pix"+grid+str(year)+".pdf"
 			if os.path.isfile(fname) == False:
 				logging.info( "plot swe")
-				cmd = ["Rscript",  "./rsrc/daSWEplot.R", ensWd,wd ,grid ,nens, valShp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
+				cmd = ["Rscript",  "./rsrc/daGSTplot.R", ensWd,wd ,grid ,nens, valShp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
 				subprocess.check_output(cmd)
 			else:
 				logging.info("skip swe plot")
