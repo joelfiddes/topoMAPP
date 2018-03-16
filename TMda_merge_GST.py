@@ -56,13 +56,16 @@ def main(config):
 
 		start1 = start+relativedelta(years=+year) # 1 sept
 		end1 = start+relativedelta(years=+(year+1)) # exactly 1 year later
+
 		logging.info("----- Now calculating DA period = "+ str(start1)+" to " +str(end1) + "-----")
 
 		for grid in initgrids:
 			logging.info("-- DA run grid " +str(grid)+ "--")
 			
-			cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs_GST.R" , ensWd , grid, nens , Nclust , sdThresh, file="ground", param="X100.000000"]
-			subprocess.check_output(cmd)
+			fname = ensWd + "/ensembRes_"+grid+"GST.rd"
+			if os.path.isfile(fname) == False:
+				cmd = ["Rscript",  "./rsrc/resultsMatrix_pbs_GST.R" , ensWd , grid, nens , Nclust , sdThresh, "ground", "X100.000000"]
+				subprocess.check_output(cmd)
 			# Results matrix remains same in val mode
 			# compute results matrix only once for entire timeseries - subsequent da years read in existing file
 

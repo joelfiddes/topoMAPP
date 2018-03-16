@@ -25,7 +25,7 @@ rstack = brick(paste0(wd,"fsca_crop",grid,year,".tif"))
 
 
 #	Load ensemble results matrix
-load(paste0(wd, "/ensembResGST_",grid,"GST.rd")) #name = ensembResGSTGST
+load(paste0(wd, "/ensembRes_",grid,"GST.rd")) #name = ensembResGSTGST
 
 #	Load sample weights
 #load(paste0(wd,"/sampleWeights.rd"))
