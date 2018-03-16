@@ -273,6 +273,9 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
             end = DEND  #firstnodata
         }
 
+        # test effect of start end
+start = DSTART
+end = DEND 
         # set default here TRIAL start = DSTART end = DEND
 
         # identify missing dates and reset start end index

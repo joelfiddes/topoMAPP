@@ -124,7 +124,7 @@ print(sample)
 print(posits.pix[j])
 
 # in valMode nedd to index sample correctly, sample id != sample index inthis case. ensembleRes matrix contains all samples across all pixels
-if (valMode == "TRUE"){
+if (valMode == "FASLE"){
 lf <- landform
 IDS = na.omit(extract(lf, shp))
 #long = formatC(IDS, flag="0", width=5)
