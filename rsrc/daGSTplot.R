@@ -307,5 +307,7 @@ legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , 
 
 dev.off()
 
+df= data.frame(median.vec, median.prior)
+write.table(df, paste0(wd, "/emsembResults.csv"))
 sink()
 
