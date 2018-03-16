@@ -4,6 +4,7 @@
 args = commandArgs(trailingOnly=TRUE)
 N=as.numeric(args[1])
 wd= args[2]
+require(MASS)
 # source: https://msalganik.wordpress.com/2017/01/21/making-sense-of-the-rlnorm-function-in-r/
 
 # all function args:  N obs, mean, sd
