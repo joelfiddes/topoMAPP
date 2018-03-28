@@ -794,7 +794,7 @@ rst=round(rst,2)
 #provides 'meanX' as argument / return rst
 crispSpatial3<-function(col,Nclust, landform,meanX){
 		meanX<-as.vector(meanX)
-		l<-length(meanX$V1)
+		l<-length(meanX)
 		s<-seq(1,l,1)
 		s<-as.vector(s)
 		meanXdf<-data.frame(s,meanX)
