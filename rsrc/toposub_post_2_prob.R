@@ -73,7 +73,7 @@ if(crisp==TRUE){
 	##make crisp maps
 	landform<-raster(lf)	
 	rst = crispSpatial3(col=targV,Nclust=Nclust, landform=landform, meanX=meanX)
-	writeRaster(rst, paste0(gridpath,"/",col,j ))
+	writeRaster(rst, paste0(gridpath,"/",targV,j ))
 	}
 
 # ============== NEW FUNCTIONS NEEDED ======================
