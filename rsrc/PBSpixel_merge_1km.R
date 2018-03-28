@@ -35,6 +35,7 @@ print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
 rstack = brick(paste0(priorwd, "/fsca_stack.tif"))
+bagg = aggregate(b[[1]], fact=2)
 obsTS = read.csv(paste0(priorwd, "/fsca_dates.csv"))
 
 # remove HH:mm part of timestamp (yyyy-mm-dd HH:mm)-> datestamp (yyy-mm-dd)

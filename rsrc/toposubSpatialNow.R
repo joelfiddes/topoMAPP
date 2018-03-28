@@ -19,22 +19,22 @@ source("./rsrc/toposub_src.R")
 # get obs make Na mask
 Nclust <- 150
 targV <- "snow_water_equivalent.mm."
-date <- "25/01/2016 00:00"
-priorwd = "/home/joel/sim/da_test2/"
+date <- "21/05/2016 00:00"
+priorwd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor/"
 rstack = brick(paste0(priorwd,"fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd,"fsca_dates.csv"))
 mod=rstack[[6]]
 mask <- mod
 mask[is.na(mask)==T]<-999
 mask[mask<999]<-NA
-
+gridpath=paste0(priorwd, "/grid1/")
 
 #t1 = Sys.time()
 #rmsvec=c()
 #for (n in 0:99){
 
 
-gridpath = paste0("/home/joel/sim/ensembler3/ensemble",n,"/grid1")
+#gridpath = paste0("/home/joel/sim/ensembler3/ensemble",n,"/grid1")
 resultsVec <- c()
 print(n)
 for (i in 1:Nclust){
@@ -46,16 +46,18 @@ resultsVec <- c(resultsVec, datpoint)
 
 landform<-raster(paste0(gridpath, "/landform.tif")	)
 rst = crispSpatialNow(resultsVec, landform)
-
+mod = crop(mod,landform)
 #=======================
 sca <- rst
-sca[sca<13]<-0
+sca[sca<13]<-NA
 sca[sca>=13]<-1
 
 r = sca
 s = mod
 d=aggregate(r, fact=c(round(dim(r)[1]/dim(s)[1]),round(dim(r)[2]/dim(s)[2])), fun='mean') #fact equals r/s for cols and rows
 e=resample(d, s,  method="ngb")
+
+
 
 s <- s/100
 

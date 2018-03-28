@@ -277,7 +277,7 @@ val = valdat$SWE.mm[simIndexVal]
 
 # plot prior,post, obs
 # plot prior,post, obs
-plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j], sample)) # prior
+plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j])) # prior
 for (i in 1:nens){lines(ensembRes[,sample,i], col='grey')}
 
 # 90 percentile and median prior

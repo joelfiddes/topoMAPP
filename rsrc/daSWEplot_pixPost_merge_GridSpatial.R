@@ -101,13 +101,12 @@ wpix <- wmat[posits.pix,] # subset by valpoints
 
 # generic plot pars
 lwd=3
-pdf(paste0(wd,"/plots/swe_pix",grid,year,".pdf"), height=8, width=5)
-
-par(mfrow=c(ceiling(sqrt(Nval)),ceiling(sqrt(Nval))))
-par(mfrow=c(3,1))
+pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
 
 
-for ( j in 1:length(samples) ) {
+
+
+
 
 ## POSTERIOR
 # sample ID
@@ -118,8 +117,8 @@ sample=samples[j]
 	
 
 
-ndays = length(ensembRes[ , 1, 1])
-
+ndays = 264
+samples=1:150
 print(sample)
 print(posits.pix[j])
 
@@ -161,9 +160,9 @@ sample = which(sort(idVec) == sample)
 }
 
 median.vec = c()
-for ( i in 1: ndays){
+for ( i in samples){
 
-mu = ensembRes[ i, sample, ]
+mu = ensembRes[ ndays, i, ]
 wfill = wpix[ j, ]
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -176,9 +175,9 @@ median.vec = c(median.vec, med$y)
 ##==========================Compute quantiles=====================================
 
 low.vec = c()
-for ( i in 1: ndays){
+for ( i in samples){
 
-mu = ensembRes[ i, sample, ]
+mu = ensembRes[ ndays, i, ]
 wfill = wpix[ j, ]
 
 df = data.frame(mu, wfill )
@@ -191,8 +190,8 @@ low.vec = c(low.vec, med$y)
 
 
 high.vec = c()
-for ( i in 1: ndays){
-mu = ensembRes[ i, sample, ]
+for ( i in samples){
+mu = ensembRes[ ndays, i, ]
 wfill = wpix[ j, ]
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
@@ -207,9 +206,9 @@ high.vec = c(high.vec, med$y)
 
 # MEDIAN
 median.prior = c()
-for ( i in 1: ndays){
+for ( i in samples){
 
-mu = ensembRes[ i, sample, ]
+mu = ensembRes[ ndays, i, ]
 w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
@@ -224,9 +223,9 @@ median.prior = c(median.prior, med$y)
 # 5%
 
 low.prior = c()
-for ( i in 1: ndays){
+for ( i in samples){
 
-mu = ensembRes[ i, sample, ]
+mu = ensembRes[ ndays, i, ]
 w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
@@ -238,9 +237,9 @@ low.prior = c(low.prior, med$y)
 # 95%
 
 high.prior = c()
-for ( i in 1: ndays){
+for ( i in samples){
 
-mu = ensembRes[ i, sample, ]
+mu = ensembRes[ ndays, i, ]
 w = rep((1/nens),nens)
 
 df = data.frame(mu, w )
@@ -301,9 +300,55 @@ points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
 axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
 legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd, cex=0.7)
 
-}
 
-dev.off()
 
-sink()
+crispSpatialNow<-function(resultsVec, landform){
+		require(raster)
+		l <- length(resultsVec)
+		s <- 1:l
+		df <- data.frame(s,resultsVec)
+		rst <- subs(landform, df,by=1, which=2)
+		rst=round(rst,2)
+		return(rst)
+		}
+		
+		
+	prior =	crispSpatialNow(median.prior, landform)
+	post = crispSpatialNow(median.vec, landform)
+	
+par(mfrow=c(1,3))	
+plot(prior)
+plot(post)
+
+lsat = raster("/home/joel/sim/landsatVal/QA/LC81940272016142LGN00_BQA.TIFsca.tif")
+landform.utm=projectRaster(from=landform, crs=crs(lsat))
+lsat.crop = crop(lsat, landform.utm, snap="out")
+lsat.wgs=projectRaster(from=lsat.crop, crs=crs(landform), method="ngb")
+lsat.crop = crop(lsat.wgs, landform)
+
+plot(lsat.crop)
+
+# threshold
+sdThresh = 13
+prior[prior <= sdThresh] <-NA
+prior[prior>sdThresh] <- 1
+
+post[post <= sdThresh] <-NA
+post[post>sdThresh] <- 1
+
+par(mfrow=c(1,3))	
+plot(prior)
+plot(post)
+plot(lsat.crop)
+
+lsat.re = resample(lsat.crop, prior, method='ngb')
+prior[is.na(prior)]<-0
+cor(getValues(prior), getValues(lsat.re))
+
+post[is.na(post)]<-0
+cor(getValues(post), getValues(lsat.re))
+
+
+
+# plot the curves
 

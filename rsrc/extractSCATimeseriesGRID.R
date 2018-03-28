@@ -170,8 +170,9 @@ print(paste0("orig NAs in MOD=", round(oldNa, 2), "% New NAs in filled MOD=", ro
 
 # }else {MOD.fill <- MOD}
 
-# compute cloudiness / NA cloudinessMOD = cellStats(is.na(MOD.fill),'sum') /
-# ncell(MOD.fill) cloudfreeMOD= which(cloudinessMOD < cloudThreshold)
+# compute cloudiness / NA 
+#cloudinessMOD = cellStats(is.na(MOD.fill),'sum') /ncell(MOD.fill) 
+#cloudfreeMOD= which(cloudinessMOD < cloudThreshold)
 # print(paste0('mean cloudiness TERRA MOD ',round(mean(cloudinessMOD),2)))
 # MOD_cf=MOD.fill[[cloudfreeMOD]]
 

@@ -34,6 +34,10 @@ print(paste0("Running PBSpixel from ", startdaLong, " to ", enddaLong))
 
 # readin data
 landform = raster(paste0(priorwd, "/grid", grid, "/landform.tif"))
+
+# project to utm
+landform_utm=projectRaster(from=landform, crs=crs(rstack))
+
 rstack = brick(paste0(priorwd, "/fsca_stack.tif"))
 obsTS = read.csv(paste0(priorwd, "/fsca_dates.csv"))
 
@@ -45,52 +49,23 @@ fscacrop = paste0(wd, "/fsca_crop",grid,year,".tif")
 if (!file.exists(fscacrop)) {
 
     # cut temporal length of dates vector to startda/endda
-    startda.index <- which(obsTS$x == startda)
-    endda.index <- which(obsTS$x == endda)
+    #startda.index <- which(obsTS$x == startda)
+    #endda.index <- which(obsTS$x == endda)
 
     # subset rstack temporally
-    print(paste0("subset rstack temporally:", startda," to ",endda))
-    rstack = rstack[[startda.index:endda.index]]
+    #print(paste0("subset rstack temporally:", startda," to ",endda))
+    #rstack = rstack[[startda.index:endda.index]]
 
     # subset dates vector to current year
-    obsTScut <- obsTS$x[startda.index:endda.index]
-    write.csv(obsTScut, paste0(wd, "/fsca_dates_",year,".csv"), row.names = FALSE)
+    #obsTScut <- obsTS$x[startda.index:endda.index]
+    #write.csv(obsTScut, paste0(wd, "/fsca_dates_",year,".csv"), row.names = FALSE)
 
-    # analyse missing days
-    actualDays <- seq(as.Date(startda), as.Date(endda), 1)
-    NactualDays <- length(actualDays)
-
-    # check for missing dates in fsca timeseries (not NA but actual missing
-    # timestamps) THIS was implement in extractSCATimeseries.R but not in _GRID.R
-    # version - fill with dummy NA layers
-    if (nlayers(rstack) != NactualDays) {
-        
-        missDates.index <- which(!(as.character(actualDays) %in% as.character(obsTScut)))
-        missDates <- actualDays[which(!(as.character(actualDays) %in% as.character(obsTScut)))]
-
-        print(paste0("missing dates found:", missDates, " filling missing datestamps now"))
-
-        # create NA layer for insertion
-        insertLyr = rstack[[1]]
-        insertLyr[insertLyr < 1000] <- NA
-
-        # name layers by date
-        names(rstack) <- obsTScut
-
-        # make stack of dummy layes and name
-        insertStack <- stack(replicate(length(missDates), insertLyr))
-        names(insertStack) <- missDates
-        mergeStack = stack(rstack, insertStack)
-        rstack = mergeStack[[order(names(mergeStack))]]
-        print("rstack missing datestamps filled")
-
-    }
 
     # crop rstack to landform as landform represent individual grid and rstack the
     # entire domain - these are not necessarily the same
 
     print(paste0("crop fsca_stack.tif (",nlayers(rstack)," layers) with landform.tif"))
-    rstack = crop(rstack, landform)
+    rstack = crop(rstack, landform_utm)
     writeRaster(rstack, fscacrop, overwrite = TRUE)
     print("crop done")
 } else {
@@ -172,12 +147,13 @@ if (!file.exists(df)) {
 
     # resample dem to rstack res (MODIS)
     dem = raster(paste0(priorwd, "/predictors/ele.tif"))
-    elegrid = crop(dem, landform)
+    dem_utm=projectRaster(from=dem, crs=crs(rstack))
+    elegrid = crop(dem_utm, landform_utm)
     r = aggregate(elegrid, res(rstack)/res(elegrid))
     rstack_ele <- resample(r, rstack)
 
-    minZ = cellStats(rstack_ele, "min") - 1  #add buffer to allow use of 'greaterthan' on lower bound and not risk excluding a point at lowest ele.
-    maxZ = cellStats(rstack_ele, "max")
+    minZ = cellStats(elegrid, "min") - 1  #add buffer to allow use of 'greaterthan' on lower bound and not risk excluding a point at lowest ele.
+    maxZ = cellStats(elegrid, "max")
     range = maxZ - minZ
     deltaZ = range/resol
 
@@ -196,10 +172,10 @@ if (!file.exists(df)) {
         rvec = rev(vec)
         lastdata = which(rvec > 0)[1]  # last non-zero value
         lastdataindex = length(vec) - lastdata + 1
-        firstnodata = lastdataindex + 1
+        firstnodata = lastdataindex
         lastdateover95 = length(vec) - which(rvec > (max(rvec, na.rm = TRUE) * 0.95))[1]  # last date over 95% of max value accounts for max below 100%
-        start = lastdateover95
-        end = firstnodata
+        start = NA
+        end = NA
         mp = c(mStart, mEnd, start, end)
         meltPeriod = rbind(meltPeriod, mp)
     }
