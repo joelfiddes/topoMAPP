@@ -43,15 +43,17 @@ setwd(gridpath)
 ensemble <- list.dirs(full.names=F, recursive=F)
 
 for (j in ensemble){
-print(paste0(gridpath,"/",j,"/grid1/"))
-setwd(paste0(gridpath,"/",j,"/grid1/"))
 
-outfile <- paste('meanX_',targV,'.txt',sep='')
+ensPath = paste0(gridpath,"/",j,"/grid1/")
+print(ensPath)
+#setwd(paste0(gridpath,"/",j,"/grid1/"))
+
+outfile <- paste0(ensPath,'/meanX_',targV,'.txt')
 file.create(outfile)
 
 for ( i in 1:Nclust){
 	#gsimindex=formatC(i, width=5,flag='0')
-	simindex <- paste0('S',formatC(i, width=5,flag='0'))
+	simindex <- paste0(ensPath, "/S",formatC(i, width=5,flag='0'))
 
 	#read in lsm output
 	sim_dat <- read.table(paste(simindex,'/out/',file1,sep=''), sep=',', header=T)
@@ -66,14 +68,14 @@ for ( i in 1:Nclust){
 	meanX<-	tapply(sim_dat_cut[,targV],sim_dat_cut$IDpoint, FUN=mean)
 
 	#append to master file
-	write(meanX, paste(gridpath, '/meanX_', targV,'.txt', sep=''), sep=',',append=T)
+	write(meanX, paste(ensPath, '/meanX_', targV,'.txt', sep=''), sep=',',append=T)
 	}
 
 if(crisp==TRUE){
 	##make crisp maps
 	landform<-raster(lf)	
-	rst = crispSpatial3(col=targV,Nclust=Nclust, landform=landform, meanX=meanX)
-	writeRaster(rst, paste0(gridpath,"/",targV,j ))
+	rst = crispSpatial2(col=targV,Nclust=Nclust, landform=landform, esPath=ensPath)
+	#writeRaster(rst, paste0(gridpath,"/",targV,j ))
 	}
 
 # ============== NEW FUNCTIONS NEEDED ======================
