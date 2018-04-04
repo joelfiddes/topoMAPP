@@ -29,7 +29,10 @@ end <- 		args[4]
 	VALIDATE <- FALSE
 
 if (tv=='gst'){file1="ground.txt" ;targV="X100.000000" }
+if (tv=='gt10'){file1="ground.txt" ;targV="X9999.000000" }
 if (tv=='swe'){file1="surface.txt" ;targV="snow_water_equivalent.mm." }
+if (tv=='sd'){file1="surface.txt" ;targV="snow_depth.mm." }
+if (tv=='tair'){file1="surface.txt" ;targV="Tair.C." }
 Nclust = length(list.files(path = gridpath, pattern="^S"))
 
 #========================================================================
