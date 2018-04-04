@@ -21,6 +21,11 @@ Key functions:
 - Ensemble simulations
 - Data assimilation routines
 
+# References
+Fiddes, J., Endrizzi, S., and Gruber, S.: Large-area land surface simulations in heterogeneous terrain driven by global data sets: application to mountain permafrost, The Cryosphere, 9, 411-426, doi:10.5194/tc-9-411-2015, 2015. 10.5194/tc-9-411-2015
+Fiddes, J. & Gruber, S. 2014: TopoSCALE v.1.0: downscaling gridded climate data in complex terrain, Geoscientific Model Development, 7, 387-405, 10.5194/gmd-7-387-2014
+Fiddes, J. & Gruber, S. 2012: TopoSUB: a tool for efficient large area numerical modelling in complex topography at sub-grid scales, Geoscientific Model Development, 5, 1245–1257,10.5194/gmd-5-1245-2012
+
 # Setup
 ## To run
 1. set config by:

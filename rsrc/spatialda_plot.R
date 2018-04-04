@@ -4,7 +4,8 @@ wd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor_ensemble/"
 grid=1
 year=0
 day=200
-lsat = raster("/home/joel/sim/landsatVal/QA/LC81940272016078LGN00_BQA.TIFsca.tif")
+doy="078"
+lsat = raster(paste0("/home/joel/sim/landsatVal/QA/LC81940272016",doy,"LGN00_BQA.TIFsca.tif"))
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 rstack = brick(paste0(wd, "//fsca_crop",grid,year,".tif"))
@@ -123,20 +124,33 @@ library(viridis)
 pal <- rev(inferno(10))
 
 
-pdf("/home/joel/sim/DA_2016078.pdf")
-par(mfrow=c(2,3))
+pdf(paste0("/home/joel/sim/DA_2016",doy,"2.pdf"))
+
+par(mfrow=c(3,3))
 
 mat[mat==0] <- NA
 mdc2[mdc2==0] <- NA
 
 plot(mat, main=paste("DA/ max swe=", cellStats(mat, "max", na.m=T)),  col = pal,zlim=c(0,2000))
 
-plot(density(getValues(mdc2), na.rm=T), lwd=3, col='red', xlim=c(0,2000), main="Density SWE")
-lines(density(getValues(mat), na.rm=T), lwd=3, col='blue')
-legend("topright", col=c("red", "blue"), legend=c("open-loop", "Post"), lwd=2, lty=1)
+
 plot(mdc2, main=paste("open-loop/ max swe=", cellStats(mdc2, "max", na.m=T)), col = pal, zlim=c(0,2000))
 #plot(rstack[[day]])
 
+rng = cellStats(mat - mdc2, "max")-cellStats(mat-mdc2,"min")
+
+factor = (1+(mat)/rng)
+factor[is.na(factor)]<-1
+
+scaled=mdc2*factor
+plot(scaled,col = pal, zlim=c(0,2000) , main=paste("open-loop/ max swe=", cellStats(scaled, "max", na.m=T)))
+
+
+
+plot(density(getValues(mdc2), na.rm=T), lwd=3, col='red', xlim=c(0,2000), main="Density SWE")
+lines(density(getValues(mat), na.rm=T), lwd=3, col='blue')
+lines(density(getValues(scaled), na.rm=T), lwd=3, col='green')
+legend("topright", col=c("red", "blue", "green"), legend=c("open-loop", "Post", "Scaled"), lwd=2, lty=1)
 mat_sca<-mat
 mat_sca[mat_sca <= 13] <-0
 mat_sca[mat_sca > 13] <-1
@@ -145,9 +159,14 @@ mdc_sca<-mdc2
 mdc_sca[mdc_sca <= 13] <-0
 mdc_sca[mdc_sca > 13] <-1
 
+scaled_sca<-scaled
+scaled_sca[scaled_sca <= 13] <-0
+scaled_sca[scaled_sca > 13] <-1
+
 plot(mat_sca, main="DA")
 plot(lsat.crop, main="landsat NDSI")
 plot(mdc_sca, main="open-loop")
+plot(scaled_sca, main="scaled")
 #plot(rstack[[day-1]])
 
 dev.off()
@@ -161,11 +180,11 @@ dev.off()
 
 
 
-# generic plot pars
-lwd=3
-pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
+## generic plot pars
+#lwd=3
 
 
+#pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
 
 
 
@@ -191,202 +210,204 @@ pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
 
 
 
-## POSTERIOR
 
 
-ndays = 264
-samples=1:150
+### POSTERIOR
 
 
+#ndays = 264
+#samples=1:150
 
-median.vec = c()
-for ( i in samples){
 
-mu = ensembRes[ ndays, i, ]
-wfill = wpix[ j, ]
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
-median.vec = c(median.vec, med$y)
-}
 
-##==========================Compute quantiles=====================================
+#median.vec = c()
+#for ( i in samples){
 
-low.vec = c()
-for ( i in samples){
+#mu = ensembRes[ ndays, i, ]
+#wfill = wpix[ j, ]
+#df = data.frame(mu, wfill )
+#dfOrder =  df[ with(df, order(mu)), ]
+##plot(dfOrder$mu , cumsum(dfOrder$wfill))
+##df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+#med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+#median.vec = c(median.vec, med$y)
+#}
 
-mu = ensembRes[ ndays, i, ]
-wfill = wpix[ j, ]
+###==========================Compute quantiles=====================================
 
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
-low.vec = c(low.vec, med$y)
-}
+#low.vec = c()
+#for ( i in samples){
 
+#mu = ensembRes[ ndays, i, ]
+#wfill = wpix[ j, ]
 
-high.vec = c()
-for ( i in samples){
-mu = ensembRes[ ndays, i, ]
-wfill = wpix[ j, ]
-df = data.frame(mu, wfill )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
-high.vec = c(high.vec, med$y)
-}
+#df = data.frame(mu, wfill )
+#dfOrder =  df[ with(df, order(mu)), ]
+##plot(dfOrder$mu , cumsum(dfOrder$wfill))
+##df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+#med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
+#low.vec = c(low.vec, med$y)
+#}
 
 
-# PRIOR
+#high.vec = c()
+#for ( i in samples){
+#mu = ensembRes[ ndays, i, ]
+#wfill = wpix[ j, ]
+#df = data.frame(mu, wfill )
+#dfOrder =  df[ with(df, order(mu)), ]
+##plot(dfOrder$mu , cumsum(dfOrder$wfill))
+##df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+#med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
+#high.vec = c(high.vec, med$y)
+#}
 
-# MEDIAN
-median.prior = c()
-for ( i in samples){
 
-mu = ensembRes[ ndays, i, ]
-w = rep((1/nens),nens)
+## PRIOR
 
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-#plot(dfOrder$mu , cumsum(dfOrder$wfill))
-#df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.5)
-median.prior = c(median.prior, med$y)
-}
+## MEDIAN
+#median.prior = c()
+#for ( i in samples){
 
+#mu = ensembRes[ ndays, i, ]
+#w = rep((1/nens),nens)
 
-# 5%
+#df = data.frame(mu, w )
+#dfOrder =  df[ with(df, order(mu)), ]
+##plot(dfOrder$mu , cumsum(dfOrder$wfill))
+##df2 = data.frame(dfOrder$mu , cumsum(dfOrder$Freq))
+#med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.5)
+#median.prior = c(median.prior, med$y)
+#}
 
-low.prior = c()
-for ( i in samples){
-
-mu = ensembRes[ ndays, i, ]
-w = rep((1/nens),nens)
-
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.05)
-low.prior = c(low.prior, med$y)
-}
 
-# 95%
-
-high.prior = c()
-for ( i in samples){
-
-mu = ensembRes[ ndays, i, ]
-w = rep((1/nens),nens)
+## 5%
 
-df = data.frame(mu, w )
-dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
-high.prior = c(high.prior, med$y)
-}
-
-
-#
-valdat<- myList[[j]]
-# convert obs timestamps
-d = strptime(valdat$DATUM, format="%d.%m.%Y")
-d2=format(d, '%d/%m/%Y %H:%M') #geotop format
-#d3=format(d, '%Y/%m/%d') # obsvec format
-
-# used to get time index - just use first sim 
-dat = read.table(paste0(priorwd,"/grid",grid,"/S00001/out/surface.txt"), sep=',', header=TRUE)
-
-# cut to year
-dat =dat[start.index:end.index,]
-
-#index of sim data in obs
-obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
-
-# index of obs in sim data
-simIndexVal = which(d2 %in% dat$Date12.DDMMYYYYhhmm.)
-
-# obs
-val = valdat$SWE.mm[simIndexVal]
-
-# modal swe
-#swe_modal = swe_mod[,id]
-
-# plot prior,post, obs
-# plot prior,post, obs
-plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j], sample)) # prior
-for (i in 1:nens){lines(ensembRes[,sample,i], col='grey')}
-
-# 90 percentile and median prior
-y = c(low.prior ,rev(high.prior))
-x = c(1:length(low.prior), rev(1:length(high.prior)) )
-polygon (x,y, col=rgb(1, 0, 0,0.5))
-
-# 90 percentile and median posterioir
-y = c(low.vec ,rev(high.vec))
-x = c(1:length(low.vec), rev(1:length(high.vec)) )
-polygon (x,y, col=rgb(0, 0, 1,0.5))
-lines(median.vec, col='blue',lwd=3)
-lines(median.prior, col='red',lwd=3)
-
-#obs
-points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
-
-#modal
-#lines(swe_modal, col='green',lwd=3)
-
-axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
-legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd, cex=0.7)
-
-
-
-crispSpatialNow<-function(resultsVec, landform){
-		require(raster)
-		l <- length(resultsVec)
-		s <- 1:l
-		df <- data.frame(s,resultsVec)
-		rst <- subs(landform, df,by=1, which=2)
-		rst=round(rst,2)
-		return(rst)
-		}
-		
-		
-	prior =	crispSpatialNow(median.prior, landform)
-	post = crispSpatialNow(median.vec, landform)
-	
-par(mfrow=c(1,3))	
-plot(prior)
-plot(post)
-
-lsat = raster("/home/joel/sim/landsatVal/QA/LC81940272016142LGN00_BQA.TIFsca.tif")
-landform.utm=projectRaster(from=landform, crs=crs(lsat))
-lsat.crop = crop(lsat, landform.utm, snap="out")
-lsat.wgs=projectRaster(from=lsat.crop, crs=crs(landform), method="ngb")
-lsat.crop = crop(lsat.wgs, landform)
-
-plot(lsat.crop)
-
-# threshold
-sdThresh = 13
-prior[prior <= sdThresh] <-NA
-prior[prior>sdThresh] <- 1
-
-post[post <= sdThresh] <-NA
-post[post>sdThresh] <- 1
-
-par(mfrow=c(1,3))	
-plot(prior)
-plot(post)
-plot(lsat.crop)
-
-lsat.re = resample(lsat.crop, prior, method='ngb')
-prior[is.na(prior)]<-0
-cor(getValues(prior), getValues(lsat.re))
-
-post[is.na(post)]<-0
-cor(getValues(post), getValues(lsat.re))
+#low.prior = c()
+#for ( i in samples){
+
+#mu = ensembRes[ ndays, i, ]
+#w = rep((1/nens),nens)
+
+#df = data.frame(mu, w )
+#dfOrder =  df[ with(df, order(mu)), ]
+#med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.05)
+#low.prior = c(low.prior, med$y)
+#}
+
+## 95%
+
+#high.prior = c()
+#for ( i in samples){
+
+#mu = ensembRes[ ndays, i, ]
+#w = rep((1/nens),nens)
+
+#df = data.frame(mu, w )
+#dfOrder =  df[ with(df, order(mu)), ]
+#med = approx( cumsum(dfOrder$w),dfOrder$mu , xout=0.95)
+#high.prior = c(high.prior, med$y)
+#}
+
+
+##
+#valdat<- myList[[j]]
+## convert obs timestamps
+#d = strptime(valdat$DATUM, format="%d.%m.%Y")
+#d2=format(d, '%d/%m/%Y %H:%M') #geotop format
+##d3=format(d, '%Y/%m/%d') # obsvec format
+
+## used to get time index - just use first sim 
+#dat = read.table(paste0(priorwd,"/grid",grid,"/S00001/out/surface.txt"), sep=',', header=TRUE)
+
+## cut to year
+#dat =dat[start.index:end.index,]
+
+##index of sim data in obs
+#obsIndexVal = which(dat$Date12.DDMMYYYYhhmm. %in% d2)
+
+## index of obs in sim data
+#simIndexVal = which(d2 %in% dat$Date12.DDMMYYYYhhmm.)
+
+## obs
+#val = valdat$SWE.mm[simIndexVal]
+
+## modal swe
+##swe_modal = swe_mod[,id]
+
+## plot prior,post, obs
+## plot prior,post, obs
+#plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j], sample)) # prior
+#for (i in 1:nens){lines(ensembRes[,sample,i], col='grey')}
+
+## 90 percentile and median prior
+#y = c(low.prior ,rev(high.prior))
+#x = c(1:length(low.prior), rev(1:length(high.prior)) )
+#polygon (x,y, col=rgb(1, 0, 0,0.5))
+
+## 90 percentile and median posterioir
+#y = c(low.vec ,rev(high.vec))
+#x = c(1:length(low.vec), rev(1:length(high.vec)) )
+#polygon (x,y, col=rgb(0, 0, 1,0.5))
+#lines(median.vec, col='blue',lwd=3)
+#lines(median.prior, col='red',lwd=3)
+
+##obs
+#points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+
+##modal
+##lines(swe_modal, col='green',lwd=3)
+
+#axis(side=1,at=1:length(dat$Date12.DDMMYYYYhhmm.) , labels=substr(dat$Date12.DDMMYYYYhhmm.,1,10),tick=FALSE)
+#legend("topright",c("SWE_prior","SWE_post_median", "SWE_post_mode", "SWE_obs" , "ENSEMBLE"),col= c("red","blue", "green","black", "grey"), lty=c(1,1,1,NA, 1),pch=c(NA,NA,NA, 24,NA),lwd=lwd, cex=0.7)
+
+
+
+#crispSpatialNow<-function(resultsVec, landform){
+#		require(raster)
+#		l <- length(resultsVec)
+#		s <- 1:l
+#		df <- data.frame(s,resultsVec)
+#		rst <- subs(landform, df,by=1, which=2)
+#		rst=round(rst,2)
+#		return(rst)
+#		}
+#		
+#		
+#	prior =	crispSpatialNow(median.prior, landform)
+#	post = crispSpatialNow(median.vec, landform)
+#	
+#par(mfrow=c(1,3))	
+#plot(prior)
+#plot(post)
+
+#lsat = raster("/home/joel/sim/landsatVal/QA/LC81940272016142LGN00_BQA.TIFsca.tif")
+#landform.utm=projectRaster(from=landform, crs=crs(lsat))
+#lsat.crop = crop(lsat, landform.utm, snap="out")
+#lsat.wgs=projectRaster(from=lsat.crop, crs=crs(landform), method="ngb")
+#lsat.crop = crop(lsat.wgs, landform)
+
+#plot(lsat.crop)
+
+## threshold
+#sdThresh = 13
+#prior[prior <= sdThresh] <-NA
+#prior[prior>sdThresh] <- 1
+
+#post[post <= sdThresh] <-NA
+#post[post>sdThresh] <- 1
+
+#par(mfrow=c(1,3))	
+#plot(prior)
+#plot(post)
+#plot(lsat.crop)
+
+#lsat.re = resample(lsat.crop, prior, method='ngb')
+#prior[is.na(prior)]<-0
+#cor(getValues(prior), getValues(lsat.re))
+
+#post[is.na(post)]<-0
+#cor(getValues(post), getValues(lsat.re))
 
 
 
