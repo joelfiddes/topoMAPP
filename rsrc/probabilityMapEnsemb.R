@@ -24,5 +24,5 @@ probcrop = crop(prob,ext)
 plot(probcrop)
 
 KML(x=probcrop, filename='probPFcrop.kml', col=rev(inferno(20)), overwrite=T, maxpixels=2000000)
-
+writeRaster(probPFcrop,"probPFcrop.tif" )
 
