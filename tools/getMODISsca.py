@@ -1,5 +1,7 @@
 # obtain MODIS SCA as independent process from main script - convenient to run these jobs more flexibly
 # takes path to config ini file as sole arg
+import sys
+import subprocess
 
 from configobj import ConfigObj
 config = ConfigObj(sys.argv[1])
