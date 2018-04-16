@@ -28,7 +28,7 @@ nc=nc_open(file)
 gp = ncvar_get( nc,'z')
 surfEle = gp[,, 1] / 9.80665
 
-# assign these values to containt "r"
+# assign these values to containt "r" on 
 r2 =setValues(r, as.vector(surfEle))
 
 # crop by actual extent

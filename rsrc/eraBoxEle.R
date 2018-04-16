@@ -2,6 +2,7 @@
 # SETUP
 #====================================================================
 #INFO
+# NOW not used getGridEle.R which had bug as used ful era extrent downloaded NOT cropped one
 
 #DEPENDENCY
 require(raster)

@@ -61,20 +61,21 @@ values(rst) <- 1:ncell(rst)
 n = crop(rst,ex)
 vec = getValues(n)
 # convert nbox from eraExtent eg 2 to nbox from ERA download
-nbox = vec[nbox]
+nbox1 = vec[nbox] # nbox position in original downloaded era extent !!nb: OLD LARGER EXTENT!!
+nbox2 = nbox # nbox position in new cropped extent !!nb: NEW SMALLER EXTENT!!
 #=======================================================================================================
 
 
 #find ele diff station/gidbox
 #eraBoxEle<-getEraEle(dem=eraBoxEleDem, eraFile=tFile) # $masl
-gridEle<-rep(eraBoxEle[nbox],length(mf$ele))
+gridEle<-rep(eraBoxEle[nbox2],length(mf$ele)) #!!nb: NEW SMALLER EXTENT!!
 mf$gridEle<-round(gridEle,2)
 eleDiff=mf$ele-mf$gridEle
 mf$eleDiff<-round(eleDiff,2)
 #get grid coordinates
 coordMap=getCoordMap(file)
-x<-coordMap$xlab[nbox] # long cell
-y<-coordMap$ylab[nbox]# lat cell
+x<-coordMap$xlab[nbox1] # long cell !!nb: OLD LARGER EXTENT!!
+y<-coordMap$ylab[nbox1]# lat cell !!nb: OLD LARGER EXTENT!!
 
 #get long lat centre point of nbox (for solar calcs)
 lat=ncvar_get(nc, 'latitude')
