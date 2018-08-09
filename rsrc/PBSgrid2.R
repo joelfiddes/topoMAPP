@@ -4,18 +4,31 @@ require(raster)
 require(zoo)
 
 args = commandArgs(trailingOnly=TRUE)
-wd = args[1]
-priorwd = args[2]
-grid = as.numeric(args[3])
-nens = as.numeric(args[4])
-Nclust = as.numeric(args[5])
-sdThresh=as.numeric(args[6])
-R=as.numeric(args[7])
-DSTART = as.numeric(args[8])
-DEND = as.numeric(args[9])
+wd = args[1] #/home/joel/mnt/myserver/nas/sim/wfj_interim_ensemble_v2
+priorwd = args[2]#/home/joel/mnt/myserver/nas/sim/wfj_interim
+grid = as.numeric(args[3]) #1
+nens = as.numeric(args[4]) #50
+Nclust = as.numeric(args[5])#150
+sdThresh=as.numeric(args[6]) #13
+R=as.numeric(args[7]) #0.016
+DSTART = as.numeric(args[8])# 210
+DEND = as.numeric(args[9])# 350
+
+
+
+wd = "/home/joel/mnt/myserver/nas/sim/wfj_interim_ensemble_v2/"
+priorwd = "/home/joel/mnt/myserver/nas/sim/wfj_interim/"
+grid = 1
+nens = 50
+Nclust = 50
+sdThresh=13
+R=0.016
+DSTART =  210
+DEND =  350
+
 
 # load files
-load( paste0(wd,"wmat_",grid,".rd"))
+load( paste0(wd,"wmat.rd"))
 rstack = brick(paste0(wd,"fsca_crop.tif"))
 obsTS = read.csv(paste0(wd,"fsca_dates.csv"))
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
@@ -28,7 +41,7 @@ npix = ncell( rstack)
 #====================================================================
 #	Load ensemble results matrix
 #====================================================================
-load(paste0(wd, "/ensembRes_",grid,".rd"))
+load(paste0(wd, "/ensembRes.rd"))
 
 # convert swe > sdThresh to snowcover = TRUE/1
 ensembRes[ ensembRes <= sdThresh ] <- 0
@@ -111,7 +124,7 @@ for( i in 1:Nclust)
 	{
 	fsca.list[[i]] <- apply(rstack[mylist[[i]]], FUN = "mean", MARGIN=2, na.rm=TRUE)
 	 #plot(apply(rstack[mylist[[i]]], FUN = "mean", MARGIN=2, na.rm=TRUE), type='l', main= i)
-	sdvec=c(sdvec,mean(apply(rstack[mylist[[i]]], FUN = "sd", MARGIN=2, na.rm=TRUE),na.rm=T))
+	#sdvec=c(sdvec,mean(apply(rstack[mylist[[i]]], FUN = "sd", MARGIN=2, na.rm=TRUE),na.rm=T))
 	}
 	
 	# list to matrix
@@ -147,7 +160,10 @@ OBS2PLOT[naind]<-NA
 prior =HX
 weight = as.vector(weight)
 ndays = length(obs)
-
+lq=0.1
+uq=0.85
+png(paste0(wd,"/fSCASWE_gridNew.png"), width=700, height=480)
+par(mfrow=c(1,2))
 # ======================= posterior = ==========================================
 
 # median
@@ -174,7 +190,7 @@ wfill <- weight
 
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=lq)
 low.post = c(low.post, med$y)
 }
 
@@ -188,7 +204,7 @@ wfill <- weight
 
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=uq)
 high.post = c(high.post, med$y)
 }
 
@@ -220,7 +236,7 @@ wfill <- w
 
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.05)
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=lq)
 low.pri = c(low.pri, med$y)
 }
 
@@ -234,13 +250,13 @@ wfill <- w
 
 df = data.frame(mu, wfill )
 dfOrder =  df[ with(df, order(mu)), ]
-med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.95)
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=uq)
 high.pri = c(high.pri, med$y)
 }
 
 
-pdf(paste0(wd,"/fSCA_grid.pdf"))
-plot(high.pri, col='red', type='l', main=i,  xlim=c(150,ndays))
+
+plot(high.pri, col='red', type='l', main="Total grid snow covered extent)",  xlim=c(150,ndays), ylab="SCE (%)", xlab="Days since Sept 1")
 lines(low.pri, col='red')
 lines(med.pri, col='red', lwd=3)
 lines(high.post, col='blue')
@@ -266,7 +282,166 @@ points(OBS2PLOT, col='green', lwd=4)
 legend("topright", c("prior", "posterior") , col=c("red", "blue"), lty=1)
 #abline(v=DSTART)
 #abline(v=DEND)
+#dev.off()
+
+abline(v=DSTART, lty=3)
+abline(v=DEND, lty=3)
+#====================================================================
+#	# Now plot SWE
+#====================================================================
+
+
+
+#====================================================================
+#	Load ensemble results matrix
+#====================================================================
+load(paste0(wd, "/ensembRes.rd"))
+
+
+
+# compute weighted  fsca by memebership
+#https://stackoverflow.com/questions/34520567/r-multiply-second-dimension-of-3d-array-by-a-vector-for-each-of-the-3rd-dimension
+Vect = lp$members
+varr <- aperm(array(Vect, dim = c(dim(ensembRes)[2], dim(ensembRes)[1], dim(ensembRes)[3])), perm = c(2L, 1L, 3L))
+arr <- varr * ensembRes
+
+
+# compute mean MOD fSCA per sample
+HX2 <- apply(arr, FUN = "sum", MARGIN = c(1,3)) / sum(lp$members)
+
+
+OBS2PLOT <-OBS
+OBS2PLOT[naind]<-NA
+prior =HX2
+weight = as.vector(weight)
+ndays = length(obs)
+
+
+
+# ======================= posterior = ==========================================
+
+# median
+med.post = c()
+for ( days in 1:ndays){
+
+mu = prior[ days, ]
+w = weight
+wfill <- weight
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+med.post = c(med.post, med$y)
+}
+
+# low
+low.post = c()
+for ( days in 1: ndays){
+
+mu = prior[ days, ]
+w = weight
+wfill <- weight
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=lq)
+low.post = c(low.post, med$y)
+}
+
+# high
+high.post = c()
+for ( days in 1: ndays){
+
+mu = prior[ days, ]
+w = weight
+wfill <- weight
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=uq)
+high.post = c(high.post, med$y)
+}
+
+
+
+# ======================= prior = ==========================================
+
+# median
+med.pri = c()
+for ( days in 1: ndays){
+
+mu = prior[ days, ]
+w = rep((1/nens),nens)
+wfill <- w
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=0.5)
+med.pri = c(med.pri, med$y)
+}
+
+# low
+low.pri = c()
+for ( days in 1: ndays){
+
+mu = prior[ days, ]
+w = rep((1/nens),nens)
+wfill <- w
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=lq)
+low.pri = c(low.pri, med$y)
+}
+
+# high
+high.pri = c()
+for ( days in 1: ndays){
+
+mu = prior[ days, ]
+w = rep((1/nens),nens)
+wfill <- w
+
+df = data.frame(mu, wfill )
+dfOrder =  df[ with(df, order(mu)), ]
+med = approx( cumsum(dfOrder$wfill),dfOrder$mu , xout=uq)
+high.pri = c(high.pri, med$y)
+}
+
+
+#pdf(paste0(wd,"/swe_grid.pdf"))
+plot(high.pri, col='red', type='l', main="Mean grid snow water equivalent",  xlim=c(150,ndays), ylab="SWE (mm)" , xlab="Days since Sept 1")
+lines(low.pri, col='red')
+lines(med.pri, col='red', lwd=3)
+lines(high.post, col='blue')
+lines(low.post, col='blue')
+lines(med.post, col='blue', lwd=3)
+
+# posterior blue
+y = c(low.post ,rev(high.post))
+x = c(1:length(low.post), rev(1:length(high.post)) )
+polygon (x,y, col=rgb(0, 0, 1,0.5))
+
+# prior red
+y = c(low.pri ,rev(high.pri))
+x = c(1:length(low.pri), rev(1:length(high.pri)) )
+polygon (x,y, col=rgb(1, 0, 0,0.5))
+lines(high.pri, col='red')
+lines(low.pri, col='red')
+lines(med.pri, col='red', lwd=3)
+lines(high.post, col='blue')
+lines(low.post, col='blue')
+lines(med.post, col='blue', lwd=3)
+#points(OBS2PLOT, col='green', lwd=4)
+legend("topright", c("prior", "posterior") , col=c("red", "blue"), lty=1)
+#abline(v=DSTART)
+#abline(v=DEND)
 dev.off()
+
+
+
+
+
 
 
 

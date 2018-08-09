@@ -33,7 +33,7 @@ config["main"]["runtype"] = "bbox" #one of : bbox, points
 config["main"]["mode"] =# one of: NORM, ENSEMB,  DA, 
 config["main"]["startDate"] = "2015-09-01"
 config["main"]["endDate"] = "2015-09-02"
-config["main"]["shp"] = datroot +"/GCOS/wfj_poly.shp"
+config["main"]["shp"] = datroot +"/GCOS/wfj_poly.shp" # cannot be a single point due to crop function handling eg https://gis.stackexchange.com/questions/187879/crop-raster-from-using-polygon-shapefile-in-r
 config["main"]["tz"] = -1
 
 # control quick starts

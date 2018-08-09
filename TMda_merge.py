@@ -29,8 +29,8 @@ def main(config):
 	
 	# Fixed params - add to DA part of config
 	sdThresh = str(13) # mm threshold of swe to sca conversion
-	DSTART = str(210) # default start of melt in case algorithm fails
-	DEND = str(350) # default end of melt in case algorithm fails
+	DSTART = str(270) # default start of melt in case algorithm fails
+	DEND = str(330) # default end of melt in case algorithm fails
 	R=str(0.016)
 	file="surface" # separate key word [val? linked?]
 	param = "snow_water_equivalent.mm." # separate key word [val? linked?]

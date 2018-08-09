@@ -141,10 +141,6 @@ if (!file.exists(pixTS)) {
 }
 
 
-
-
-
-
 # readin ensemble results matrix
 load(paste0(wd, "/ensembRes_", grid, ".rd"))
 

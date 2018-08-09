@@ -1,11 +1,11 @@
 require(raster)
 priorwd=  "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor/"
-wd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor_ensemble/"
+wd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor_ensemble"
 grid=1
 year=0
 day=200
 doy="078"
-lsat = raster(paste0("/home/joel/sim/landsatVal/QA/LC81940272016",doy,"LGN00_BQA.TIFsca.tif"))
+lsat = raster(paste0("/home/joel/mnt/myserver/sim/localsim/landsatVal/QA/LC81940272016",doy,"LGN00_BQA.TIFsca.tif"))
 # readin
 landform = raster(paste0(priorwd,"/grid",grid,"/landform.tif"))
 rstack = brick(paste0(wd, "//fsca_crop",grid,year,".tif"))
@@ -31,6 +31,8 @@ wpix <- wmat
 ID.max.weight = apply(wmat, 1, which.max) 
 #max.weight = apply(wmat, 1, max) 
 
+
+
 # make raster container
 rst <- rstack[[1]]
 
@@ -51,12 +53,66 @@ df =cbind(ensem.vec, samp.vec)
 df.u = unique(df)
 res.vec=(rep(NA, length(ensem.vec)))
  
+ 
+
+
+
 for (i in 1:length(df.u[,1]) ){
  print(i)
  index = which(df[,1]==df.u[i,1] & df[,2]==df.u[i,2])
  res.vec[index]<- ensembRes[day,df.u[i,2], df.u[i,1]]
  }
  
+ 
+
+ 
+ 
+# getmode <- function(v) {
+#   uniqv <- unique(v)
+#   uniqv[which.max(tabulate(match(v, uniqv)))]
+#}
+
+
+## mean per sample
+#mvec=c()
+#for (i in 1:150){
+
+#s = getmode(ensem.vec[which(getValues(landform)==i)])
+#mvec=c(mvec,s)
+#print(i)
+#}
+
+#par(mfrow=c(2,2))
+#er = ensembRes[200,,]
+#val  = diag(er[,mvec])
+#mdc2= crispSpatialNow(val, landform)
+#plot(mdc2, zlim=c(0,800))
+#plot(density(getValues(mdc2),na.rm=T))
+#val = apply(er, FUN = "mean", 1)
+#mdc2= crispSpatialNow(val, landform)
+#plot(mdc2,zlim=c(0,800))
+#plot(density(getValues(mdc2),na.rm=T))
+
+
+## make timeseries
+#par(mfrow=c(2,2))
+#er = ensembRes[,103,mvec[103]]
+
+
+#plot(er)
+
+#er = ensembRes[,103,]
+#val = apply(er, FUN = "mean", 1)
+
+#lines(val,col='red')
+
+## deterministic
+#open=sRes[,"snow_water_equivalent.mm.",103]
+#lines(open, col='blue')
+#points(obsIndexVal,val, lwd=lwd, cex=2, col='black',pch=24) #obs
+
+
+
  
 # slow pixel
 # resvec=c()
@@ -124,7 +180,7 @@ library(viridis)
 pal <- rev(inferno(10))
 
 
-pdf(paste0("/home/joel/sim/DA_2016",doy,"2.pdf"))
+pdf(paste0("/home/joel/sim/DA_2016",doy,"2NEW.pdf"))
 
 par(mfrow=c(3,3))
 

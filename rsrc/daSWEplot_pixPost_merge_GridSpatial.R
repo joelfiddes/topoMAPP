@@ -99,9 +99,6 @@ wpix <- wmat[posits.pix,] # subset by valpoints
 #			New plot routine - compute SWE posterior
 #===============================================================================
 
-# generic plot pars
-lwd=3
-pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
 
 
 
@@ -276,6 +273,10 @@ val = valdat$SWE.mm[simIndexVal]
 
 # plot prior,post, obs
 # plot prior,post, obs
+# generic plot pars
+lwd=3
+pdf(paste0(wd,"/plots/swe_pix",grid,year,"SPATIAL.pdf"), height=8, width=5)
+
 plot(median.prior, ylim=c(0,1000),col='blue', type='l',lwd=3,xaxt = "n",main=paste0(stat[j], sample)) # prior
 for (i in 1:nens){lines(ensembRes[,sample,i], col='grey')}
 
@@ -349,6 +350,6 @@ post[is.na(post)]<-0
 cor(getValues(post), getValues(lsat.re))
 
 
-
+dev.off()
 # plot the curves
 
