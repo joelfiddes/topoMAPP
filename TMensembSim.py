@@ -19,22 +19,22 @@ def main(Ngrid, config):
 	# logging.info(sim_dirs)
 
 	# loop through sim dirs
-	for s in sim_dirs:
-
-	# read meteo0001
+	for s in sim_dirs:			
+		# read meteo0001
 		df = pd.read_csv( s +"/meteo0001.txt")
+		if config["da"]["Ponly"] == "TRUE":
+			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
 
-	# scale meteo
-	#https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
-	
-		df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
-		df['LW'] = df['LW'] * config['da']['lwscale']##multiplicative
-		df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
-		
-		# convert to K
-		taK = df['Tair'] + 273.15
-		# peturb and back to celcius
-		df['Tair'] = (taK*config['da']['tscale']) - 273.15
+		# scale meteo
+		#https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
+		if config["da"]["Ponly"] == "FALSE":
+			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
+			df['LW'] = df['LW'] * config['da']['lwscale']##multiplicative
+			df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
+			# convert to K
+			taK = df['Tair'] + 273.15
+			# peturb and back to celcius
+			df['Tair'] = (taK*config['da']['tscale']) - 273.15
 
 		#write meteo
 		df.to_csv( s +"/meteo0001.txt", index = False)

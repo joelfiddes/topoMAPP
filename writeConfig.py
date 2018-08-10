@@ -122,7 +122,7 @@ config["da"]["pscale"] = 1 #factor to multiply precip by
 config["da"]["tscale"] = 0 #factor to add to temp
 config["da"]["lwscale"] = 0 #factor to add to temp
 config["da"]["swscale"] = 0 #factor to add to temp
-
+config["da"]["Ponly"] = "TRUE"
 config.write()
 
 
