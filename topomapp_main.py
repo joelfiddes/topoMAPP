@@ -242,7 +242,9 @@ if not os.path.exists(ndvi_wd) and config["toposcale"]["tscaleOnly"] == "FALSE" 
 # need config to prioritise grids here
 logging.info("Grids to loop over = ")
 logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
-
+# IDEA TO IMPLEMENT INIT GRID HERE
+#if config['main']['initGrid']!="all":
+#	grid_dirs=map(str.__add__,'grid',config['main']['initGrid'])
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 

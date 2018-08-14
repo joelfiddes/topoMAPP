@@ -7,6 +7,7 @@ import sys
 from configobj import ConfigObj
 import logging
 
+# need to reverse these loops; INITGRID FIRST then ensemble loop. That way garantee at least some complete ensembles, otherwise need wait till all ensemble memebers are done to get any results at all - sensitive to failure. 
 
 def main(config):
 
