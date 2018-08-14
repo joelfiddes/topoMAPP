@@ -22,19 +22,36 @@ def main(Ngrid, config):
 	for s in sim_dirs:			
 		# read meteo0001
 		df = pd.read_csv( s +"/meteo0001.txt")
-		if config["da"]["Ponly"] == "TRUE":
+		
+
+		if config["da"]["PPARS"] == "P":
 			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
 
-		# scale meteo
-		#https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
-		if config["da"]["Ponly"] == "FALSE":
+		if config["da"]["PPARS"] == "PT":
+			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
+			# convert to K
+			taK = df['Tair'] + 273.15
+			# peturb and back to celcius
+			df['Tair'] = (taK*config['da']['tscale']) - 273.15
+
+		if config["da"]["PPARS"] == "PTS":
+			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
+			df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
+			# convert to K
+			taK = df['Tair'] + 273.15
+			# peturb and back to celcius
+			df['Tair'] = (taK*config['da']['tscale']) - 273.15
+
+		if config["da"]["PPARS"] == "PTSL":
 			df['Prec'] = df['Prec'] * config['da']['pscale'] #multiplicative
 			df['LW'] = df['LW'] * config['da']['lwscale']##multiplicative
 			df['SW'] = df['SW'] * config['da']['swscale']##multiplicative
 			# convert to K
 			taK = df['Tair'] + 273.15
 			# peturb and back to celcius
-			df['Tair'] = (taK*config['da']['tscale']) - 273.15
+			df['Tair'] = (taK*config['da']['tscale']) - 273.15		# scale meteo
+
+		#MULTIPAR CROSS CORELATION": https://www.the-cryosphere.net/10/103/2016/tc-10-103-2016.pdf
 
 		#write meteo
 		df.to_csv( s +"/meteo0001.txt", index = False)
