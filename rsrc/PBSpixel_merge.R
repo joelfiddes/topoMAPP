@@ -117,8 +117,8 @@ if (valMode == "TRUE"){
 }
 
 # read and cut and write dates here
-#dates <- read.csv(paste0(wd, "/fsca_dates.csv"))
-#write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
+dates <- read.csv(paste0(wd, "/fsca_dates.csv"))
+write.csv(dates, paste0(wd, "/fsca_dates.csv"), row.names = FALSE)
 
 # output
 outfile1 = paste0("wmat_", grid, year, ".rd")  #'wmat_trunc20.rd' 'HX.rd'#
@@ -157,72 +157,72 @@ ensembRes[ensembRes > sdThresh] <- 1
 # ===============================================================================
 # Compute melt period for year n by elevation
 # ===============================================================================
-t1 = Sys.time()
-df = paste0(wd, "/df_", grid)
+# t1 = Sys.time()
+# df = paste0(wd, "/df_", grid)
 
-# subset rstack temporally
+# # subset rstack temporally
 
-if (!file.exists(df)) {
-    resol = 5
-    print(paste0("Computing ", resol, " melt period elevation bands"))
+# if (!file.exists(df)) {
+#     resol = 5
+#     print(paste0("Computing ", resol, " melt period elevation bands"))
 
-    # resample dem to rstack res (MODIS)
-    dem = raster(paste0(priorwd, "/predictors/ele.tif"))
-    elegrid = crop(dem, landform)
-    r = aggregate(elegrid, res(rstack)/res(elegrid))
-    rstack_ele <- resample(r, rstack)
+#     # resample dem to rstack res (MODIS)
+#     dem = raster(paste0(priorwd, "/predictors/ele.tif"))
+#     elegrid = crop(dem, landform)
+#     r = aggregate(elegrid, res(rstack)/res(elegrid))
+#     rstack_ele <- resample(r, rstack)
 
-    minZ = cellStats(rstack_ele, "min") - 1  #add buffer to allow use of 'greaterthan' on lower bound and not risk excluding a point at lowest ele.
-    maxZ = cellStats(rstack_ele, "max")
-    range = maxZ - minZ
-    deltaZ = range/resol
+#     minZ = cellStats(rstack_ele, "min") - 1  #add buffer to allow use of 'greaterthan' on lower bound and not risk excluding a point at lowest ele.
+#     maxZ = cellStats(rstack_ele, "max")
+#     range = maxZ - minZ
+#     deltaZ = range/resol
 
-    # meltList <- list()
-    meltPeriod = c()
-    for (i in 1:resol) {
-        print(paste0("compute band: ", i))
-        mStart = minZ + (deltaZ * (i - 1))
-        mEnd = mStart + deltaZ
+#     # meltList <- list()
+#     meltPeriod = c()
+#     for (i in 1:resol) {
+#         print(paste0("compute band: ", i))
+#         mStart = minZ + (deltaZ * (i - 1))
+#         mEnd = mStart + deltaZ
 
-        pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
-        x = rstack[pix]  # mega slow function
-        meanMelt = apply(x, FUN = "mean", MARGIN = 2, na.rm = T)
+#         pix = which(getValues(rstack_ele) > mStart & getValues(rstack_ele) <= mEnd)
+#         x = rstack[pix]  # mega slow function
+#         meanMelt = apply(x, FUN = "mean", MARGIN = 2, na.rm = T)
 
-        vec <- meanMelt
-        rvec = rev(vec)
-        lastdata = which(rvec > 0)[1]  # last non-zero value
-        lastdataindex = length(vec) - lastdata + 1
-        firstnodata = lastdataindex + 1
-        lastdateover95 = length(vec) - which(rvec > (max(rvec, na.rm = TRUE) * 0.95))[1]  # last date over 95% of max value accounts for max below 100%
-        start = lastdateover95
-        end = firstnodata
-        mp = c(mStart, mEnd, start, end)
-        meltPeriod = rbind(meltPeriod, mp)
-    }
-    df = data.frame(meltPeriod)
-    names(df) <- c("ele1", "ele2", "start", "end")
-    save(df, file = paste0(wd, "/df_", grid))
+#         vec <- meanMelt
+#         rvec = rev(vec)
+#         lastdata = which(rvec > 0)[1]  # last non-zero value
+#         lastdataindex = length(vec) - lastdata + 1
+#         firstnodata = lastdataindex + 1
+#         lastdateover95 = length(vec) - which(rvec > (max(rvec, na.rm = TRUE) * 0.95))[1]  # last date over 95% of max value accounts for max below 100%
+#         start = lastdateover95
+#         end = firstnodata
+#         mp = c(mStart, mEnd, start, end)
+#         meltPeriod = rbind(meltPeriod, mp)
+#     }
+#     df = data.frame(meltPeriod)
+#     names(df) <- c("ele1", "ele2", "start", "end")
+#     save(df, file = paste0(wd, "/df_", grid))
 
-} else {
+# } else {
 
-    print(paste0(df, " already exists."))
-    load(paste0(wd, "/df_", grid))
+#     print(paste0(df, " already exists."))
+#     load(paste0(wd, "/df_", grid))
 
-    # resample dem to rstack res (MODIS)
-    dem = raster(paste0(priorwd, "/predictors/ele.tif"))
-    elegrid = crop(dem, landform)
-    r = aggregate(elegrid, res(rstack)/res(elegrid))
-    rstack_ele <- resample(r, rstack)
-}
+#     # resample dem to rstack res (MODIS)
+#     dem = raster(paste0(priorwd, "/predictors/ele.tif"))
+#     elegrid = crop(dem, landform)
+#     r = aggregate(elegrid, res(rstack)/res(elegrid))
+#     rstack_ele <- resample(r, rstack)
+# }
 
 
 
-# pixel based timeseries
-pixEle = getValues(rstack_ele)
+# # pixel based timeseries
+# pixEle = getValues(rstack_ele)
 
-t2 = Sys.time() - t1
-print("Ele band computation done in: ")
-print(t2)
+# t2 = Sys.time() - t1
+# print("Ele band computation done in: ")
+# print(t2)
 # ===============================================================================
 # Run pixel calcs in parallel - get WMAT need to combine wmat and HX calcs
 # ===============================================================================
@@ -240,16 +240,35 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
     wmat = foreach(i = npix, .combine = "rbind", .packages = "raster") %dopar% {
 
         #print(i)
-        ele = pixEle[i]
-        lb = which(df$ele1 < ele)
-        ub = which(df$ele2 >= ele)
-        class = which(lb %in% ub)
-        meltp = df[class, ]
-        start = meltp$start
-        end = meltp$end
+        # ele = pixEle[i]
+        # lb = which(df$ele1 < ele)
+        # ub = which(df$ele2 >= ele)
+        # class = which(lb %in% ub)
+        # meltp = df[class, ]
+        # start = meltp$start
+        # end = meltp$end
 
         # Extract pixel based timesries of MODIS obs and scale
         obs = pixTS[i, ]/100
+
+        # Simple and robust meltperiod
+        vec <- pixTS[i,]
+        vec[1:150] <-NA
+        lastdata = which(vec == 0)[1]  # last non-zero value
+ 
+        start = lastdata - 30
+        end = lastdata +5
+        print(paste0("meltperiod start: ", start))
+        print(paste0("meltperiod end: ", end))
+
+        vec <- pixTS[i,]
+        vec[1:150] <-NA
+        lastdata = which(vec == 0)[1]  # last non-zero value
+ 
+        start = lastdata - 30
+        end = lastdata +5
+        print(paste0("meltperiod start: ", start))
+        print(paste0("meltperiod end: ", end))
 
         # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
         # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
@@ -397,15 +416,34 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
     HX = foreach(i = npix, .combine = "rbind", .packages = "raster") %dopar% {
 
         #print(i)
-        ele = pixEle[i]
-        lb = which(df$ele1 < ele)
-        ub = which(df$ele2 >= ele)
-        class = which(lb %in% ub)
-        meltp = df[class, ]
-        start = meltp$start
-        end = meltp$end
+        # ele = pixEle[i]
+        # lb = which(df$ele1 < ele)
+        # ub = which(df$ele2 >= ele)
+        # class = which(lb %in% ub)
+        # meltp = df[class, ]
+        # start = meltp$start
+        # end = meltp$end
         # Extract pixel based timesries of MODIS obs and scale
         obs = pixTS[i, ]/100
+
+        # Simple and robust meltperiod
+        vec <- pixTS[i,]
+        vec[1:150] <-NA
+        lastdata = which(vec == 0)[1]  # last non-zero value
+ 
+        start = lastdata - 30
+        end = lastdata +5
+        print(paste0("meltperiod start: ", start))
+        print(paste0("meltperiod end: ", end))
+
+        vec <- pixTS[i,]
+        vec[1:150] <-NA
+        lastdata = which(vec == 0)[1]  # last non-zero value
+ 
+        start = lastdata - 30
+        end = lastdata +5
+        print(paste0("meltperiod start: ", start))
+        print(paste0("meltperiod end: ", end))
 
         # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
         # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =

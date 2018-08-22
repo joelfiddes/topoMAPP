@@ -74,7 +74,7 @@ meanX=read.table( paste(gridpath, '/meanX_', targV,'.txt', sep=''), sep=',')
 # compute coeffs of linear model
 coeffs=linMod2(meanX=meanX,listpoints=listpoints, predNames=predNames2,col=targV, svfCompute=svfCompute) #linear model
 
-if(sum(as.numeric(coeffs),na.rm=TRUE) == 0){stop("inform targetV variable all zero counts in obs period (tip: are you using SWE in summer for informed scaling routine?)")} # This catches the case where targV does not have values in simulation period eg. using snow water equivalent in summer sim period
+if(sum(as.numeric(coeffs),na.rm=TRUE) == 0){stop("inform targetV variable all zero counts in obs period (tip: are you using SWE in summer for informed scaling routine?) or does preprocessed era in eraDat/all etc match set time period in ini file?")} # This catches the case where targV does not have values in simulation period eg. using snow water equivalent in summer sim period, also case where forcing meteo has been recyldced for another simulation but the preprocessed time slice left in place. forcing and simulation period then do not overlap. First simulation runs without errors but inform will not work.
 
 write(coeffs, paste(gridpath,"/coeffs.txt",sep=""),ncolumns=7, append=TRUE, sep=",") # 6 cols if no svf
 weightsMean<-read.table(paste(gridpath,"/coeffs.txt",sep=""), sep=",",header=T)
