@@ -16,6 +16,7 @@ import os.path
 from listpoints_make import getRasterDims as dims
 import glob
 import joblib
+import numpy
 
 
 
@@ -239,23 +240,21 @@ if not os.path.exists(ndvi_wd) and config["toposcale"]["tscaleOnly"] == "FALSE" 
 #====================================================================
 
 # start main grid loop here - make parallel here
-# need config to prioritise grids here
-logging.info("Grids to loop over = ")
-logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
-# IDEA TO IMPLEMENT INIT GRID HERE
-#if config['main']['initGrid']!="all":
-#	grid_dirs=map(str.__add__,'grid',config['main']['initGrid'])
 
 if config['main']['mysubset']== "TRUE":
 	# make numpy.array
 	n = numpy.array(grid_dirs)
-	
+
 	# change str to int
 	x = map(int,config['main']['initGrid'])
 
 	# substract 1 to make python index start 0
 	y = [a - 1 for a in x]
-	grid_dirs = y
+	#n[y]
+	grid_dirs = n[y]
+
+logging.info("Grids to loop over = ")
+logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
 
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
