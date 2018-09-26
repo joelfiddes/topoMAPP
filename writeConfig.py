@@ -39,7 +39,8 @@ config["main"]["tz"] = -1
 # control quick starts
 config["main"]["initSim"] = "FALSE" # initialises interim data and dem from existing to allow perturbed experiment 
 config["main"]["initDir"] = simroot +"/da_test"
-config["main"]["initGrid"] = 1 # can be single number or comma seperated list eg. 1,2,3
+config['main']['mysubset'] = "TRUE" # allows to select subset of grids based on config["main"]["initGrid"] for forward simulation
+config["main"]["initGrid"] = 1 # can be single number or comma seperated list eg. 1,2,3 - this is used in "mysubset" also for defining grids to take to ensemble simulation.
 
 # option to supply own dem - doesnt work yet
 config["main"]["demexists"] = "FALSE"

@@ -245,6 +245,18 @@ logging.info( [os.path.basename(os.path.normpath(x)) for x in grid_dirs] )
 # IDEA TO IMPLEMENT INIT GRID HERE
 #if config['main']['initGrid']!="all":
 #	grid_dirs=map(str.__add__,'grid',config['main']['initGrid'])
+
+if config['main']['mysubset']== "TRUE":
+	# make numpy.array
+	n = numpy.array(grid_dirs)
+	
+	# change str to int
+	x = map(int,config['main']['initGrid'])
+
+	# substract 1 to make python index start 0
+	y = [a - 1 for a in x]
+	grid_dirs = y
+
 for Ngrid in grid_dirs:
 	gridpath = Ngrid
 

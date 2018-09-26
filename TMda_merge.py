@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # this _val version accepts vector of pixel numbers corresponding to val points then does computations only at these points to speed up analysis
+# this has been superseded by dedicated scripts that do pointwise DA eg /home/joel/mnt/myserver/sim/wfj_compare/da_plot.sh
+# Run as: joel@myserver:~/src/topoMAPP$ python TMda_merge.py ../../nas/sim/gcos_era5_big/gcos_era5_big.ini FALSE
+# FALSE = only HX and WMAT are produced (normally what we want)
+# TRUE = includes plot routines (original full pipline mode)
+
 
 from configobj import ConfigObj
 import logging
@@ -13,7 +18,7 @@ from dateutil.relativedelta import *
 # cut multi year timeseries to single year blocks
 # valShp only required if valMode = TRUE. This specifies set of MODIS pixels to run particle filter on (based on point locations), not whole domain 
 
-def main(config):
+def main(config, makePlots):
 #def main(config, valShp = None, valMode = "FALSE"):
 	config = ConfigObj(config)
 	valShp =  config["ensemble"]["valShp"] #"/home/joel/nas/data/GCOS/metadata_easy.shp" # tske from config
@@ -90,32 +95,32 @@ def main(config):
 			# 	subprocess.check_output(cmd)	
 			# else:
 			# 	logging.info( fname+ " exists")
+			if makePlots=="TRUE":
+				# make plot dir
+				mydir = ensWd+"/plots"
+				if not os.path.exists(mydir):
+						os.makedirs(mydir)
 
-			# make plot dir
-			mydir = ensWd+"/plots"
-			if not os.path.exists(mydir):
-					os.makedirs(mydir)
+				# SCA plots	
+				fname = ensWd+"/plots/fSCA_plot"+grid+str(year)+".pdf"
+				if os.path.isfile(fname) == False:
+					logging.info( "plot SCA")
+					cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valShp, DSTART, DEND, str(year), valMode ] 
+					subprocess.check_output(cmd)
+				else:
+					logging.info( "skip sca plot routine")
 
-			# SCA plots	
-			fname = ensWd+"/plots/fSCA_plot"+grid+str(year)+".pdf"
-			if os.path.isfile(fname) == False:
-				logging.info( "plot SCA")
-				cmd = ["Rscript",  "./rsrc/daSCAplot_merge.R", ensWd ,wd,grid ,nens ,valShp, DSTART, DEND, str(year), valMode ] 
-				subprocess.check_output(cmd)
-			else:
-				logging.info( "skip sca plot routine")
-
-			# SWE plot
-			fname = ensWd+"/plots/swe_pix"+grid+str(year)+".pdf"
-			if os.path.isfile(fname) == False:
-				logging.info( "plot swe")
-				cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valShp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
-				subprocess.check_output(cmd)
-			else:
-				logging.info("skip swe plot")
+				# SWE plot
+				fname = ensWd+"/plots/swe_pix"+grid+str(year)+".pdf"
+				if os.path.isfile(fname) == False:
+					logging.info( "plot swe")
+					cmd = ["Rscript",  "./rsrc/daSWEplot_pixPost_merge.R", ensWd,wd ,grid ,nens, valShp, str(year), str(start1), str(end1), config["main"]["startDate"], config["main"]["endDate"], valDat, valMode ]
+					subprocess.check_output(cmd)
+				else:
+					logging.info("skip swe plot")
 
 			# SCA grid plot
-			logging.info( "calc SCA grid= OFF")
+				logging.info( "calc SCA grid= OFF")
 			#cmd = ["Rscript",  "./rsrc/PBSgrid2.R" ,  ensWd , wd , grid , nens , Nclust , sdThresh , R , DSTART , DEND] 
 			#subprocess.check_output(cmd)
 
@@ -138,4 +143,5 @@ if __name__ == '__main__':
 	import sys
 
 	config      = sys.argv[1]
-	main(config)
+	makePlots      = sys.argv[2]
+	main(config,makePlots)

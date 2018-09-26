@@ -1,6 +1,8 @@
 require(raster)
 priorwd=  "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor/"
 wd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor_ensemble"
+priorwd=  "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor8/"
+wd = "/home/joel/mnt/myserver/nas/sim/SIMS_JAN18/gcos_cor8_ensemble"
 grid=1
 year=0
 day=200
@@ -180,7 +182,7 @@ library(viridis)
 pal <- rev(inferno(10))
 
 
-pdf(paste0("/home/joel/sim/DA_2016",doy,"2NEW.pdf"))
+pdf(paste0(wd,"/DA_2016",doy,"2NEW.pdf"))
 
 par(mfrow=c(3,3))
 

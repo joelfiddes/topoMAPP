@@ -2,6 +2,7 @@
 # SETUP
 #====================================================================
 #INFO
+# remove these scaling parameters?
 
 #DEPENDENCY
 require(raster)

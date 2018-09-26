@@ -127,31 +127,7 @@ dev.off()
 # plot(tbias,lwbias)
 
 
-> require(MASS)
-Loading required package: MASS
-> mvrnom(n=100, m=rep(1,4), Sigma=cov.m)
-cov.mat  cov.mcd  cov.mve  
-> res = mvrnom(n=100, m=rep(1,4), Sigma=cov.mat)
-Error in mvrnom(n = 100, m = rep(1, 4), Sigma = cov.mat) : 
-  could not find function "mvrnom"
-> res = mvrnorm(n=100, m=rep(1,4), Sigma=cov.mat)
-> str(res)
- num [1:100, 1:4] 1 0.994 1.002 0.999 0.995 ...
- - attr(*, "dimnames")=List of 2
-  ..$ : NULL
-  ..$ : NULL
-> plot(res[,1],type="l")
-> plot(res[,1],type="l")
-> lines(res[,2],type="l", col="red")
-> lines(res[,3],type="l", col="green")
-> lines(res[,4],type="l", col="blue")
-> plot(res[,2],type="l")
-> plot(res[,3],type="l")
-> plot(res[,4],type="l")
-> plot(res[,2],type="l")
-> lines(res[,1],type="l", col="blue")
-> lines(res[,3],type="l", col="green")
-> lines(res[,4],type="l", col="red")
+
 
 
  

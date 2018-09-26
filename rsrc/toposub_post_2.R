@@ -2,6 +2,9 @@
 # SETUP
 #====================================================================
 #INFO
+# Genrates mean annual maps
+# example: joel@myserver:~/src/topoMAPP$ Rscript rsrc/toposub_post_2.R /home/joel/sim/gperm/grid1/ 200 ground.txt X9999.000000 01.09.2006 01.09.2017
+# generates mean annual temp at 10m
 
 #DEPENDENCY
 require(raster)
@@ -15,8 +18,8 @@ gridpath <- args[1]
 Nclust <-	args[2]
 file1 <- 	args[3]
 targV <- 	args[4]
-beg <- 		args[5]
-end <- 		args[6]
+beg <- 		args[5] #"%Y-%m-%d"
+end <- 		args[6] #"%Y-%m-%d"
 #====================================================================
 # PARAMETERS FIXED
 #====================================================================
