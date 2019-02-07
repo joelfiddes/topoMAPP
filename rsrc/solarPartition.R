@@ -13,8 +13,8 @@ dim2=dims[2]
 kt=as.vector(swPoint)/as.vector(toaPoint)#*se
 kt[is.na(kt)==T]<-0 # make sure 0/0 =0
 kt[is.infinite(kt)==T]<-0 # make sure 0/0 =0
-kt[kt<0]<-0
-kt[kt>1]<-0.8 #upper limit of kt
+kt[kt<0]<- 0
+kt[kt>1] <- 0.8 #upper limit of kt
 
 #very slow need to vectorise
 #kdvec=c()

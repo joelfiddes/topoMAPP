@@ -44,6 +44,8 @@ def main(config, makePlots):
 	logging.basicConfig(level=logging.DEBUG, filename=ensWd+"/da_logfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	logging.info("----- START data assimilation-----")
+	logging.info("Make plots="+makePlots)
+
 
 	# grids to loop over
 	initgrids = config["main"]["initGrid"]

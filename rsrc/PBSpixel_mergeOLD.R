@@ -250,16 +250,6 @@ if (!file.exists(paste0(wd,"/",outfile1))) {
 
         # Extract pixel based timesries of MODIS obs and scale
         obs = pixTS[i, ]/100
-        
-        vec <- pixTS[i,]
-        vec[1:150] <-NA
-        lastdata = which(vec == 0)[1]  # last non-zero value
- 
-        start = lastdata - 30
-        end = lastdata +5
-        print(paste0("meltperiod start: ", start))
-        print(paste0("meltperiod end: ", end))
-
 
         # Simple and robust meltperiod
         vec <- pixTS[i,]
@@ -436,24 +426,15 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
         # Extract pixel based timesries of MODIS obs and scale
         obs = pixTS[i, ]/100
 
-<<<<<<< HEAD
-        vec <- pixTS[i,]
-        vec[1:150] <-NA
-        lastdata = which(vec == 0)[1]  # last non-zero value
-=======
         # Simple and robust meltperiod
         vec <- pixTS[i,]
         vec[1:150] <-NA
         lastdata = which(vec == 0)[1]  # last non-zero value
  
->>>>>>> 388946a8585d13496bae64a479b193416e3dcaff
         start = lastdata - 30
         end = lastdata +5
         print(paste0("meltperiod start: ", start))
         print(paste0("meltperiod end: ", end))
-<<<<<<< HEAD
-        
-=======
 
         vec <- pixTS[i,]
         vec[1:150] <-NA
@@ -464,7 +445,6 @@ if (!file.exists(paste0(wd,"/",outfile2))) {
         print(paste0("meltperiod start: ", start))
         print(paste0("meltperiod end: ", end))
 
->>>>>>> 388946a8585d13496bae64a479b193416e3dcaff
         # get melt period vec=pixTS[i,] rvec=rev(vec) lastdata = which(rvec>0)[1] # last
         # non-zero value lastdataindex = length(vec) - lastdata+1 firstnodata =
         # lastdataindex+1 lastdateover95 = length(vec) - which (rvec >(max(rvec,
